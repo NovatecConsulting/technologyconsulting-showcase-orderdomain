@@ -1,0 +1,59 @@
+<server description="order domain server">
+	<featureManager>
+		<!-- <feature>servlet-3.1</feature> -->
+		<feature>servlet-4.0</feature>
+		<feature>javaee-8.0</feature>
+		<feature>mpMetrics-2.0</feature>
+		<feature>mpHealth-2.0</feature>
+		<feature>mpConfig-1.3</feature>
+		<feature>ejb-3.2</feature>
+		<feature>restConnector-2.0</feature>
+		<!-- <feature>jdbc-4.0</feature> -->
+	</featureManager>
+
+	<!-- <basicRegistry id="basic" realm="dummyRealm"/> -->
+	<keyStore id="defaultKeyStore" password="Liberty" />
+	<quickStartSecurity userName="blogAdmin"
+		userPassword="blogAdminPassword" />
+
+	<logging
+		traceSpecification="com.ibm.ws.microprofile.health.*=all" />
+
+
+	<httpEndpoint host="*" httpPort="${default.http.port}"
+		httpsPort="${default.https.port}" id="defaultHttpEndpoint" />
+
+	<webApplication contextRoot="${app.context.root}"
+		id="orderdomain" location="orderdomain.war" />
+
+	<jdbcDriver id="H2Driver"
+		javax.sql.DataSource="org.h2.jdbcx.JdbcDataSource" libraryRef="h2-lib" />
+	<library id="h2-lib">
+		<fileset dir="${shared.resource.dir}/h2"
+			includes="h2-1.4.200.jar" />
+	</library>
+
+<!-- 	<dataSource id="h2-db" jndiName="jdbc/h2_db" -->
+<!-- 		type="javax.sql.DataSource" jdbcDriverRef="H2Driver"> -->
+<!-- 		<properties url="jdbc:h2:mem:h2_db;DB_CLOSE_DELAY=-1" -->
+<!-- 			databasename="h2_db" user="sa" password="sa" /> -->
+<!-- 		<properties password="rtsdbUser" url="jdbc:h2:file:${server.config.dir}/databases/h2/rtsdb" user="rtsdbUser"/> -->
+<!-- 	</dataSource> -->
+
+
+	<dataSource id="h2-db" jndiName="jdbc/h2_db">
+		<!-- Define the DataSource class names on the <jdbcDriver> element -->
+		<jdbcDriver
+			javax.sql.XADataSource="org.h2.jdbcx.JdbcDataSource"
+			javax.sql.ConnectionPoolDataSource="org.h2.jdbcx.JdbcDataSource"
+			javax.sql.DataSource="org.h2.jdbcx.JdbcDataSource"
+			libraryRef="h2-lib" />
+		<!-- set the connection URL on the <properties> element. this corresponds 
+			to the setURL() method on H2's JdbcDataSource class. you may also list any 
+			properties here that have a corresponding setXXX method on H2's JdbcDataSource 
+			class -->
+		<properties URL="jdbc:h2:mem:h2_db;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;TRACE_LEVEL_FILE=4" />
+	</dataSource>
+
+
+</server>

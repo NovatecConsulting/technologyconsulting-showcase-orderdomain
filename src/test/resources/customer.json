@@ -1,0 +1,19 @@
+{
+	"firstName": "firstName",
+	"lastName": "lastNAme",
+	"contact": "contact",
+	"credit": "100.0",
+	"creditLimit": "1000.0",
+	"balance": "200.0",
+	"ytdPayment": "100.0",
+	"customerInventories": [],
+	"address": {
+		"street1": "street1",
+		"street2": "street2",
+		"city": "city",
+		"state": "state",
+		"country": "county",
+		"zip": "zip",
+		"phone": "phone"
+	}
+}
