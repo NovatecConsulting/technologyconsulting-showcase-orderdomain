@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>net.wasdev.wlp.maven.parent</groupId>
+		<groupId>io.openliberty.tools</groupId>
 		<artifactId>liberty-maven-app-parent</artifactId>
-		<version>3.0.M1</version>
+		<version>3.1</version>
 	</parent>
 
 	<groupId>de.novatec.showcase</groupId>
@@ -25,8 +25,8 @@
 		<warContext>${app.name}</warContext>
 
 		<!-- Liberty configuration -->
-		<testServerHttpPort>9080</testServerHttpPort>
-		<testServerHttpsPort>9443</testServerHttpsPort>
+		<liberty.var.default.http.port>9080</liberty.var.default.http.port>
+		<liberty.var.default.https.port>9443</liberty.var.default.https.port>
 
 	</properties>
 
@@ -35,7 +35,7 @@
 			<dependency>
 				<groupId>io.openliberty.features</groupId>
 				<artifactId>features-bom</artifactId>
-				<version>19.0.0.10</version>
+				<version>19.0.0.11</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -130,33 +130,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<!-- <version>2.1</version> -->
-				<executions>
-					<execution>
-						<!-- <phase>validate</phase> -->
-						<phase>package</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${shared.resource.dir}/h2</outputDirectory>
-							<!-- <silent>true</silent> -->
-							<artifactItems>
-								<artifactItem>
-									<groupId>com.h2database</groupId>
-									<artifactId>h2</artifactId>
-									<version>1.4.200</version>
-									<type>jar</type>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -182,19 +155,58 @@
 					<packageFile>${package.file}</packageFile>
 					<include>${packaging.type}</include>
 					<bootstrapProperties>
-						<default.http.port>${testServerHttpPort}</default.http.port>
-						<default.https.port>${testServerHttpsPort}</default.https.port>
+						<default.http.port>${liberty.var.default.http.port}</default.http.port>
+						<default.https.port>${liberty.var.default.https.port}</default.https.port>
 						<app.context.root>${warContext}</app.context.root>
 					</bootstrapProperties>
 				</configuration>
 				<executions>
 					<execution>
 						<id>package-server</id>
+						<phase>package</phase>
+						<goals>
+							<goal>create-server</goal>
+						</goals>
 						<configuration>
 							<outputDirectory>target/wlp-package</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${shared.resource.dir}/h2</outputDirectory>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.h2database</groupId>
+									<artifactId>h2</artifactId>
+									<version>1.4.200</version>
+									<type>jar</type>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.0.0-M4</version>
+				<configuration>
+					<systemPropertyVariables>
+						<http.port>${liberty.var.default.http.port}</http.port>
+					</systemPropertyVariables>
+				</configuration>
 			</plugin>
 
 		</plugins>
