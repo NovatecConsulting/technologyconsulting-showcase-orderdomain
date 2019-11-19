@@ -64,12 +64,6 @@
 			<version>8.0.0</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>javax</groupId> -->
-		<!-- <artifactId>javaee-web-api</artifactId> -->
-		<!-- <version>6.0</version> -->
-		<!-- <scope>provided</scope> -->
-		<!-- </dependency> -->
 		<dependency>
 			<groupId>javax.jms</groupId>
 			<artifactId>javax.jms-api</artifactId>
@@ -82,22 +76,10 @@
 			<version>1.4.200</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.29</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.29</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-			<scope>runtime</scope>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20190722</version>
 		</dependency>
 
 		<!-- Test dependencies -->
@@ -119,11 +101,6 @@
 			<artifactId>cxf-rt-rs-extension-providers</artifactId>
 			<version>3.2.6</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20190722</version>
 		</dependency>
 
 	</dependencies>

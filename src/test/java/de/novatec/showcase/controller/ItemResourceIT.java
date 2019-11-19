@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.math.BigDecimal;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -14,31 +12,16 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import de.novatec.showcase.ejb.orders.entity.Item;
 
-public class ItemResourceIT {
+public class ItemResourceIT extends ResourcdITBase {
 
-	private static final String PORT = System.getProperty("http.port");
-	private static final String URL = "http://localhost:" + PORT + "/orderdomain/item/";
-
-	private Client client;
-
-	@Before
-	public void setup() {
-		client = ClientBuilder.newClient();
-	}
-
-	@After
-	public void teardown() {
-		client.close();
-	}
+	private static final String URL = BASE_URL + "item/";
 
 	@Test
-	public void testGetItemsWithId1000WhichDoesNotExist() {
+	public void testGetItemWithId1000WhichDoesNotExist() {
 		WebTarget target = client.target(URL).path("1000");
 		Response response = target.request().get();
 		assertResponse200(URL, response);
@@ -47,7 +30,7 @@ public class ItemResourceIT {
 	}
 
 	@Test
-	public void testGetItemsWithId() {
+	public void testGetItemWithId() {
 		WebTarget target = client.target(URL);
 		Item item = new Item("name", "description", new BigDecimal(100.0), new BigDecimal(0.0), 1, 0);
 		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
@@ -69,19 +52,5 @@ public class ItemResourceIT {
 		assertEquals("Category is not equal!", item.getCategory(), jsonObject.getInt("category"));
 		assertNotEquals("Version is not equal!", item.getVersion(), jsonObject.getInt("version"));
 		assertNotEquals("Id is equal!", item.getId(), jsonObject.getInt("id"));
-	}
-
-	private void assertResponse200(String url, Response response) {
-		assertEquals("Incorrect response code from " + url, Response.Status.OK.getStatusCode(), response.getStatus());
-	}
-
-	private void assertResponse201(String url, Response response) {
-		assertEquals("Incorrect response code from " + url, Response.Status.CREATED.getStatusCode(),
-				response.getStatus());
-	}
-
-	private void assertResponse404(String url, Response response) {
-		assertEquals("Incorrect response code from " + url, Response.Status.NOT_FOUND.getStatusCode(),
-				response.getStatus());
 	}
 }

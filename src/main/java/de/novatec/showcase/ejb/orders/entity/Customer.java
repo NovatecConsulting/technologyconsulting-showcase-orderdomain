@@ -25,6 +25,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "O_CUSTOMER")
 @NamedQueries(value = { @NamedQuery(name = "QUERY_ALL", query = Customer.QUERY_ALL),
@@ -64,6 +66,7 @@ public class Customer implements Serializable {
 
 	@Column(name = "C_SINCE")
 	@Temporal(value = TemporalType.DATE)
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Calendar since;
 
 	@Column(name = "C_BALANCE")

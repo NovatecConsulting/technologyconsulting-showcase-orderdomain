@@ -1,4 +1,5 @@
-"orderdomain" is a part of a showcase implementation which is running on a open liberty instance
+# tc-orderdomain-showcase
+orderdomain is a part of a showcase implementation which is running on a open liberty instance
 
 #### The project consists of the following packages
 
@@ -22,6 +23,6 @@ There is a little script smoketest.sh in the orderdomain folder which could be u
 - replace formerly existing MDB/JMS code with REST clients to other domains (manufacturing, supplier)
 - Better REST Responses including status codes
 - some validations to avoid NPE's
-- pom.xml cleanup
 - more test cases for REST Controllers
 - check functionality of ItemSession.getSubList -> refactor this "PARTS"-thing...
+- the parent pom version has to be updated as soon as 3.2 is out, there should be a fix for the maven-failsafe-plugin bug (https://github.com/OpenLiberty/ci.maven/issues/570) available, right now integration tests could be excuted just once, then you get an ERROR from maven-failsafe-plugin which makes restart impossible
