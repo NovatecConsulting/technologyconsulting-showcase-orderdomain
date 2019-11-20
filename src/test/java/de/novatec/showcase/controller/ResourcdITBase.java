@@ -41,6 +41,19 @@ abstract public class ResourcdITBase {
 	protected static Customer testCustomer = null;
 	protected static Order testOrder = null;
 
+	@BeforeClass
+	public static void beforeClass() {
+		client = ClientBuilder.newClient();
+		testCustomer = createCustomer();
+		testItem = createItem();
+		testOrder = createOrder(testCustomer.getId(), testItem);
+	}
+
+	@AfterClass
+	public static void teardown() {
+		client.close();
+	}
+	
 	public static void assertResponse200(String url, Response response) {
 		assertEquals("Incorrect response code from " + url, Response.Status.OK.getStatusCode(), response.getStatus());
 	}
@@ -116,23 +129,6 @@ abstract public class ResourcdITBase {
 		assertEquals("Address is not equal!", expectedAddress.getCountry(), actualJsonAddress.getString("country"));
 		assertEquals("Address is not equal!", expectedAddress.getZip(), actualJsonAddress.getString("zip"));
 		assertEquals("Address is not equal!", expectedAddress.getPhone(), actualJsonAddress.getString("phone"));
-	}
-
-	@BeforeClass
-	public static void setup() {
-		client = ClientBuilder.newClient();
-	}
-
-	@AfterClass
-	public static void teardown() {
-		client.close();
-	}
-
-	@BeforeClass
-	public static void beforeClass() {
-		testCustomer = createCustomer();
-		testItem = createItem();
-		testOrder = createOrder(testCustomer.getId(), testItem);
 	}
 
 	protected static Order createOrder(Integer customerId, Item item) {
