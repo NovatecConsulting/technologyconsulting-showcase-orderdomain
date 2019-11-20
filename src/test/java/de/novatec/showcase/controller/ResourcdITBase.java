@@ -116,9 +116,9 @@ abstract public class ResourcdITBase {
 
 		assertJsonAddress(expectedCustomer.getAddress(), actualJsonCustomer.getJSONObject("address"));
 
-		assertNotEquals("Version is equal!", expectedCustomer.getVersion(), actualJsonCustomer.getInt("version"));
+		assertEquals("Version is NOT equal!", expectedCustomer.getVersion(), actualJsonCustomer.getInt("version"));
 		assertNotNull("Id is null", Integer.valueOf(actualJsonCustomer.getInt("id")));
-		assertNotEquals("Id is equal!", expectedCustomer.getId(), Integer.valueOf(actualJsonCustomer.getInt("id")));
+		assertEquals("Id is NOT equal!", expectedCustomer.getId(), Integer.valueOf(actualJsonCustomer.getInt("id")));
 	}
 
 	protected static void assertJsonAddress(Address expectedAddress, JSONObject actualJsonAddress) {

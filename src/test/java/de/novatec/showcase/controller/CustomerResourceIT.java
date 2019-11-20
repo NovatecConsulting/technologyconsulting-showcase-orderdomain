@@ -30,20 +30,9 @@ public class CustomerResourceIT extends ResourcdITBase {
 
 	@Test
 	public void testGetCustomerWithId() {
-		WebTarget target = client.target(CUSTOMER_URL);
-		Customer customer = new Customer("firstname", "lastname", "contact", "credit", new BigDecimal(1000.0),
-				constantDate(), new BigDecimal(100.0), new BigDecimal(10.0), null,
-				new Address("street1", "street2", "city", "state", "county", "zip", "phone"));
-		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.json(JsonHelper.toJson(customer)));
-		assertResponse201(CUSTOMER_URL, response);
-
-		JSONObject json = new JSONObject(response.readEntity(String.class));
-		Integer customerId = Integer.valueOf(json.getInt("id"));
-		target = client.target(CUSTOMER_URL).path(customerId.toString());
-		response = target.request().get();
+		WebTarget target = client.target(CUSTOMER_URL).path(testCustomer.getId().toString());
+		Response response = target.request().get();
 		assertResponse200(CUSTOMER_URL, response);
-
-		assertJsonCustomer(customer, new JSONObject(response.readEntity(String.class)));
+		assertJsonCustomer(testCustomer, new JSONObject(response.readEntity(String.class)));
 	}
 }
