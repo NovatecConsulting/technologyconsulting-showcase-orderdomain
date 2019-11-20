@@ -117,7 +117,7 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>net.wasdev.wlp.maven.plugins</groupId>
+				<groupId>io.openliberty.tools</groupId>
 				<artifactId>liberty-maven-plugin</artifactId>
 				<configuration>
 					<assemblyArtifact>
@@ -140,10 +140,6 @@
 				<executions>
 					<execution>
 						<id>package-server</id>
-						<phase>package</phase>
-						<goals>
-							<goal>create-server</goal>
-						</goals>
 						<configuration>
 							<outputDirectory>target/wlp-package</outputDirectory>
 						</configuration>

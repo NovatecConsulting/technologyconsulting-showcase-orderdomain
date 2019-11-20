@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
@@ -25,8 +24,6 @@ import de.novatec.showcase.ejb.orders.entity.OrderStatus;
 @Stateless
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 public class CustomerSession implements CustomerSessionRemote, CustomerSessionLocal {
-
-	public final static Random rng = new Random();
 
 	@Resource
 	SessionContext mySessionCtx;
