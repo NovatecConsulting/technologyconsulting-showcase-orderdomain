@@ -4,17 +4,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import de.novatec.showcase.controller.helper.JsonHelper;
 import de.novatec.showcase.ejb.orders.entity.Address;
 import de.novatec.showcase.ejb.orders.entity.Customer;
 
@@ -34,10 +36,10 @@ public class CustomerResourceIT extends ResourcdITBase {
 	@Test
 	public void testGetCustomerWithId() {
 		WebTarget target = client.target(URL);
-		Customer customer = new Customer("firstname", "lastname", "contact", "credit", new BigDecimal(1000.0), Calendar.getInstance(), new BigDecimal(100.0),
+		Customer customer = new Customer("firstname", "lastname", "contact", "credit", new BigDecimal(1000.0), constantDate(), new BigDecimal(100.0),
 				new BigDecimal(10.0), null, new Address("street1", "street2", "city", "state", "county", "zip", "phone"));
 		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.json(new JsonHelper().toJson(customer)));
+				.post(Entity.json(JsonHelper.toJson(customer)));
 		assertResponse201(URL, response);
 
 		JSONObject json = new JSONObject(response.readEntity(String.class));
@@ -53,6 +55,8 @@ public class CustomerResourceIT extends ResourcdITBase {
 		assertEquals("CreditLimit is not equal!", customer.getCreditLimit(), jsonCustomer.getBigDecimal("creditLimit"));
 		assertEquals("Balance is not equal!", customer.getBalance(), jsonCustomer.getBigDecimal("balance"));
 		assertEquals("YtdPayment is not equal!", customer.getYtdPayment(), jsonCustomer.getBigDecimal("ytdPayment"));
+		assertEquals("Calendar is not equal!", fromat(customer.getSince()), 
+				jsonCustomer.get("since"));
 		assertEquals("CustomerInventory length is not equal!", 0, jsonCustomer.getJSONArray("customerInventories").length());
 		JSONObject addressJson = jsonCustomer.getJSONObject("address");
 		assertEquals("Address is not equal!", customer.getAddress().getStreet1(), addressJson.getString("street1"));
@@ -64,6 +68,18 @@ public class CustomerResourceIT extends ResourcdITBase {
 		assertEquals("Address is not equal!", customer.getAddress().getPhone(), addressJson.getString("phone"));
 		assertNotEquals("Version is not equal!", customer.getVersion(), jsonCustomer.getInt("version"));
 		assertNotEquals("Id is equal!", customer.getId(), Integer.valueOf(jsonCustomer.getInt("id")));
+	}
+
+	private String fromat(Calendar calendar) {
+		return new SimpleDateFormat(Customer.DATE_FORMAT, Locale.GERMAN).format(calendar.getTime());
+	}
+
+	private Calendar constantDate() {
+		Calendar calendar = Calendar.getInstance(Locale.GERMAN);
+		calendar.set(Calendar.YEAR, 2019);
+		calendar.set(Calendar.MONTH, Calendar.NOVEMBER);
+		calendar.set(Calendar.DAY_OF_MONTH, 20);
+		return calendar;
 	}
 
 }

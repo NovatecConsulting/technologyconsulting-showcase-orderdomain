@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import de.novatec.showcase.controller.helper.JsonHelper;
 import de.novatec.showcase.ejb.orders.entity.Order;
 import de.novatec.showcase.ejb.orders.entity.ShoppingCart;
 import de.novatec.showcase.ejb.orders.session.InsufficientCreditException;
@@ -27,8 +28,6 @@ public class OrderResource {
 
 	@EJB
 	private OrderSessionLocal bean;
-
-	private JsonHelper jsonHelper = new JsonHelper();
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -42,7 +41,7 @@ public class OrderResource {
 			return Response.status(Response.Status.NOT_FOUND).entity("Order with id '" + orderId + "'not found")
 					.build();
 		}
-		String json = this.jsonHelper.toJson(order);
+		String json = JsonHelper.toJson(order);
 		return Response.ok(json, MediaType.APPLICATION_JSON).build();
 	}
 
@@ -70,7 +69,7 @@ public class OrderResource {
 			return Response.status(Response.Status.NOT_FOUND)
 					.entity("Orders with customer id '" + customerId + "' not found").build();
 		}
-		String json = jsonHelper.toJson(orders);
+		String json = JsonHelper.toJson(orders);
 		return Response.ok(json, MediaType.APPLICATION_JSON).build();
 	}
 

@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import de.novatec.showcase.controller.helper.JsonHelper;
 import de.novatec.showcase.ejb.orders.entity.Item;
 
 public class ItemResourceIT extends ResourcdITBase {
@@ -34,7 +35,7 @@ public class ItemResourceIT extends ResourcdITBase {
 		WebTarget target = client.target(URL);
 		Item item = new Item("name", "description", new BigDecimal(100.0), new BigDecimal(0.0), 1, 0);
 		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.json(new JsonHelper().toJson(item)));
+				.post(Entity.json(JsonHelper.toJson(item)));
 		assertResponse201(URL, response);
 
 		JSONObject json = new JSONObject(response.readEntity(String.class));

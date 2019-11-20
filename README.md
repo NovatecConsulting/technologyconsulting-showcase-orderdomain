@@ -26,3 +26,4 @@ There is a little script smoketest.sh in the orderdomain folder which could be u
 - more test cases for REST Controllers
 - check functionality of ItemSession.getSubList -> refactor this "PARTS"-thing...
 - the parent pom version has to be updated as soon as 3.2 is out, there should be a fix for the maven-failsafe-plugin bug (https://github.com/OpenLiberty/ci.maven/issues/570) available, right now integration tests could be excuted just once, then you get an ERROR from maven-failsafe-plugin which makes restart impossible
+- get rid of Calendar instances

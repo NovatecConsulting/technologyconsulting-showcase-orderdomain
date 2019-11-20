@@ -15,16 +15,16 @@ abstract public class ResourcdITBase {
 	protected static final String BASE_URL = "http://localhost:" + PORT + "/orderdomain/";
 	protected Client client;
 
-	protected void assertResponse200(String url, Response response) {
+	public static void assertResponse200(String url, Response response) {
 		assertEquals("Incorrect response code from " + url, Response.Status.OK.getStatusCode(), response.getStatus());
 	}
 
-	protected void assertResponse201(String url, Response response) {
+	public static void assertResponse201(String url, Response response) {
 		assertEquals("Incorrect response code from " + url, Response.Status.CREATED.getStatusCode(),
 				response.getStatus());
 	}
 
-	protected void assertResponse404(String url, Response response) {
+	public static void assertResponse404(String url, Response response) {
 		assertEquals("Incorrect response code from " + url, Response.Status.NOT_FOUND.getStatusCode(),
 				response.getStatus());
 	}

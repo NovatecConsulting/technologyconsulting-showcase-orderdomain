@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import javax.persistence.AttributeOverride;
@@ -36,6 +37,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 })
 public class Customer implements Serializable {
+	public static final String DATE_FORMAT = "yyyy-MM-dd";
+
 	private static final long serialVersionUID = 3961431086357095469L;
 
 	public static final String QUERY_ALL = "SELECT c FROM Customer c";
@@ -66,7 +69,7 @@ public class Customer implements Serializable {
 
 	@Column(name = "C_SINCE")
 	@Temporal(value = TemporalType.DATE)
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = DATE_FORMAT, locale = "de_DE")
 	private Calendar since;
 
 	@Column(name = "C_BALANCE")

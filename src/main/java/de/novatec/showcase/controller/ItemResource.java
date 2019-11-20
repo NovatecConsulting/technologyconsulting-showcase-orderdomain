@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import de.novatec.showcase.controller.helper.JsonHelper;
 import de.novatec.showcase.ejb.orders.entity.Item;
 import de.novatec.showcase.ejb.orders.session.ItemSessionLocal;
 
@@ -25,8 +26,6 @@ public class ItemResource {
 
 	@EJB
 	private ItemSessionLocal itemBean;
-
-	private JsonHelper jsonHelper = new JsonHelper();
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -78,7 +77,7 @@ public class ItemResource {
 	@Path(value = "{ids}")
 	public Response getItems(@PathParam("ids") String itemIds) {
 		List<Item> items = itemBean.getItems(itemIds);
-		String json = jsonHelper.toJson(items);
+		String json = JsonHelper.toJson(items);
 		return Response.ok(json).build();
 	}
 
@@ -87,7 +86,7 @@ public class ItemResource {
 	@Path(value = "forward")
 	public Response forward() {
 		List<Item> items = itemBean.browseForward();
-		String json = jsonHelper.toJson(items);
+		String json = JsonHelper.toJson(items);
 		return Response.ok(json).build();
 	}
 
@@ -96,7 +95,7 @@ public class ItemResource {
 	@Path(value = "reverse")
 	public Response reverse() {
 		List<Item> items = itemBean.browseReverse();
-		String json = jsonHelper.toJson(items);
+		String json = JsonHelper.toJson(items);
 		return Response.ok(json).build();
 	}
 

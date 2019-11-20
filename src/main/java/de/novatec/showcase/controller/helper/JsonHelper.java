@@ -1,4 +1,4 @@
-package de.novatec.showcase.controller;
+package de.novatec.showcase.controller.helper;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,13 +9,13 @@ import de.novatec.showcase.ejb.orders.entity.Customer;
 import de.novatec.showcase.ejb.orders.entity.Item;
 import de.novatec.showcase.ejb.orders.entity.Order;
 
-public class JsonHelper {
-	private ObjectMapper mapper = new ObjectMapper();
+public abstract class JsonHelper {
+	private static ObjectMapper mapper = new ObjectMapper();
 
-	public JsonHelper() {
+	private JsonHelper() {
 	}
 
-	String toJsonString(Object object) {
+	public static String toJsonString(Object object) {
 		String json = "{}";
 		try {
 
@@ -28,19 +28,19 @@ public class JsonHelper {
 		return json;
 	}
 
-	String toJson(List<?> entities) {
+	public static String toJson(List<?> entities) {
 		return toJsonString(entities);
 	}
 
-	String toJson(Item item) {
+	public static String toJson(Item item) {
 		return toJsonString(item);
 	}
 
-	String toJson(Customer customer) {
+	public static String toJson(Customer customer) {
 		return toJsonString(customer);
 	}
 
-	String toJson(Order order) {
+	public static String toJson(Order order) {
 		return toJsonString(order);
 	}
 }

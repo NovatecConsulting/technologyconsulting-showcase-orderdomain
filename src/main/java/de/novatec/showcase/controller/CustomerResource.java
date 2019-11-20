@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import de.novatec.showcase.controller.helper.JsonHelper;
 import de.novatec.showcase.ejb.orders.entity.Customer;
 import de.novatec.showcase.ejb.orders.entity.CustomerInventory;
 import de.novatec.showcase.ejb.orders.session.CustomerSessionLocal;
@@ -28,8 +29,6 @@ public class CustomerResource {
 
 	@EJB
 	private CustomerSessionLocal bean;
-
-	private JsonHelper jsonHelper = new JsonHelper();
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -43,7 +42,7 @@ public class CustomerResource {
 			return Response.status(Response.Status.NOT_FOUND).entity("Customer with id '" + customerId + "' not found!")
 					.build();
 		}
-		String json = jsonHelper.toJson(customer);
+		String json = JsonHelper.toJson(customer);
 		return Response.ok(json).build();
 	}
 
@@ -80,7 +79,7 @@ public class CustomerResource {
 			return Response.status(Response.Status.NOT_FOUND)
 					.entity("Customer with id '" + customerId + "' has no inventory!").build();
 		}
-		String json = jsonHelper.toJson(inventories);
+		String json = JsonHelper.toJson(inventories);
 		return Response.ok(json).build();
 	}
 
@@ -92,7 +91,7 @@ public class CustomerResource {
 		if (customers == null || customers.isEmpty()) {
 			return Response.status(Response.Status.NOT_FOUND).entity("No Customer with good credit found!").build();
 		}
-		String json = jsonHelper.toJson(customers);
+		String json = JsonHelper.toJson(customers);
 		return Response.ok(json).build();
 	}
 
