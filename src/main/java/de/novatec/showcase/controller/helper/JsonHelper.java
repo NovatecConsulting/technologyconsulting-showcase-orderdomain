@@ -3,11 +3,7 @@ package de.novatec.showcase.controller.helper;
 import java.io.IOException;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.novatec.showcase.controller.ItemQuantityPairs;
 import de.novatec.showcase.ejb.orders.entity.Customer;
@@ -67,9 +63,11 @@ public abstract class JsonHelper {
 		return (Order)fromJsonString(jsonOrder, Order.class);
 	}
 
-	public static Item fromJsonItem(String jsonOrder) {
-		return (Item)fromJsonString(jsonOrder, Item.class);
+	public static Item fromJsonItem(String jsonItem) {
+		return (Item)fromJsonString(jsonItem, Item.class);
 	}
 	
-
+	public static Customer fromJsonCustomer(String jsonCustomer) {
+		return (Customer)fromJsonString(jsonCustomer, Customer.class);
+	}
 }
