@@ -40,11 +40,8 @@ public class OrderResourceIT extends ResourcdITBase {
 		WebTarget target = client.target(ORDER_URL).path(testOrder.getId().toString());
 		Response response = target.request().get();
 		assertResponse200(ORDER_URL, response);
-
 		Order order = JsonHelper.fromJsonOrder(response.readEntity(String.class));
-
-		// TODO more test with deserialized order
-		assertEquals(1, order.getOrderLines().size());
+		assertEquals(testOrder, order);
 	}
 
 	@Test

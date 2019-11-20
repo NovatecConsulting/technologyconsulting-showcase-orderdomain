@@ -91,7 +91,7 @@ public class OrderSession implements OrderSessionRemote, OrderSessionLocal {
 
 		Order order = new Order(shoppingCart.getTotalPrice(), shoppingCart.getTotalDiscount(), customer);
 		em.persist(order);
-		em.flush();
+//		em.flush();
 
 		int lineNumber = 1;
 		for (Item item : shoppingCart.getItems()) {
