@@ -3,7 +3,6 @@ package de.novatec.showcase.ejb.orders.session;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -16,7 +15,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import de.novatec.showcase.ejb.orders.entity.Address;
 import de.novatec.showcase.ejb.orders.entity.Customer;
 import de.novatec.showcase.ejb.orders.entity.CustomerInventory;
 import de.novatec.showcase.ejb.orders.entity.Item;

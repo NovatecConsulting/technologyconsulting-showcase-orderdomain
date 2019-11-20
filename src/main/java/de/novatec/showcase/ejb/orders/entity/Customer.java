@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import javax.persistence.AttributeOverride;
@@ -222,12 +221,6 @@ public class Customer implements Serializable {
 
 	public boolean hasSufficientCredit(BigDecimal cost) {
 		return this.creditLimit.add(this.balance).compareTo(cost) == 1;
-//		if (cost.compareTo(this.creditLimit.add(this.balance)) == 1) {
-//			return false;
-//		} else {
-//			return true;
-//		}
-//
 	}
 
 	@Override

@@ -55,7 +55,7 @@ public class CustomerResourceIT extends ResourcdITBase {
 		assertEquals("CreditLimit is not equal!", customer.getCreditLimit(), jsonCustomer.getBigDecimal("creditLimit"));
 		assertEquals("Balance is not equal!", customer.getBalance(), jsonCustomer.getBigDecimal("balance"));
 		assertEquals("YtdPayment is not equal!", customer.getYtdPayment(), jsonCustomer.getBigDecimal("ytdPayment"));
-		assertEquals("Calendar is not equal!", fromat(customer.getSince()), 
+		assertEquals("Calendar is not equal!", format(customer.getSince()), 
 				jsonCustomer.get("since"));
 		assertEquals("CustomerInventory length is not equal!", 0, jsonCustomer.getJSONArray("customerInventories").length());
 		JSONObject addressJson = jsonCustomer.getJSONObject("address");
@@ -70,10 +70,10 @@ public class CustomerResourceIT extends ResourcdITBase {
 		assertNotEquals("Id is equal!", customer.getId(), Integer.valueOf(jsonCustomer.getInt("id")));
 	}
 
-	private String fromat(Calendar calendar) {
+	private String format(Calendar calendar) {
 		return new SimpleDateFormat(Customer.DATE_FORMAT, Locale.GERMAN).format(calendar.getTime());
 	}
-
+	
 	private Calendar constantDate() {
 		Calendar calendar = Calendar.getInstance(Locale.GERMAN);
 		calendar.set(Calendar.YEAR, 2019);
@@ -81,5 +81,4 @@ public class CustomerResourceIT extends ResourcdITBase {
 		calendar.set(Calendar.DAY_OF_MONTH, 20);
 		return calendar;
 	}
-
 }
