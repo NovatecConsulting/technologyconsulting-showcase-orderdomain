@@ -67,5 +67,9 @@ public abstract class JsonHelper {
 		return (Order)fromJsonString(jsonOrder, Order.class);
 	}
 
+	public static Item fromJsonItem(String jsonOrder) {
+		return (Item)fromJsonString(jsonOrder, Item.class);
+	}
+	
 
 }

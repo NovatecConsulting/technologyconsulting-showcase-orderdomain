@@ -28,43 +28,6 @@ public class OrderResourceIT extends ResourcdITBase {
 	private static Integer customerId = null;
 	private static Integer orderId = null;
 
-	@BeforeClass
-	public static void beforeClass() {
-		// create the test customer
-		WebTarget target = client.target(CUSTOMER_URL);
-		Customer customer = new Customer("firstname", "lastname", "contact", "credit", new BigDecimal(1000.0),
-				constantDate(), new BigDecimal(100.0), new BigDecimal(10.0), null,
-				new Address("street1", "street2", "city", "state", "county", "zip", "phone"));
-		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.json(JsonHelper.toJson(customer)));
-		assertResponse201(ORDER_URL, response);
-
-		JSONObject json = new JSONObject(response.readEntity(String.class));
-		customerId = Integer.valueOf(json.getInt("id"));
-
-		// create the testItem
-		target = client.target(ITEM_URL);
-		testItem = new Item("name", "description", new BigDecimal(100.0), new BigDecimal(0.0), 1, 0);
-		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.json(JsonHelper.toJson(testItem)));
-		assertResponse201(ITEM_URL, response);
-
-		json = new JSONObject(response.readEntity(String.class));
-		Integer itemId = Integer.valueOf(json.getInt("id"));
-		testItem.setId(itemId.toString());
-
-		// create the test Order
-		target = client.target(ORDER_URL).path(customerId.toString());
-		ItemQuantityPairs itemQuantityPairs = new ItemQuantityPairs()
-				.setItemQuantityPairs(Arrays.asList(new ItemQuantityPair(testItem, 1)));
-		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.json(JsonHelper.toJson(itemQuantityPairs)));
-		assertResponse201(ORDER_URL, response);
-
-		json = new JSONObject(response.readEntity(String.class));
-		orderId = Integer.valueOf(json.getInt("id"));
-	}
-
 	@Test
 	public void testGetOrderWithNonExistingId() {
 		WebTarget target = client.target(ORDER_URL).path(NON_EXISTING_ID);
@@ -98,31 +61,10 @@ public class OrderResourceIT extends ResourcdITBase {
 
 	@Test
 	public void testDeleteOrder() {
-		// create the an other customer
-		WebTarget target = client.target(CUSTOMER_URL);
-		Customer customer = new Customer("firstname", "lastname", "contact", "credit", new BigDecimal(1000.0),
-				constantDate(), new BigDecimal(100.0), new BigDecimal(10.0), null,
-				new Address("street1", "street2", "city", "state", "county", "zip", "phone"));
-		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.json(JsonHelper.toJson(customer)));
-		assertResponse201(ORDER_URL, response);
-
-		JSONObject json = new JSONObject(response.readEntity(String.class));
-		Integer otherCustomerId = Integer.valueOf(json.getInt("id"));
-
-		// create the Order to be deleted
-		target = client.target(ORDER_URL).path(otherCustomerId.toString());
-		ItemQuantityPairs itemQuantityPairs = new ItemQuantityPairs()
-				.setItemQuantityPairs(Arrays.asList(new ItemQuantityPair(testItem, 1)));
-		response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.json(JsonHelper.toJson(itemQuantityPairs)));
-		assertResponse201(ORDER_URL, response);
-
-		json = new JSONObject(response.readEntity(String.class));
-		Integer orderIdToBeDeleted = Integer.valueOf(json.getInt("id"));
-
-		target = client.target(ORDER_URL).path(orderIdToBeDeleted.toString());
-		response = target.request(MediaType.APPLICATION_JSON).delete();
+		// create an order for an other customer which has to be deleted
+		Integer orderIdToBeDeleted = createOrderId(createCustomerId(), testItem);
+		WebTarget target = client.target(ORDER_URL).path(orderIdToBeDeleted.toString());
+		Response response = target.request(MediaType.APPLICATION_JSON).delete();
 		assertResponse200(ORDER_URL, response);
 
 		target = client.target(ORDER_URL).path(orderIdToBeDeleted.toString());
@@ -151,4 +93,55 @@ public class OrderResourceIT extends ResourcdITBase {
 		assertEquals("Size should be only one order with customer " + customerId + "!", Integer.valueOf(1),
 				Integer.valueOf(jsonCount.getString("count")));
 	}
+
+	@BeforeClass
+	public static void beforeClass() {
+		customerId = createCustomerId();
+		testItem = createItem();
+		orderId = createOrderId(customerId, testItem);
+	}
+
+	private static Integer createOrderId(Integer customerId, Item item) {
+		WebTarget target = client.target(ORDER_URL).path(customerId.toString());
+		ItemQuantityPairs itemQuantityPairs = new ItemQuantityPairs()
+				.setItemQuantityPairs(Arrays.asList(new ItemQuantityPair(item, 1)));
+		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity.json(JsonHelper.toJson(itemQuantityPairs)));
+		assertResponse201(ORDER_URL, response);
+
+		JSONObject json = new JSONObject(response.readEntity(String.class));
+		return Integer.valueOf(json.getInt("id"));
+	}
+
+	private static Item createItem() {
+		WebTarget target = client.target(ITEM_URL);
+		Item item = new Item("name", "description", new BigDecimal(100.0), new BigDecimal(0.0), 1, 0);
+		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity.json(JsonHelper.toJson(item)));
+		assertResponse201(ITEM_URL, response);
+
+		JSONObject json = new JSONObject(response.readEntity(String.class));
+		target = client.target(ITEM_URL).path(Integer.valueOf(json.getInt("id")).toString());
+		response = target.request().get();
+		assertResponse200(ITEM_URL, response);
+
+		JSONArray jsonItems = new JSONArray(response.readEntity(String.class));
+		assertEquals("Result should be just one element in an json array!", 1, jsonItems.length());
+
+		return JsonHelper.fromJsonItem(jsonItems.getJSONObject(0).toString());
+	}
+
+	private static Integer createCustomerId() {
+		WebTarget target = client.target(CUSTOMER_URL);
+		Customer customer = new Customer("firstname", "lastname", "contact", "credit", new BigDecimal(1000.0),
+				constantDate(), new BigDecimal(100.0), new BigDecimal(10.0), null,
+				new Address("street1", "street2", "city", "state", "county", "zip", "phone"));
+		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity.json(JsonHelper.toJson(customer)));
+		assertResponse201(ORDER_URL, response);
+
+		JSONObject json = new JSONObject(response.readEntity(String.class));
+		return Integer.valueOf(json.getInt("id"));
+	}
+
 }
