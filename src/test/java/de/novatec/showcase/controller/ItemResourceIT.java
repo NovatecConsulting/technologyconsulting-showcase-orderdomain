@@ -1,7 +1,6 @@
 package de.novatec.showcase.controller;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import java.math.BigDecimal;
 
@@ -19,39 +18,31 @@ import de.novatec.showcase.ejb.orders.entity.Item;
 
 public class ItemResourceIT extends ResourcdITBase {
 
-	private static final String URL = BASE_URL + "item/";
-
 	@Test
-	public void testGetItemWithId1000WhichDoesNotExist() {
-		WebTarget target = client.target(URL).path("1000");
+	public void testGetItemWithNonExistingId() {
+		WebTarget target = client.target(ITEM_URL).path(NON_EXISTING_ID);
 		Response response = target.request().get();
-		assertResponse200(URL, response);
+		assertResponse200(ITEM_URL, response);
 		JSONArray jsonItems = new JSONArray(response.readEntity(String.class));
 		assertEquals("Result should be an empty json array!", 0, jsonItems.length());
 	}
 
 	@Test
 	public void testGetItemWithId() {
-		WebTarget target = client.target(URL);
+		WebTarget target = client.target(ITEM_URL);
 		Item item = new Item("name", "description", new BigDecimal(100.0), new BigDecimal(0.0), 1, 0);
 		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.json(JsonHelper.toJson(item)));
-		assertResponse201(URL, response);
+		assertResponse201(ITEM_URL, response);
 
 		JSONObject json = new JSONObject(response.readEntity(String.class));
 		Integer itemId = Integer.valueOf(json.getInt("id"));
-		target = client.target(URL).path(itemId.toString());
+		target = client.target(ITEM_URL).path(itemId.toString());
 		response = target.request().get();
-		assertResponse200(URL, response);
+		assertResponse200(ITEM_URL, response);
+
 		JSONArray jsonItems = new JSONArray(response.readEntity(String.class));
 		assertEquals("Result should be just one element in an json array!", 1, jsonItems.length());
-		JSONObject jsonObject = jsonItems.getJSONObject(0);
-		assertEquals("Name is not equal!", item.getName(), jsonObject.getString("name"));
-		assertEquals("Description is not equal!", item.getDescription(), jsonObject.getString("description"));
-		assertEquals("Price is not equal!", item.getPrice(), jsonObject.getBigDecimal("price"));
-		assertEquals("Discount is not equal!", item.getDiscount(), jsonObject.getBigDecimal("discount"));
-		assertEquals("Category is not equal!", item.getCategory(), jsonObject.getInt("category"));
-		assertNotEquals("Version is not equal!", item.getVersion(), jsonObject.getInt("version"));
-		assertNotEquals("Id is equal!", item.getId(), jsonObject.getInt("id"));
+		assertJsonItem(item, jsonItems.getJSONObject(0));
 	}
 }

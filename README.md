@@ -31,3 +31,4 @@ There is a little script smoketest.sh in the orderdomain folder which could be u
 - some validations to avoid NPE's
 - more test cases for REST Controllers
 - check functionality of ItemSession.getSubList -> refactor this "PARTS"-thing...
+- OrderStatus model is not clean, i.e. DELETED order are also counted with order/count_by_customer/{id}

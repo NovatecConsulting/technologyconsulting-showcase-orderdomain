@@ -10,8 +10,9 @@ public class ItemQuantityPairs {
 		return itemQuantityPairs;
 	}
 
-	public void setItemQuantityPairs(List<ItemQuantityPair> itemQuantityPairs) {
+	public ItemQuantityPairs setItemQuantityPairs(List<ItemQuantityPair> itemQuantityPairs) {
 		this.itemQuantityPairs = itemQuantityPairs;
+		return this;
 	}
 
 }

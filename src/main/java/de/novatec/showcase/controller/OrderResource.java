@@ -38,7 +38,7 @@ public class OrderResource {
 		}
 		Order order = bean.getOrder(orderId);
 		if (order == null) {
-			return Response.status(Response.Status.NOT_FOUND).entity("Order with id '" + orderId + "'not found")
+			return Response.status(Response.Status.NOT_FOUND).entity("Order with id '" + orderId + "' not found!")
 					.build();
 		}
 		String json = JsonHelper.toJson(order);

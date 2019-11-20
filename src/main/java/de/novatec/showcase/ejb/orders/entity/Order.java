@@ -27,6 +27,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "O_ORDERS")
 @NamedQueries(value = { @NamedQuery(name = "COUNT_BY_CUSTOMER", query = Order.COUNT_BY_CUSTOMER),
@@ -159,16 +161,17 @@ public class Order implements Serializable {
 		return this.customer;
 	}
 
+	@JsonIgnore
 	public boolean isPriceMinusDiscountEqualPriceWithDiscount() {
 		return getPrice().subtract(this.discount).equals(getPriceWithDiscount());
 	}
 
+	@JsonIgnore
 	public boolean isPriceWithDiscountEqualTotal() {
 		return getPriceWithDiscount().equals(this.total);
 	}
 
-	private BigDecimal getPrice()
-	{
+	private BigDecimal getPrice() {
 		BigDecimal price = BigDecimal.ZERO;
 		for (OrderLine orderLine : this.getOrderLines()) {
 			Item item = orderLine.getItem();
@@ -176,9 +179,8 @@ public class Order implements Serializable {
 		}
 		return price;
 	}
-	
-	private BigDecimal getPriceWithDiscount()
-	{
+
+	private BigDecimal getPriceWithDiscount() {
 		BigDecimal priceWithDiscount = BigDecimal.ZERO;
 		for (OrderLine orderLine : this.getOrderLines()) {
 			Item item = orderLine.getItem();
@@ -187,7 +189,7 @@ public class Order implements Serializable {
 		}
 		return priceWithDiscount;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Order [id=" + id + ", status=" + status + ", shipDate=" + shipDate + ", entryDate=" + entryDate
