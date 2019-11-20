@@ -85,52 +85,6 @@ abstract public class ResourcdITBase {
 		return new SimpleDateFormat(Customer.DATE_FORMAT, Locale.GERMAN).format(calendar.getTime());
 	}
 
-	protected static void assertJsonItem(Item expectedItem, JSONObject actualJsonItem) {
-		assertEquals("Name is not equal!", expectedItem.getName(), actualJsonItem.getString("name"));
-		assertEquals("Description is not equal!", expectedItem.getDescription(),
-				actualJsonItem.getString("description"));
-		assertEquals("Price is not equal!", expectedItem.getPrice(), actualJsonItem.getBigDecimal("price"));
-		assertEquals("Discount is not equal!", expectedItem.getDiscount(), actualJsonItem.getBigDecimal("discount"));
-		assertEquals("Category is not equal!", expectedItem.getCategory(), actualJsonItem.getInt("category"));
-		assertNotEquals("Version is equal!", expectedItem.getVersion(), actualJsonItem.getInt("version"));
-		assertNotNull("Id is null", Integer.valueOf(actualJsonItem.getInt("id")));
-		assertNotEquals("Id is equal!", expectedItem.getId(), actualJsonItem.getInt("id"));
-	}
-
-	protected static void assertJsonCustomer(Customer expectedCustomer, JSONObject actualJsonCustomer) {
-		assertEquals("FirstName is not equal!", expectedCustomer.getFirstName(),
-				actualJsonCustomer.getString("firstName"));
-		assertEquals("LastName is not equal!", expectedCustomer.getLastName(),
-				actualJsonCustomer.getString("lastName"));
-		assertEquals("Contact is not equal!", expectedCustomer.getContact(), actualJsonCustomer.getString("contact"));
-		assertEquals("Credit is not equal!", expectedCustomer.getCredit(), actualJsonCustomer.getString("credit"));
-		assertEquals("CreditLimit is not equal!", expectedCustomer.getCreditLimit(),
-				actualJsonCustomer.getBigDecimal("creditLimit"));
-		assertEquals("Balance is not equal!", expectedCustomer.getBalance(),
-				actualJsonCustomer.getBigDecimal("balance"));
-		assertEquals("YtdPayment is not equal!", expectedCustomer.getYtdPayment(),
-				actualJsonCustomer.getBigDecimal("ytdPayment"));
-		assertEquals("Calendar is not equal!", format(expectedCustomer.getSince()), actualJsonCustomer.get("since"));
-		assertEquals("CustomerInventory length is not equal!", 0,
-				actualJsonCustomer.getJSONArray("customerInventories").length());
-
-		assertJsonAddress(expectedCustomer.getAddress(), actualJsonCustomer.getJSONObject("address"));
-
-		assertEquals("Version is NOT equal!", expectedCustomer.getVersion(), actualJsonCustomer.getInt("version"));
-		assertNotNull("Id is null", Integer.valueOf(actualJsonCustomer.getInt("id")));
-		assertEquals("Id is NOT equal!", expectedCustomer.getId(), Integer.valueOf(actualJsonCustomer.getInt("id")));
-	}
-
-	protected static void assertJsonAddress(Address expectedAddress, JSONObject actualJsonAddress) {
-		assertEquals("Address is not equal!", expectedAddress.getStreet1(), actualJsonAddress.getString("street1"));
-		assertEquals("Address is not equal!", expectedAddress.getStreet2(), actualJsonAddress.getString("street2"));
-		assertEquals("Address is not equal!", expectedAddress.getCity(), actualJsonAddress.getString("city"));
-		assertEquals("Address is not equal!", expectedAddress.getState(), actualJsonAddress.getString("state"));
-		assertEquals("Address is not equal!", expectedAddress.getCountry(), actualJsonAddress.getString("country"));
-		assertEquals("Address is not equal!", expectedAddress.getZip(), actualJsonAddress.getString("zip"));
-		assertEquals("Address is not equal!", expectedAddress.getPhone(), actualJsonAddress.getString("phone"));
-	}
-
 	protected static Order createOrder(Integer customerId, Item item) {
 		WebTarget target = client.target(ORDER_URL).path(customerId.toString());
 		ItemQuantityPairs itemQuantityPairs = new ItemQuantityPairs()
