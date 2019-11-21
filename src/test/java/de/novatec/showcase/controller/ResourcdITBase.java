@@ -121,7 +121,7 @@ abstract public class ResourcdITBase {
 
 	protected static Customer createCustomer() {
 		WebTarget target = client.target(CUSTOMER_URL);
-		Customer customer = new Customer("firstname", "lastname", "contact", "credit", new BigDecimal(1000.0),
+		Customer customer = new Customer("firstname", "lastname", "contact", "GC", new BigDecimal(1000.0),
 				constantDate(), new BigDecimal(100.0), new BigDecimal(10.0), null,
 				new Address("street1", "street2", "city", "state", "county", "zip", "phone"));
 		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
