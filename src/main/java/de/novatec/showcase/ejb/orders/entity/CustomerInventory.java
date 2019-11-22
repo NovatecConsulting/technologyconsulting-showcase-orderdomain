@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Objects;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,9 +38,11 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 	@Column(name = "CI_CUSTOMERID")
 	private Integer customerId;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CI_CUSTOMERID", insertable = false, updatable = false)
+	//Use Both anatation, until we are clean and only one (JsonbTransient) is used 
 	@JsonIgnore
+	@JsonbTransient
 	private Customer customer;
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -74,10 +77,11 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 		return id;
 	}
 
-	public Integer getCustId() {
+	public Integer getCustomerId() {
 		return customerId;
 	}
 
+	@JsonIgnore
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -112,9 +116,9 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 	public int compare(CustomerInventory o1, CustomerInventory o2) {
 		if (o1.equals(o2)) {
 			return 0;
-		} else if (o1.getCustId() < o2.getCustId()) {
+		} else if (o1.getCustomerId() < o2.getCustomerId()) {
 			return -1;
-		} else if (o1.getCustId() > o2.getCustId()) {
+		} else if (o1.getCustomerId() > o2.getCustomerId()) {
 			return 1;
 		} else {
 			if (o1.getId() < o2.getId()) {

@@ -46,7 +46,7 @@ public class CustomerInventoryPK implements Serializable {
 		return Objects.equals(customerId, other.customerId) && Objects.equals(id, other.id);
 	}
 
-	public Integer getCustId() {
+	public Integer getCustomerId() {
 		return customerId;
 	}
 

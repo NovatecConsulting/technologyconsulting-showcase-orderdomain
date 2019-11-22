@@ -1,7 +1,15 @@
 package de.novatec.showcase.controller.helper;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.List;
+import java.util.stream.Collector;
+
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.servlet.Registration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -70,4 +78,22 @@ public abstract class JsonHelper {
 	public static Customer fromJsonCustomer(String jsonCustomer) {
 		return (Customer)fromJsonString(jsonCustomer, Customer.class);
 	}
+
+	public static JsonObject toJsonObject(Item item) {
+		return convertToJsonObject(item);
+	}
+	
+	public static JsonObject toJsonObject(Order order) {
+		return convertToJsonObject(order);
+	}
+	
+	public static JsonObject toJsonObject(Customer customer) {
+		return convertToJsonObject(customer);
+	}
+	
+	public static JsonObject convertToJsonObject(Object object) {
+		return Json.createReader(new StringReader(JsonHelper.toJsonString(object))).readObject();
+	}
+	
+	
 }

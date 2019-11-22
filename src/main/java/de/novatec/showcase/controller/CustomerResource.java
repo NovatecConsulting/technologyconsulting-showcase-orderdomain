@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -18,7 +20,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import de.novatec.showcase.controller.helper.JsonHelper;
 import de.novatec.showcase.ejb.orders.entity.Customer;
 import de.novatec.showcase.ejb.orders.entity.CustomerInventory;
 import de.novatec.showcase.ejb.orders.session.CustomerSessionLocal;
@@ -42,8 +43,7 @@ public class CustomerResource {
 			return Response.status(Response.Status.NOT_FOUND).entity("Customer with id '" + customerId + "' not found!")
 					.build();
 		}
-		String json = JsonHelper.toJson(customer);
-		return Response.ok(json).build();
+		return Response.ok().entity(customer).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@GET
@@ -51,8 +51,9 @@ public class CustomerResource {
 	@Path(value = "count")
 	public Response countCustomer() {
 		long count = bean.countCustomer();
-		String json = "{ \"count\": \"" + count + "\" }";
-		return Response.ok(json).build();
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+		builder.add("count", count);
+		return Response.ok().entity(builder.build()).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@GET
@@ -63,8 +64,9 @@ public class CustomerResource {
 			return Response.serverError().entity("Id cannot be less than 1!").build();
 		}
 		boolean exist = bean.validateCustomer(customerId);
-		String json = "{ \"exist\": \"" + Boolean.valueOf(exist).toString() + "\" }";
-		return Response.ok(json).build();
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+		builder.add("exist", exist);
+		return Response.ok().entity(builder.build()).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@GET
@@ -79,8 +81,7 @@ public class CustomerResource {
 			return Response.status(Response.Status.NOT_FOUND)
 					.entity("Customer with id '" + customerId + "' has no inventory!").build();
 		}
-		String json = JsonHelper.toJson(inventories);
-		return Response.ok(json).build();
+		return Response.ok().entity(inventories).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@GET
@@ -91,8 +92,7 @@ public class CustomerResource {
 		if (customers == null || customers.isEmpty()) {
 			return Response.status(Response.Status.NOT_FOUND).entity("No Customer with good credit found!").build();
 		}
-		String json = JsonHelper.toJson(customers);
-		return Response.ok(json).build();
+		return Response.ok().entity(customers).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@GET
@@ -102,9 +102,10 @@ public class CustomerResource {
 		if (customerId <= 0) {
 			return Response.serverError().entity("Id cannot be less than 1!").build();
 		}
-		boolean hascredit = bean.checkCustomerCredit(customerId, costs);
-		String json = "{ \"credit\": \"" + Boolean.valueOf(hascredit).toString() + "\" }";
-		return Response.ok(json).build();
+		boolean hasCredit = bean.checkCustomerCredit(customerId, costs);
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+		builder.add("credit", hasCredit);
+		return Response.ok().entity(builder.build()).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@PUT
@@ -126,8 +127,9 @@ public class CustomerResource {
 		// TODO if the one of the ids is not found an exception should be thrown, so
 		// that the Response with Response.Status.NOT_FOUND could returned
 		boolean sold = bean.sellInventory(customerId, itemId, quantity);
-		String json = "{ \"sold\": \"" + Boolean.valueOf(sold).toString() + "\" }";
-		return Response.ok(json).build();
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+		builder.add("sold", sold);
+		return Response.ok().entity(builder.build()).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@POST
@@ -137,7 +139,8 @@ public class CustomerResource {
 		// TODO validate customer
 		customer.setSince(Calendar.getInstance());
 		Integer id = bean.createCustomer(customer);
-		String json = "{ \"id\": \"" + id + "\" }";
-		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(json).build();
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+		builder.add("id", id);
+		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(builder.build()).build();
 	}
 }

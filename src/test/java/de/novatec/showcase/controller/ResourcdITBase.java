@@ -1,30 +1,34 @@
 package de.novatec.showcase.controller;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+
 import de.novatec.showcase.controller.helper.JsonHelper;
 import de.novatec.showcase.ejb.orders.entity.Address;
 import de.novatec.showcase.ejb.orders.entity.Customer;
+import de.novatec.showcase.ejb.orders.entity.CustomerInventory;
 import de.novatec.showcase.ejb.orders.entity.Item;
 import de.novatec.showcase.ejb.orders.entity.Order;
 
@@ -44,6 +48,8 @@ abstract public class ResourcdITBase {
 	@BeforeClass
 	public static void beforeClass() {
 		client = ClientBuilder.newClient();
+		client.register(JsrJsonpProvider.class);
+		client.register(JacksonJsonProvider.class);
 		testCustomer = createCustomer();
 		testItem = createItem();
 		testOrder = createOrder(testCustomer.getId(), testItem);
@@ -90,7 +96,7 @@ abstract public class ResourcdITBase {
 		ItemQuantityPairs itemQuantityPairs = new ItemQuantityPairs()
 				.setItemQuantityPairs(Arrays.asList(new ItemQuantityPair(item, 1)));
 		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.json(JsonHelper.toJson(itemQuantityPairs)));
+				.post(Entity.json(itemQuantityPairs));
 		assertResponse201(ORDER_URL, response);
 	
 		JSONObject json = new JSONObject(response.readEntity(String.class));
@@ -105,7 +111,7 @@ abstract public class ResourcdITBase {
 		WebTarget target = client.target(ITEM_URL);
 		Item item = new Item("name", "description", new BigDecimal(100.0), new BigDecimal(0.0), 1, 0);
 		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.json(JsonHelper.toJson(item)));
+				.post(Entity.json(item));
 		assertResponse201(ITEM_URL, response);
 	
 		JSONObject json = new JSONObject(response.readEntity(String.class));
@@ -113,10 +119,9 @@ abstract public class ResourcdITBase {
 		response = target.request().get();
 		assertResponse200(ITEM_URL, response);
 	
-		JSONArray jsonItems = new JSONArray(response.readEntity(String.class));
-		assertEquals("Result should be just one element in an json array!", 1, jsonItems.length());
-	
-		return JsonHelper.fromJsonItem(jsonItems.getJSONObject(0).toString());
+		List<Item> items = response.readEntity(new GenericType<List<Item>>() {});
+		assertEquals("Result should be just one element in an json array!", 1, items.size());
+		return items.get(0);
 	}
 
 	protected static Customer createCustomer() {
@@ -125,14 +130,14 @@ abstract public class ResourcdITBase {
 				constantDate(), new BigDecimal(100.0), new BigDecimal(10.0), null,
 				new Address("street1", "street2", "city", "state", "county", "zip", "phone"));
 		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.json(JsonHelper.toJson(customer)));
-		assertResponse201(ORDER_URL, response);
+				.post(Entity.json(customer));
+		assertResponse201(CUSTOMER_URL, response);
 		
 		JSONObject json = new JSONObject(response.readEntity(String.class));
 		target = client.target(CUSTOMER_URL).path(Integer.valueOf(json.getInt("id")).toString());
-		response = target.request().get();
+		response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
 		assertResponse200(CUSTOMER_URL, response);
-		return JsonHelper.fromJsonCustomer(new JSONObject(response.readEntity(String.class)).toString());
+		return response.readEntity(Customer.class);
 	}
 
 }
