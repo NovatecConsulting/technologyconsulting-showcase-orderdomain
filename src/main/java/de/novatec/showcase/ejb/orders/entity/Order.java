@@ -29,7 +29,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import de.novatec.showcase.GlobalConstants;
 
 @Entity
 @Table(name = "O_ORDERS")
@@ -40,7 +41,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Order implements Serializable {
 
 	private static final long serialVersionUID = 4097897801304129622L;
-	public static final String DATE_FORMAT = "yyyy-MM-dd";
 
 	public static final String COUNT_BY_CUSTOMER = "SELECT COUNT(o) FROM Order o JOIN o.customer AS c WHERE c.id = :id";
 	public static final String QUERY_BY_CUSTOMER_AND_ORDER_STATUS = "SELECT o FROM Order o JOIN o.customer AS c WHERE c.id = :id and o.status = :status";
@@ -61,12 +61,12 @@ public class Order implements Serializable {
 
 	@Column(name = "O_SHIP_DATE")
 	@Temporal(value = TemporalType.DATE)
-	@JsonFormat(pattern = DATE_FORMAT, locale = "de_DE")
+	@JsonFormat(pattern = GlobalConstants.DATE_FORMAT, locale = "de_DE")
 	private Calendar shipDate;
 
 	@Column(name = "O_ENTRY_DATE")
 	@Temporal(value = TemporalType.TIMESTAMP)
-	@JsonFormat(pattern = DATE_FORMAT, locale = "de_DE")
+	@JsonFormat(pattern = GlobalConstants.DATE_FORMAT, locale = "de_DE")
 	private Calendar entryDate;
 
 	@Column(name = "O_TOTAL")
@@ -166,13 +166,11 @@ public class Order implements Serializable {
 		return this.customer;
 	}
 
-	@JsonIgnore
 	@JsonbTransient
 	public boolean isPriceMinusDiscountEqualPriceWithDiscount() {
 		return getPrice().subtract(this.discount).equals(getPriceWithDiscount());
 	}
 
-	@JsonIgnore
 	@JsonbTransient
 	public boolean isPriceWithDiscountEqualTotal() {
 		return getPriceWithDiscount().equals(this.total);

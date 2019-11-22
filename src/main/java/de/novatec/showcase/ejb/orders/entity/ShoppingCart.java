@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class ShoppingCart implements Serializable {
 
@@ -45,8 +44,6 @@ public class ShoppingCart implements Serializable {
 	}
 
 	public synchronized Item getItem(String itemId) {
-		Set<Item> set = this.items.keySet();
-
 		for (Item item : this.items.keySet()) {
 			if (item.getId().equals(itemId)) {
 				return item;

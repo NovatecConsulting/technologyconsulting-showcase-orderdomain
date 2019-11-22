@@ -19,8 +19,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Table(name = "O_ORDERLINE")
 @Entity
 public class OrderLine implements Serializable {
@@ -50,7 +48,6 @@ public class OrderLine implements Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "OL_O_ID", insertable = false, updatable = false)
-	@JsonIgnore
 	@JsonbTransient
 	private Order order;
 

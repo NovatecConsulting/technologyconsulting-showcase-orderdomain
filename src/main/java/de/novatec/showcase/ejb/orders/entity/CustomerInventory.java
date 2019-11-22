@@ -19,8 +19,6 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Version;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name = "O_CUSTOMERINVENTORY")
 @IdClass(CustomerInventoryPK.class)
@@ -41,7 +39,6 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CI_CUSTOMERID", insertable = false, updatable = false)
 	//Use Both anatation, until we are clean and only one (JsonbTransient) is used 
-	@JsonIgnore
 	@JsonbTransient
 	private Customer customer;
 
@@ -81,7 +78,6 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 		return customerId;
 	}
 
-	@JsonIgnore
 	public Customer getCustomer() {
 		return customer;
 	}

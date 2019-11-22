@@ -1,4 +1,4 @@
-# tc-orderdomain-showcase
+# technologyconsulting-security-showcase-orderdomain-showcase
 orderdomain is a part of a showcase implementation which is running on a open liberty instance
 
 #### The project consists of the following packages
@@ -29,6 +29,5 @@ There is a little script smoketest.sh in the orderdomain folder which could be u
 - replace formerly existing MDB/JMS code with REST clients to other domains (manufacturing, supplier)
 - Better REST Responses including status codes
 - some validations to avoid NPE's
-- more test cases for REST Controllers
 - check functionality of ItemSession.getSubList -> refactor this "PARTS"-thing...
 - OrderStatus model is not clean, i.e. DELETED order are also counted with order/count_by_customer/{id}

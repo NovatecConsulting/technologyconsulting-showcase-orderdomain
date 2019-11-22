@@ -27,6 +27,8 @@ import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import de.novatec.showcase.GlobalConstants;
+
 @Entity
 @Table(name = "O_CUSTOMER")
 @NamedQueries(value = { @NamedQuery(name = "QUERY_ALL", query = Customer.QUERY_ALL),
@@ -36,8 +38,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 })
 public class Customer implements Serializable {
-	public static final String DATE_FORMAT = "yyyy-MM-dd";
-
 	private static final long serialVersionUID = 3961431086357095469L;
 
 	public static final String QUERY_ALL = "SELECT c FROM Customer c";
@@ -68,7 +68,7 @@ public class Customer implements Serializable {
 
 	@Column(name = "C_SINCE")
 	@Temporal(value = TemporalType.DATE)
-	@JsonFormat(pattern = DATE_FORMAT, locale = "de_DE")
+	@JsonFormat(pattern = GlobalConstants.DATE_FORMAT, locale = "de_DE")
 	private Calendar since;
 
 	@Column(name = "C_BALANCE")

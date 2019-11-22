@@ -24,6 +24,7 @@ import org.junit.BeforeClass;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
+import de.novatec.showcase.GlobalConstants;
 import de.novatec.showcase.ejb.orders.entity.Address;
 import de.novatec.showcase.ejb.orders.entity.Customer;
 import de.novatec.showcase.ejb.orders.entity.Item;
@@ -85,7 +86,7 @@ abstract public class ResourcdITBase {
 	}
 
 	protected static String format(Calendar calendar) {
-		return new SimpleDateFormat(Customer.DATE_FORMAT, Locale.GERMAN).format(calendar.getTime());
+		return new SimpleDateFormat(GlobalConstants.DATE_FORMAT, Locale.GERMAN).format(calendar.getTime());
 	}
 
 	protected static Order createOrder(Integer customerId, Item item) {
