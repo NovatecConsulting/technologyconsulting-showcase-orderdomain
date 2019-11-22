@@ -27,8 +27,8 @@
 			includes="h2-1.4.200.jar" />
 	</library>
 
-	<dataSource id="h2-db" jndiName="jdbc/h2_db"
+	<dataSource id="h2-db" jndiName="jdbc/order_db"
 		type="javax.sql.DataSource" jdbcDriverRef="H2Driver">
-		<properties url="jdbc:h2:mem:h2_db;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;TRACE_LEVEL_FILE=4" />
+		<properties url="jdbc:h2:mem:order_db;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;TRACE_LEVEL_FILE=4" />
 	</dataSource>
 </server>
