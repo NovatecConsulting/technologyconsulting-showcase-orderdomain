@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Objects;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -50,6 +51,7 @@ public class OrderLine implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "OL_O_ID", insertable = false, updatable = false)
 	@JsonIgnore
+	@JsonbTransient
 	private Order order;
 
 	@ManyToOne(fetch = FetchType.EAGER)

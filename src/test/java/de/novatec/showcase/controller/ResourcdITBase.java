@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import javax.json.JsonObject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -18,17 +19,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
-import de.novatec.showcase.controller.helper.JsonHelper;
 import de.novatec.showcase.ejb.orders.entity.Address;
 import de.novatec.showcase.ejb.orders.entity.Customer;
-import de.novatec.showcase.ejb.orders.entity.CustomerInventory;
 import de.novatec.showcase.ejb.orders.entity.Item;
 import de.novatec.showcase.ejb.orders.entity.Order;
 
@@ -99,12 +96,11 @@ abstract public class ResourcdITBase {
 				.post(Entity.json(itemQuantityPairs));
 		assertResponse201(ORDER_URL, response);
 	
-		JSONObject json = new JSONObject(response.readEntity(String.class));
-		target = client.target(ORDER_URL).path(Integer.valueOf(json.getInt("id")).toString());
+		target = client.target(ORDER_URL).path(Integer.valueOf(response.readEntity(JsonObject.class).getInt("id")).toString());
 		response = target.request().get();
 		assertResponse200(ORDER_URL, response);
 	
-		return JsonHelper.fromJsonOrder(response.readEntity(String.class));
+		return response.readEntity(Order.class);
 	}
 
 	private static Item createItem() {
@@ -114,8 +110,7 @@ abstract public class ResourcdITBase {
 				.post(Entity.json(item));
 		assertResponse201(ITEM_URL, response);
 	
-		JSONObject json = new JSONObject(response.readEntity(String.class));
-		target = client.target(ITEM_URL).path(Integer.valueOf(json.getInt("id")).toString());
+		target = client.target(ITEM_URL).path(Integer.valueOf(response.readEntity(JsonObject.class).getString("id")).toString());
 		response = target.request().get();
 		assertResponse200(ITEM_URL, response);
 	
@@ -133,8 +128,7 @@ abstract public class ResourcdITBase {
 				.post(Entity.json(customer));
 		assertResponse201(CUSTOMER_URL, response);
 		
-		JSONObject json = new JSONObject(response.readEntity(String.class));
-		target = client.target(CUSTOMER_URL).path(Integer.valueOf(json.getInt("id")).toString());
+		target = client.target(CUSTOMER_URL).path(Integer.valueOf(response.readEntity(JsonObject.class).getInt("id")).toString());
 		response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
 		assertResponse200(CUSTOMER_URL, response);
 		return response.readEntity(Customer.class);

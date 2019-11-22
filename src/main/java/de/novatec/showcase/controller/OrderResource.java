@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,7 +18,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import de.novatec.showcase.controller.helper.JsonHelper;
 import de.novatec.showcase.ejb.orders.entity.Order;
 import de.novatec.showcase.ejb.orders.entity.ShoppingCart;
 import de.novatec.showcase.ejb.orders.session.InsufficientCreditException;
@@ -41,8 +42,7 @@ public class OrderResource {
 			return Response.status(Response.Status.NOT_FOUND).entity("Order with id '" + orderId + "' not found!")
 					.build();
 		}
-		String json = JsonHelper.toJson(order);
-		return Response.ok(json, MediaType.APPLICATION_JSON).build();
+		return Response.ok().entity(order).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@GET
@@ -53,8 +53,9 @@ public class OrderResource {
 			return Response.serverError().entity("Id cannot be less than 1!").build();
 		}
 		long count = bean.getOrderCount(customerId);
-		String json = "{ \"count\": \"" + count + "\" }";
-		return Response.ok(json).build();
+		JsonObjectBuilder builder = Json.createObjectBuilder();
+		builder.add("count", count);
+		return Response.ok().entity(builder.build()).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@GET
@@ -69,8 +70,7 @@ public class OrderResource {
 			return Response.status(Response.Status.NOT_FOUND)
 					.entity("Orders with customer id '" + customerId + "' not found").build();
 		}
-		String json = JsonHelper.toJson(orders);
-		return Response.ok(json, MediaType.APPLICATION_JSON).build();
+		return Response.ok().entity(orders).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@POST
@@ -91,8 +91,10 @@ public class OrderResource {
 			return Response.status(Response.Status.PRECONDITION_FAILED)
 					.entity("The customer with id '" + customerId + "' has insufficient credit!").build();
 		}
-		String json = "{ \"id\": \"" + id + "\" }";
-		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(json).build();
+
+		JsonObjectBuilder builder = Json.createObjectBuilder();
+		builder.add("id", id);
+		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(builder.build()).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@DELETE

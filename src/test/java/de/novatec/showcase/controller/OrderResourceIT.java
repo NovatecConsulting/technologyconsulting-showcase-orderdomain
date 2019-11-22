@@ -2,15 +2,16 @@ package de.novatec.showcase.controller;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
+import javax.json.JsonObject;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.Test;
 
-import de.novatec.showcase.controller.helper.JsonHelper;
 import de.novatec.showcase.ejb.orders.entity.Order;
 import de.novatec.showcase.ejb.orders.entity.OrderStatus;
 
@@ -40,8 +41,7 @@ public class OrderResourceIT extends ResourcdITBase {
 		WebTarget target = client.target(ORDER_URL).path(testOrder.getId().toString());
 		Response response = target.request().get();
 		assertResponse200(ORDER_URL, response);
-		Order order = JsonHelper.fromJsonOrder(response.readEntity(String.class));
-		assertEquals(testOrder, order);
+		assertEquals(testOrder, response.readEntity(Order.class));
 	}
 
 	@Test
@@ -55,7 +55,7 @@ public class OrderResourceIT extends ResourcdITBase {
 		target = client.target(ORDER_URL).path(orderIdToBeDeleted.getId().toString());
 		response = target.request().get();
 		assertResponse200(ORDER_URL, response);
-		Order deletedOrder = JsonHelper.fromJsonOrder(response.readEntity(String.class));
+		Order deletedOrder = response.readEntity(Order.class);
 		assertEquals("Order status has to be DELETED!", OrderStatus.DELETED, deletedOrder.getStatus());
 	}
 
@@ -64,9 +64,9 @@ public class OrderResourceIT extends ResourcdITBase {
 		WebTarget target = client.target(ORDER_URL).path("open_orders_by_customer/" + testCustomer.getId().toString());
 		Response response = target.request().get();
 		assertResponse200(ORDER_URL, response);
-		JSONArray jsonOpenOrders = new JSONArray(response.readEntity(String.class));
+		List<Order> jsonOpenOrders = response.readEntity(new GenericType<List<Order>>() {});
 		assertEquals("There should be only one open order with customer " + testCustomer + "!", 1,
-				jsonOpenOrders.length());
+				jsonOpenOrders.size());
 	}
 
 	@Test
@@ -74,9 +74,8 @@ public class OrderResourceIT extends ResourcdITBase {
 		WebTarget target = client.target(ORDER_URL).path("count_bycustomer/" + testCustomer.getId().toString());
 		Response response = target.request().get();
 		assertResponse200(ORDER_URL, response);
-		JSONObject jsonCount = new JSONObject(response.readEntity(String.class));
-		assertEquals("Size should be only one order with customer " + testCustomer + "!", Integer.valueOf(1),
-				Integer.valueOf(jsonCount.getString("count")));
+		assertEquals("Size should be only one order with customer " + testCustomer + "!", 1,
+				response.readEntity(JsonObject.class).getInt("count"));
 	}
 
 }
