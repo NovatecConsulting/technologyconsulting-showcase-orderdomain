@@ -1,54 +1,25 @@
-package de.novatec.showcase.ejb.orders.entity;
+package de.novatec.showcase.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.persistence.Version;
-
-@SuppressWarnings("serial")
-@Entity
-@Table(name = "O_Item")
-@NamedQueries(value = { @NamedQuery(name = "QUERY_BY_CATEGORY", query = Item.QUERY_BY_CATEGORY),
-		@NamedQuery(name = "QUERY_BY_ITEM_IDS", query = Item.QUERY_BY_ITEM_IDS) })
-
 public class Item implements Serializable {
 
-	public static final String QUERY_BY_CATEGORY = "Select i From Item i Where i.category=:category";
-	public static final String QUERY_BY_ITEM_IDS = "Select i From Item i Where i.id in :ids";
+	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name = "I_ID")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "I_ID_GEN")
-	@TableGenerator(name = "I_ID_GEN", table = "U_SEQUENCES", pkColumnName = "S_ID", valueColumnName = "S_NEXTNUM", pkColumnValue = "I_SEQ", allocationSize = 1)
 	private String id;
 
-	@Column(name = "I_NAME")
 	private String name;
 
-	@Column(name = "I_DESC")
 	private String desc;
 
-	@Column(name = "I_PRICE")
 	private BigDecimal price;
 
-	@Column(name = "I_DISCOUNT")
 	private BigDecimal discount;
 
-	@Column(name = "I_CATEGORY")
 	private int category;
 
-	@Version
-	@Column(name = "I_VERSION")
 	private int version;
 
 	public Item() {
@@ -117,12 +88,10 @@ public class Item implements Serializable {
 		return version;
 	}
 
-	@Override
 	public int hashCode() {
 		return Objects.hash(category, desc, discount, id, name, price, version);
 	}
 
-	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -136,7 +105,6 @@ public class Item implements Serializable {
 				&& Objects.equals(name, other.name) && Objects.equals(price, other.price) && version == other.version;
 	}
 
-	@Override
 	public String toString() {
 		return "Item [id=" + id + ", name=" + name + ", desc=" + desc + ", price=" + price + ", discount=" + discount
 				+ ", category=" + category + ", version=" + version + "]";

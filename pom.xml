@@ -17,6 +17,7 @@
 	<name>orderdomainParent</name>
 
     <modules>
+        <module>orderdomainDTO</module>
         <module>orderdomainWAR</module>
         <module>orderdomainEAR</module>
     </modules>

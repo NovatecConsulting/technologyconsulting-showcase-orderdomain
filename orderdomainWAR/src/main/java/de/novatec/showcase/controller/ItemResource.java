@@ -18,12 +18,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import de.novatec.showcase.ejb.orders.entity.Item;
+import de.novatec.showcase.dto.Item;
 import de.novatec.showcase.ejb.orders.session.ItemSessionLocal;
+import de.novatec.showcase.mapper.DtoMapper;
 
 @ManagedBean
 @Path(value = "/item")
 public class ItemResource {
+
 
 	@EJB
 	private ItemSessionLocal itemBean;
@@ -32,7 +34,7 @@ public class ItemResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createItem(Item item, @Context UriInfo uriInfo) {
-		String id = itemBean.createItem(item);
+		String id = itemBean.createItem(DtoMapper.mapToItemEntity(item));
 		JsonObjectBuilder builder = Json.createObjectBuilder();
 		builder.add("id", id);
 		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(builder.build()).type(MediaType.APPLICATION_JSON_TYPE).build();
@@ -81,8 +83,8 @@ public class ItemResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "{ids}")
-	public Response getItems(@PathParam("ids") String itemIds) {
-		List<Item> items = itemBean.getItems(itemIds);
+	public Response getItems(@PathParam("ids") String itemIds) {		
+		List<Item> items = DtoMapper.mapToItemDto(itemBean.getItems(itemIds));
 		return Response.ok().entity(items).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
@@ -90,7 +92,7 @@ public class ItemResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "forward")
 	public Response forward() {
-		List<Item> items = itemBean.browseForward();
+		List<Item> items = DtoMapper.mapToItemDto(itemBean.browseForward());
 		return Response.ok().entity(items).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
@@ -98,7 +100,7 @@ public class ItemResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "reverse")
 	public Response reverse() {
-		List<Item> items = itemBean.browseReverse();
+		List<Item> items = DtoMapper.mapToItemDto(itemBean.browseReverse());
 		return Response.ok().entity(items).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 

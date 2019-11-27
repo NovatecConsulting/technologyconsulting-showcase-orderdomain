@@ -20,9 +20,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import de.novatec.showcase.ejb.orders.entity.Customer;
-import de.novatec.showcase.ejb.orders.entity.CustomerInventory;
+import de.novatec.showcase.dto.Customer;
+import de.novatec.showcase.dto.CustomerInventory;
 import de.novatec.showcase.ejb.orders.session.CustomerSessionLocal;
+import de.novatec.showcase.mapper.DtoMapper;
 
 @ManagedBean
 @Path(value = "/customer")
@@ -38,7 +39,7 @@ public class CustomerResource {
 		if (customerId <= 0) {
 			return Response.serverError().entity("Id cannot be less than 1!").build();
 		}
-		Customer customer = bean.getCustomer(customerId);
+		Customer customer = DtoMapper.mapToCustomerDto(bean.getCustomer(customerId));
 		if (customer == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Customer with id '" + customerId + "' not found!")
 					.build();
@@ -76,7 +77,7 @@ public class CustomerResource {
 		if (customerId <= 0) {
 			return Response.serverError().entity("Id cannot be less than 1!").build();
 		}
-		List<CustomerInventory> inventories = bean.getInventories(customerId);
+		List<CustomerInventory> inventories = DtoMapper.mapToCustomerInventoryDto(bean.getInventories(customerId));
 		if (inventories == null || inventories.isEmpty()) {
 			return Response.status(Response.Status.NOT_FOUND)
 					.entity("Customer with id '" + customerId + "' has no inventory!").build();
@@ -88,7 +89,7 @@ public class CustomerResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "with_good_credit")
 	public Response customersWithGoodCredit() {
-		List<Customer> customers = bean.selectCustomerWithGoodCredit();
+		List<Customer> customers = DtoMapper.mapToCustomerDto(bean.selectCustomerWithGoodCredit());
 		if (customers == null || customers.isEmpty()) {
 			return Response.status(Response.Status.NOT_FOUND).entity("No Customer with good credit found!").build();
 		}
@@ -138,7 +139,7 @@ public class CustomerResource {
 	public Response createCustomer(Customer customer, @Context UriInfo uriInfo) {
 		// TODO validate customer
 		customer.setSince(Calendar.getInstance());
-		Integer id = bean.createCustomer(customer);
+		Integer id = bean.createCustomer(DtoMapper.mapToCustomerEntity(customer));
         JsonObjectBuilder builder = Json.createObjectBuilder();
 		builder.add("id", id);
 		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(builder.build()).build();

@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,10 +26,6 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import de.novatec.showcase.GlobalConstants;
 
 @Entity
 @Table(name = "O_ORDERS")
@@ -61,12 +56,10 @@ public class Order implements Serializable {
 
 	@Column(name = "O_SHIP_DATE")
 	@Temporal(value = TemporalType.DATE)
-	@JsonFormat(pattern = GlobalConstants.DATE_FORMAT, locale = "de_DE")
 	private Calendar shipDate;
 
 	@Column(name = "O_ENTRY_DATE")
 	@Temporal(value = TemporalType.TIMESTAMP)
-	@JsonFormat(pattern = GlobalConstants.DATE_FORMAT, locale = "de_DE")
 	private Calendar entryDate;
 
 	@Column(name = "O_TOTAL")
@@ -166,12 +159,10 @@ public class Order implements Serializable {
 		return this.customer;
 	}
 
-	@JsonbTransient
 	public boolean isPriceMinusDiscountEqualPriceWithDiscount() {
 		return getPrice().subtract(this.discount).equals(getPriceWithDiscount());
 	}
 
-	@JsonbTransient
 	public boolean isPriceWithDiscountEqualTotal() {
 		return getPriceWithDiscount().equals(this.total);
 	}

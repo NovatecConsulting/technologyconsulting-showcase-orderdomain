@@ -10,8 +10,10 @@ import javax.ws.rs.core.Response;
 
 import org.junit.Test;
 
-import de.novatec.showcase.ejb.orders.entity.CustomerInventory;
-import de.novatec.showcase.ejb.orders.entity.Item;
+import de.novatec.showcase.dto.Item;
+
+//import de.novatec.showcase.ejb.orders.entity.Item;
+
 
 public class ItemResourceIT extends ResourcdITBase {
 
@@ -21,7 +23,7 @@ public class ItemResourceIT extends ResourcdITBase {
 		Response response = target.request().get();
 		assertResponse200(ITEM_URL, response);
 		
-			assertEquals("Result should be an empty json array!", 0, response.readEntity(new GenericType<List<CustomerInventory>>() {}).size());
+			assertEquals("Result should be an empty json array!", 0, response.readEntity(new GenericType<List<Item>>() {}).size());
 	}
 
 	@Test

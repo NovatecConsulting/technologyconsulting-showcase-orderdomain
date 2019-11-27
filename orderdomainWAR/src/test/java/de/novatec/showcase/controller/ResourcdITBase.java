@@ -25,10 +25,12 @@ import org.junit.BeforeClass;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
 import de.novatec.showcase.GlobalConstants;
-import de.novatec.showcase.ejb.orders.entity.Address;
-import de.novatec.showcase.ejb.orders.entity.Customer;
-import de.novatec.showcase.ejb.orders.entity.Item;
-import de.novatec.showcase.ejb.orders.entity.Order;
+import de.novatec.showcase.dto.Address;
+import de.novatec.showcase.dto.Customer;
+import de.novatec.showcase.dto.Item;
+import de.novatec.showcase.dto.ItemQuantityPair;
+import de.novatec.showcase.dto.ItemQuantityPairs;
+import de.novatec.showcase.dto.Order;
 
 abstract public class ResourcdITBase {
 
@@ -57,7 +59,7 @@ abstract public class ResourcdITBase {
 	public static void teardown() {
 		client.close();
 	}
-	
+
 	public static void assertResponse200(String url, Response response) {
 		assertEquals("Incorrect response code from " + url, Response.Status.OK.getStatusCode(), response.getStatus());
 	}
@@ -90,17 +92,19 @@ abstract public class ResourcdITBase {
 	}
 
 	protected static Order createOrder(Integer customerId, Item item) {
+
 		WebTarget target = client.target(ORDER_URL).path(customerId.toString());
 		ItemQuantityPairs itemQuantityPairs = new ItemQuantityPairs()
 				.setItemQuantityPairs(Arrays.asList(new ItemQuantityPair(item, 1)));
 		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.json(itemQuantityPairs));
 		assertResponse201(ORDER_URL, response);
-	
-		target = client.target(ORDER_URL).path(Integer.valueOf(response.readEntity(JsonObject.class).getInt("id")).toString());
+
+		target = client.target(ORDER_URL)
+				.path(Integer.valueOf(response.readEntity(JsonObject.class).getInt("id")).toString());
 		response = target.request().get();
 		assertResponse200(ORDER_URL, response);
-	
+
 		return response.readEntity(Order.class);
 	}
 
@@ -110,11 +114,12 @@ abstract public class ResourcdITBase {
 		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.json(item));
 		assertResponse201(ITEM_URL, response);
-	
-		target = client.target(ITEM_URL).path(Integer.valueOf(response.readEntity(JsonObject.class).getString("id")).toString());
+
+		target = client.target(ITEM_URL)
+				.path(Integer.valueOf(response.readEntity(JsonObject.class).getString("id")).toString());
 		response = target.request().get();
 		assertResponse200(ITEM_URL, response);
-	
+
 		List<Item> items = response.readEntity(new GenericType<List<Item>>() {});
 		assertEquals("Result should be just one element in an json array!", 1, items.size());
 		return items.get(0);
@@ -128,8 +133,9 @@ abstract public class ResourcdITBase {
 		Response response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.json(customer));
 		assertResponse201(CUSTOMER_URL, response);
-		
-		target = client.target(CUSTOMER_URL).path(Integer.valueOf(response.readEntity(JsonObject.class).getInt("id")).toString());
+
+		target = client.target(CUSTOMER_URL)
+				.path(Integer.valueOf(response.readEntity(JsonObject.class).getInt("id")).toString());
 		response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
 		assertResponse200(CUSTOMER_URL, response);
 		return response.readEntity(Customer.class);

@@ -12,8 +12,8 @@ import javax.ws.rs.core.Response;
 
 import org.junit.Test;
 
-import de.novatec.showcase.ejb.orders.entity.Order;
-import de.novatec.showcase.ejb.orders.entity.OrderStatus;
+import de.novatec.showcase.dto.Order;
+import de.novatec.showcase.dto.OrderStatus;
 
 public class OrderResourceIT extends ResourcdITBase {
 

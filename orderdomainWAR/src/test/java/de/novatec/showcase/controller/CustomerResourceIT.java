@@ -15,9 +15,9 @@ import javax.ws.rs.core.Response;
 
 import org.junit.Test;
 
-import de.novatec.showcase.ejb.orders.entity.Customer;
-import de.novatec.showcase.ejb.orders.entity.CustomerInventory;
-import de.novatec.showcase.ejb.orders.entity.Order;
+import de.novatec.showcase.dto.Customer;
+import de.novatec.showcase.dto.CustomerInventory;
+import de.novatec.showcase.dto.Order;
 
 public class CustomerResourceIT extends ResourcdITBase {
 

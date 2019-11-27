@@ -1,63 +1,36 @@
-package de.novatec.showcase.ejb.orders.entity;
+package de.novatec.showcase.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Objects;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Version;
+import javax.json.bind.annotation.JsonbTransient;
 
-@Table(name = "O_ORDERLINE")
-@Entity
 public class OrderLine implements Serializable {
 
 	private static final long serialVersionUID = -3556060565328926516L;
 
-	@EmbeddedId
-	@AttributeOverrides({ @AttributeOverride(name = "orderId", column = @Column(name = "OL_O_ID")),
-			@AttributeOverride(name = "number", column = @Column(name = "OL_ID")) })
 	private OrderLinePK pk;
 
-	@Column(name = "OL_QTY")
 	private int quantity;
 
-	@Column(name = "OL_SHIP_DATE")
-	@Temporal(value = TemporalType.DATE)
 	private Calendar shipDate;
 
-	@Column(name = "OL_STATUS")
 	private OrderStatus status;
 
-	@Column(name = "OL_TOTAL_VALUE")
 	private BigDecimal totalValue;
 
-	@Column(name = "OL_MSRP")
 	private BigDecimal msrpAtPurchase;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "OL_O_ID", insertable = false, updatable = false)
+	@JsonbTransient
 	private Order order;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "OL_I_ID")
 	private Item item;
 
-	@Version
-	@Column(name = "OL_VERSION")
 	private int version;
 
-	protected OrderLine() {
+	public OrderLine() {
 		super();
 	}
 

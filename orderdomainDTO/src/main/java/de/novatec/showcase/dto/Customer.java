@@ -1,4 +1,4 @@
-package de.novatec.showcase.ejb.orders.entity;
+package de.novatec.showcase.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -6,87 +6,37 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Version;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Entity
-@Table(name = "O_CUSTOMER")
-@NamedQueries(value = { @NamedQuery(name = "QUERY_ALL", query = Customer.QUERY_ALL),
-		@NamedQuery(name = "QUERY_COUNT", query = Customer.QUERY_COUNT),
-		@NamedQuery(name = "QUERY_BY_CREDIT", query = Customer.QUERY_BY_CREDIT),
-		@NamedQuery(name = "BAD_CREDIT", query = Customer.BAD_CREDIT)
+import de.novatec.showcase.GlobalConstants;
 
-})
 public class Customer implements Serializable {
-	private static final long serialVersionUID = 3961431086357095469L;
 
-	public static final String QUERY_ALL = "SELECT c FROM Customer c";
-	public static final String QUERY_COUNT = "SELECT COUNT(c) FROM Customer c";
-	public static final String QUERY_BY_CREDIT = "SELECT c FROM Customer c WHERE c.credit = :credit";
-	public static final String BAD_CREDIT = "SELECT c FROM Customer c WHERE c.credit = 'BC'";
+	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name = "C_ID")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "C_ID_GEN")
-	@TableGenerator(name = "C_ID_GEN", table = "U_SEQUENCES", pkColumnName = "S_ID", valueColumnName = "S_NEXTNUM", pkColumnValue = "C_SEQ", allocationSize = 1)
 	private Integer id;
 
-	@Column(name = "C_FIRST")
 	private String firstName;
 
-	@Column(name = "C_LAST")
 	private String lastName;
 
-	@Column(name = "C_CONTACT")
 	private String contact;
 
-	@Column(name = "C_CREDIT")
 	private String credit;
 
-	@Column(name = "C_CREDIT_LIMIT")
 	private BigDecimal creditLimit;
 
-	@Column(name = "C_SINCE")
-	@Temporal(value = TemporalType.DATE)
+	@JsonFormat(pattern = GlobalConstants.DATE_FORMAT, locale = "de_DE")
 	private Calendar since;
 
-	@Column(name = "C_BALANCE")
 	private BigDecimal balance;
 
-	@Column(name = "C_YTD_PAYMENT")
 	private BigDecimal ytdPayment;
 
-	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private List<CustomerInventory> customerInventories;
 
-	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "street1", column = @Column(name = "C_STREET1")),
-			@AttributeOverride(name = "street2", column = @Column(name = "C_STREET2")),
-			@AttributeOverride(name = "city", column = @Column(name = "C_CITY")),
-			@AttributeOverride(name = "state", column = @Column(name = "C_STATE")),
-			@AttributeOverride(name = "country", column = @Column(name = "C_COUNTRY")),
-			@AttributeOverride(name = "zip", column = @Column(name = "C_ZIP")),
-			@AttributeOverride(name = "phone", column = @Column(name = "C_PHONE")) })
 	private Address address;
 
-	@Version
-	@Column(name = "C_VERSION")
 	private int version;
 
 	public Customer() {
@@ -173,19 +123,6 @@ public class Customer implements Serializable {
 		this.balance = balance;
 	}
 
-	public void addBalance(BigDecimal money) {
-		this.balance = this.balance.add(money);
-	}
-
-	public boolean reduceBalance(BigDecimal costs) {
-		if (this.hasSufficientCredit(costs)) {
-			this.balance.subtract(costs);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public Address getAddress() {
 		return address;
 	}
@@ -212,10 +149,6 @@ public class Customer implements Serializable {
 
 	public int getVersion() {
 		return version;
-	}
-
-	public boolean hasSufficientCredit(BigDecimal cost) {
-		return this.creditLimit.add(this.balance).compareTo(cost) == 1;
 	}
 
 	@Override

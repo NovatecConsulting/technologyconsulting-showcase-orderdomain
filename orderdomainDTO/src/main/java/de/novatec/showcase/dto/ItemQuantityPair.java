@@ -1,6 +1,6 @@
-package de.novatec.showcase.controller;
+package de.novatec.showcase.dto;
 
-import de.novatec.showcase.ejb.orders.entity.Item;
+//import de.novatec.showcase.ejb.orders.entity.Item;
 
 /**
  * Simple class for holding an <code>Item</code> and it's quantity

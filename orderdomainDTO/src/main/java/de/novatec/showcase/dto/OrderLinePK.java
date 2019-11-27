@@ -1,15 +1,11 @@
-package de.novatec.showcase.ejb.orders.entity;
+package de.novatec.showcase.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Embeddable;
-
-@Embeddable
 public class OrderLinePK implements Serializable {
 
-	private static final long serialVersionUID = 2378709934764446278L;
-
+	private static final long serialVersionUID = 1L;
 	private Integer orderId;
 	private int number;
 

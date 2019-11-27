@@ -1,4 +1,4 @@
-package de.novatec.showcase.controller;
+package de.novatec.showcase.dto;
 
 import java.util.List;
 

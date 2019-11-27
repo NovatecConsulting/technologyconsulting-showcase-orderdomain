@@ -18,10 +18,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import de.novatec.showcase.ejb.orders.entity.Order;
+import de.novatec.showcase.dto.ItemQuantityPair;
+import de.novatec.showcase.dto.ItemQuantityPairs;
+import de.novatec.showcase.dto.Order;
 import de.novatec.showcase.ejb.orders.entity.ShoppingCart;
 import de.novatec.showcase.ejb.orders.session.InsufficientCreditException;
 import de.novatec.showcase.ejb.orders.session.OrderSessionLocal;
+import de.novatec.showcase.mapper.DtoMapper;
 
 @ManagedBean
 @Path(value = "/order")
@@ -37,7 +40,7 @@ public class OrderResource {
 		if (orderId <= 0) {
 			return Response.serverError().entity("Id cannot be less than 1!").build();
 		}
-		Order order = bean.getOrder(orderId);
+		Order order = DtoMapper.mapToOrderDto(bean.getOrder(orderId));
 		if (order == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Order with id '" + orderId + "' not found!")
 					.build();
@@ -65,7 +68,7 @@ public class OrderResource {
 		if (customerId <= 0) {
 			return Response.serverError().entity("Id cannot be less than 1!").build();
 		}
-		List<Order> orders = bean.getOpenOrders(customerId);
+		List<Order> orders = DtoMapper.mapToOrderDto(bean.getOpenOrders(customerId));
 		if (orders == null || orders.isEmpty()) {
 			return Response.status(Response.Status.NOT_FOUND)
 					.entity("Orders with customer id '" + customerId + "' not found").build();

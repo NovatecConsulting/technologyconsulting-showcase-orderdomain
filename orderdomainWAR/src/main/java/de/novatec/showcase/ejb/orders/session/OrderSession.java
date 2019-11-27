@@ -14,11 +14,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import de.novatec.showcase.ejb.orders.entity.Customer;
-import de.novatec.showcase.ejb.orders.entity.Item;
 import de.novatec.showcase.ejb.orders.entity.Order;
 import de.novatec.showcase.ejb.orders.entity.OrderLine;
 import de.novatec.showcase.ejb.orders.entity.OrderStatus;
 import de.novatec.showcase.ejb.orders.entity.ShoppingCart;
+import de.novatec.showcase.mapper.DtoMapper;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -94,9 +94,10 @@ public class OrderSession implements OrderSessionRemote, OrderSessionLocal {
 //		em.flush();
 
 		int lineNumber = 1;
-		for (Item item : shoppingCart.getItems()) {
+
+		for (de.novatec.showcase.dto.Item item : shoppingCart.getItems()) {
 			OrderLine orderLine = new OrderLine(lineNumber, order.getId(), shoppingCart.getQuantity(item), shoppingCart.getPrice(item),
-					item.getPrice(), order, item);
+					item.getPrice(), order, DtoMapper.mapToItemEntity(item));
 			em.persist(orderLine);
 			em.flush();
 			order.addOrderLine(orderLine);

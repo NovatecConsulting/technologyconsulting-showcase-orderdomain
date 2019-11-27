@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.novatec.showcase.dto.Item;
+
 public class ShoppingCart implements Serializable {
 
 	private static final long serialVersionUID = 9045321423835602714L;
