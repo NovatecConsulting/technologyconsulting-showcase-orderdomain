@@ -10,17 +10,10 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-	<groupId>de.novatec.showcase</groupId>
 	<artifactId>orderdomainWAR</artifactId>
 	<packaging>war</packaging>
 
 	<name>orderdomainWAR</name>
-
-<!--     <modules> -->
-<!--         <module>jar</module> -->
-<!--         <module>war</module> -->
-<!--         <module>ear</module> -->
-<!--     </modules> -->
 
 	<properties>
 		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -46,13 +39,6 @@
 	</dependencyManagement>
 
 	<dependencies>
-<!-- 		<dependency> -->
-<!-- 			<groupId>javax</groupId> -->
-<!-- 			<artifactId>javaee-api</artifactId> -->
-<!-- 			<version>6.0</version> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency> -->
-
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>
