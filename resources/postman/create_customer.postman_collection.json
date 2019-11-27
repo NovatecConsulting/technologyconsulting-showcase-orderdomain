@@ -1,0 +1,34 @@
+{
+	"info": {
+		"_postman_id": "35f3e3be-7c86-4446-96db-c1c3368625dd",
+		"name": "smoketest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n        \"firstName\": \"firstName\",\n        \"lastName\": \"lastNAme\",\n        \"contact\": \"contact\",\n        \"credit\": \"GC\",\n        \"creditLimit\": \"1000.0\",\n        \"balance\": \"200.0\",\n        \"ytdPayment\": \"100.0\",\n        \"customerInventories\": [],\n        \"address\": {\n                \"street1\": \"street1\",\n                \"street2\": \"street2\",\n                \"city\": \"city\",\n                \"state\": \"state\",\n                \"country\": \"county\",\n                \"zip\": \"zip\",\n                \"phone\": \"phone\"\n        }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9080/orderdomain/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"orderdomain",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
