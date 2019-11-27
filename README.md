@@ -1,9 +1,10 @@
 # technologyconsulting-security-showcase-orderdomain-showcase
 orderdomain is a part of a showcase implementation which is running on a open liberty instance. It ist structured right now like this
 
-- orderdomainParent
-  - orderdomainWAR
-  - orderdomainEAR
+- **orderdomainParent** Parent maven module
+  - **orderdomainDTO** - contains all classes used in the rest controllers
+  - **orderdomainWAR** - contains the rest controllers and all EJB classes and entities
+  - **orderdomainEAR** - contains the war module
 
 #### The project consists of the following packages
 
@@ -19,10 +20,10 @@ orderdomain is a part of a showcase implementation which is running on a open li
 
 All command have to be executed from the orderdomainEAR/WAR folder. IN development mode you can run the the integration tests (*IT.java classes) by pressing RETURN/ENTER when the server is up. Code changes in the IT tests are hot replaced.
 
-Right now the integration tests run just in the WAR module. For running this also in the EAR a jar with the DTO has to be created. So that the objects are also be used in the tests when running in the EAR module.
+Right now the integration tests run just in the WAR module. For running this also in the EAR a jar with the DTO has to be created. So that the objects are also be used in the tests when running in the EAR module. 
 
 #### Smoketest
-There is a little script smoketest.sh in the orderdomainParent\resources\smoketest folder which could be used to test if the very basic functionality works after staring the open liberty server with the orderdomain as WAR ord as EAR.
+There is a little script smoketest.sh in the orderdomainParent\resources\smoketest folder which could be used to test if the very basic functionality works after staring the open liberty server with the orderdomain as WAR or as EAR.
 
 - create three items
 - create a customer
@@ -37,4 +38,4 @@ There is a little script smoketest.sh in the orderdomainParent\resources\smokete
 - some validations to avoid NPE's
 - check functionality of ItemSession.getSubList -> refactor this "PARTS"-thing...
 - OrderStatus model is not clean, i.e. DELETED order are also counted with order/count_by_customer/{id}
-- build DTO jar file with the objects in the REST interface so the the integration tests could also run form the EAR
+- move the integration tests to the EAR by using the orderdomainDTO project
