@@ -3,6 +3,7 @@ package de.novatec.showcase.controller;
 import java.util.List;
 
 import javax.annotation.ManagedBean;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
@@ -18,12 +19,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import de.novatec.showcase.GlobalConstants;
 import de.novatec.showcase.dto.Item;
 import de.novatec.showcase.ejb.orders.session.ItemSessionLocal;
 import de.novatec.showcase.mapper.DtoMapper;
 
 @ManagedBean
 @Path(value = "/item")
+@RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME, GlobalConstants.ITEM_READ_ROLE_NAME})
 public class ItemResource {
 
 
@@ -33,6 +36,7 @@ public class ItemResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME})
 	public Response createItem(Item item, @Context UriInfo uriInfo) {
 		String id = itemBean.createItem(DtoMapper.mapToItemEntity(item));
 		JsonObjectBuilder builder = Json.createObjectBuilder();

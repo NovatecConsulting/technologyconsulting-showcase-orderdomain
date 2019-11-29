@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.annotation.ManagedBean;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
@@ -20,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import de.novatec.showcase.GlobalConstants;
 import de.novatec.showcase.dto.Customer;
 import de.novatec.showcase.dto.CustomerInventory;
 import de.novatec.showcase.ejb.orders.session.CustomerSessionLocal;
@@ -27,6 +29,7 @@ import de.novatec.showcase.mapper.DtoMapper;
 
 @ManagedBean
 @Path(value = "/customer")
+@RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME, GlobalConstants.CUSTOMER_READ_ROLE_NAME})
 public class CustomerResource {
 
 	@EJB
@@ -136,6 +139,7 @@ public class CustomerResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME})
 	public Response createCustomer(Customer customer, @Context UriInfo uriInfo) {
 		// TODO validate customer
 		customer.setSince(Calendar.getInstance());

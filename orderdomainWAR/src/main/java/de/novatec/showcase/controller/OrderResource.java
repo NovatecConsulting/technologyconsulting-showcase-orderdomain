@@ -3,6 +3,7 @@ package de.novatec.showcase.controller;
 import java.util.List;
 
 import javax.annotation.ManagedBean;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
@@ -18,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import de.novatec.showcase.GlobalConstants;
 import de.novatec.showcase.dto.ItemQuantityPair;
 import de.novatec.showcase.dto.ItemQuantityPairs;
 import de.novatec.showcase.dto.Order;
@@ -28,6 +30,7 @@ import de.novatec.showcase.mapper.DtoMapper;
 
 @ManagedBean
 @Path(value = "/order")
+@RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME, GlobalConstants.ORDER_READ_ROLE_NAME})
 public class OrderResource {
 
 	@EJB
@@ -80,6 +83,7 @@ public class OrderResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path(value = "{customerId}")
+	@RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME})
 	public Response createOrder(@PathParam("customerId") Integer customerId, ItemQuantityPairs itemQuantityPairs,
 			@Context UriInfo uriInfo) {
 		// TODO validate parameters customerId and itemQuantityPairs
@@ -103,6 +107,7 @@ public class OrderResource {
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "{id}")
+	@RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME})
 	public Response deleteOrder(@PathParam("id") int orderId) {
 		// TODO cancel method should return the deleted (or marked as deleted) order id
 		// and if the id is not found an exception should be thrown, so that the

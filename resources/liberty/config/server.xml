@@ -3,18 +3,16 @@
 		<feature>javaee-8.0</feature>
 	</featureManager>
 
-	<basicRegistry id="basic" realm="dummyRealm" />
-
 	<logging
 		traceSpecification="com.ibm.ws.microprofile.health.*=all" />
 
-	<httpEndpoint host="*" httpPort="${default.http.port}"
+<!-- 	<httpEndpoint host="localhost" httpPort="-1" -->
+	<httpEndpoint host="localhost" httpPort="${default.http.port}"
 		httpsPort="${default.https.port}" id="defaultHttpEndpoint" />
 
-	<enterpriseApplication
-		id="orderdomain"
-		location="orderdomainEAR.ear"
-		name="orderdomainEAR.ear" />
+	<keyStore id="defaultKeyStore"
+		type="PKCS12"
+		password="Liberty" />
 
 	<jdbcDriver id="H2Driver"
 		javax.sql.DataSource="org.h2.jdbcx.JdbcDataSource" libraryRef="h2-lib" />
@@ -25,39 +23,43 @@
 
 	<dataSource id="h2-db" jndiName="jdbc/order_db"
 		type="javax.sql.DataSource" jdbcDriverRef="H2Driver">
-		<properties
-			url="jdbc:h2:mem:order_db;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;TRACE_LEVEL_FILE=4" />
+		<properties	url="jdbc:h2:mem:order_db;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;TRACE_LEVEL_FILE=4" />
 	</dataSource>
 
+	<basicRegistry id="basic" realm="defaultRealm">
+		<user name="admin" password="adminpwd" />
+		<user name="testuser" password="pwd" />
 
-	<!-- <basicRegistry id="basic" realm="PAI Realm"> -->
-	<!-- <user name="testuser" password="pwd"/> -->
+		<group name="ORDERDOMAIN.ITEM">
+			<member name="testuser" />
+		</group>
+		<group name="ORDERDOMAIN.CUSTOMER">
+			<member name="testuser" />
+		</group>
+		<group name="ORDERDOMAIN.ORDER">
+			<member name="testuser" />
+		</group>
+		<group name="ORDERDOMAIN.ADMIN">
+			<member name="admin" />
+		</group>
+	</basicRegistry>
 
-	<!-- <group name="ORDERDOMAIN.ENTITLEMENT"> -->
-	<!-- <member name="testuser"/> -->
-	<!-- </group> -->
-	<!-- <group name="ORDERDOMAIN.ENTITLEMENT2"> -->
-	<!-- <member name="testuser"/> -->
-	<!-- </group> -->
-	<!-- <group name="ORDERDOMAIN.ENTITLEMENT3"> -->
-	<!-- <member name="testuser"/> -->
-	<!-- </group> -->
-	<!-- </basicRegistry> -->
-	<!-- ​ -->
-	<!-- <enterpriseApplication id="orderdomain" location="orderdomain.ear" 
-		name="orderdomain"> -->
-	<!-- <application-bnd> -->
-	<!-- <security-role name="ORDERDOMAIN.ENTITLEMENT"> -->
-	<!-- <group name="ORDERDOMAIN.ENTITLEMENT"/> -->
-	<!-- </security-role> -->
-	<!-- <security-role name="ORDERDOMAIN.ENTITLEMENT2"> -->
-	<!-- <group name="ORDERDOMAIN.ENTITLEMENT2"/> -->
-	<!-- </security-role> -->
-	<!-- <security-role name="ORDERDOMAIN.ENTITLEMENT3"> -->
-	<!-- <group name="ORDERDOMAIN.ENTITLEMENT3"/> -->
-	<!-- </security-role> -->
-	<!-- </application-bnd> -->
-	<!-- </enterpriseApplication> -->
+	<enterpriseApplication id="orderdomain"
+		location="orderdomainEAR.ear" name="orderdomainEAR.ear">
+		<application-bnd>
+			<security-role name="ORDERDOMAIN.ITEM">
+				<group name="ORDERDOMAIN.ITEM" />
+			</security-role>
+			<security-role name="ORDERDOMAIN.CUSTOMER">
+				<group name="ORDERDOMAIN.CUSTOMER" />
+			</security-role>
+			<security-role name="ORDERDOMAIN.ORDER">
+				<group name="ORDERDOMAIN.ORDER" />
+			</security-role>
+			<security-role name="ORDERDOMAIN.ADMIN">
+				<group name="ORDERDOMAIN.ADMIN" />
+			</security-role>
+		</application-bnd>
+	</enterpriseApplication>
 
 </server>
-<!-- </server> -->
