@@ -20,7 +20,7 @@ import de.novatec.showcase.ejb.orders.entity.Item;
  */
 
 @Stateful
-public class ItemSession implements ItemSessionRemote, ItemSessionLocal {
+public class ItemSession implements ItemSessionLocal {
 
 	@PersistenceContext
 	EntityManager em;

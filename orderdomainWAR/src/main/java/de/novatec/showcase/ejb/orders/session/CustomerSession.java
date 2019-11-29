@@ -23,7 +23,7 @@ import de.novatec.showcase.ejb.orders.entity.OrderStatus;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-public class CustomerSession implements CustomerSessionRemote, CustomerSessionLocal {
+public class CustomerSession implements CustomerSessionLocal {
 
 	@Resource
 	SessionContext mySessionCtx;

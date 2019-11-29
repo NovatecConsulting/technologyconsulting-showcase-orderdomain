@@ -22,7 +22,7 @@ import de.novatec.showcase.mapper.DtoMapper;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class OrderSession implements OrderSessionRemote, OrderSessionLocal {
+public class OrderSession implements OrderSessionLocal {
 
 	private static final int MAX_SHOPPING_CART_SIZE = 200;
 
