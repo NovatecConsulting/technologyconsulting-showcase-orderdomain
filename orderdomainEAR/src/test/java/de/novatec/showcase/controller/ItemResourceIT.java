@@ -17,7 +17,7 @@ public class ItemResourceIT extends ResourcdITBase {
 	@Test
 	public void testGetItemWithNonExistingId() {
 		WebTarget target = client.target(ITEM_URL).path(NON_EXISTING_ID);
-		Response response = getTestUserPasswordProperty(target.request()).get();
+		Response response = asTestUser(target.request()).get();
 		assertResponse200(ITEM_URL, response);
 		
 			assertEquals("Result should be an empty json array!", 0, response.readEntity(new GenericType<List<Item>>() {}).size());
@@ -26,7 +26,7 @@ public class ItemResourceIT extends ResourcdITBase {
 	@Test
 	public void testGetItemWithId() {
 		WebTarget target = client.target(ITEM_URL).path(testItem.getId());
-		Response response = getTestUserPasswordProperty(target.request()).get();
+		Response response = asTestUser(target.request()).get();
 		assertResponse200(ITEM_URL, response);
 
 			List<Item> items = response.readEntity(new GenericType<List<Item>>() {});
