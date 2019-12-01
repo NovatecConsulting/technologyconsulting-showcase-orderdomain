@@ -42,12 +42,12 @@ public class CustomerResource {
 		if (customerId <= 0) {
 			return Response.serverError().entity("Id cannot be less than 1!").build();
 		}
-		Customer customer = DtoMapper.mapToCustomerDto(bean.getCustomer(customerId));
+		de.novatec.showcase.ejb.orders.entity.Customer customer = bean.getCustomer(customerId);
 		if (customer == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Customer with id '" + customerId + "' not found!")
 					.build();
 		}
-		return Response.ok().entity(customer).type(MediaType.APPLICATION_JSON_TYPE).build();
+		return Response.ok().entity(DtoMapper.mapToCustomerDto(customer)).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@GET

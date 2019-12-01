@@ -43,12 +43,12 @@ public class OrderResource {
 		if (orderId <= 0) {
 			return Response.serverError().entity("Id cannot be less than 1!").build();
 		}
-		Order order = DtoMapper.mapToOrderDto(bean.getOrder(orderId));
+		de.novatec.showcase.ejb.orders.entity.Order order = bean.getOrder(orderId);
 		if (order == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Order with id '" + orderId + "' not found!")
 					.build();
 		}
-		return Response.ok().entity(order).type(MediaType.APPLICATION_JSON_TYPE).build();
+		return Response.ok().entity(DtoMapper.mapToOrderDto(order)).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@GET
