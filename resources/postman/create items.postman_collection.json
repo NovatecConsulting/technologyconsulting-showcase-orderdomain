@@ -1,0 +1,77 @@
+{
+	"info": {
+		"_postman_id": "35f3e3be-7c86-4446-96db-c1c3368625dd",
+		"name": "create items",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create Item",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c824e1a5-fcf2-43e6-b4c3-94582269bd9f",
+						"exec": [
+							"pm.environment.set(\"name\", \"name1\");",
+							"pm.environment.set(\"description\", \"description1\");",
+							"pm.environment.set(\"price\", 100.0);",
+							"pm.environment.set(\"discount\", 10.0);",
+							"pm.environment.set(\"category\", 1);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "adminpwd",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{name}}\",\n    \"description\": \"{{description}}\",\n    \"price\": \"{{price}}\",\n    \"discount\": \"{{discount}}\",\n    \"category\": \"{{category}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9080/orderdomain/item",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"orderdomain",
+						"item"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

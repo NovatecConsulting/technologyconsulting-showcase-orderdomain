@@ -1,0 +1,89 @@
+{
+	"info": {
+		"_postman_id": "d26fadfe-c049-4696-ae8a-df94b9c8dc95",
+		"name": "create orders",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create order",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "85acded0-4cc1-4558-bc08-c660b9dcc648",
+						"exec": [
+							"pm.environment.set(\"id\", \"1\");",
+							"pm.environment.set(\"name\", \"name1\");",
+							"pm.environment.set(\"description\", \"description1\");",
+							"pm.environment.set(\"price\", 100.0);",
+							"pm.environment.set(\"discount\", 10.0);",
+							"pm.environment.set(\"category\", 1);",
+							"pm.environment.set(\"quantity\", 1);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "adminpwd",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"itemQuantityPairs\":[{\n\t\"item\": {\n\t\t\"id\": \"{{id}}\",\n\t\t\"name\": \"{{name}}\",\n\t\t\"description\": \"{{description}}\",\n\t\t\"price\": \"{{price}}\",\n\t\t\"discount\": \"{{discount}}\",\n\t\t\"category\": \"{{category}}\"\n\t},\n\t\"quantity\": \"{{quantity}}\"\n}]}"
+				},
+				"url": {
+					"raw": "http://localhost:9080/orderdomain/order/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"orderdomain",
+						"order",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "adminpwd",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "admin",
+				"type": "string"
+			}
+		]
+	},
+	"protocolProfileBehavior": {}
+}

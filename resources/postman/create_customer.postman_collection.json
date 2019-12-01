@@ -1,18 +1,64 @@
 {
 	"info": {
-		"_postman_id": "35f3e3be-7c86-4446-96db-c1c3368625dd",
-		"name": "smoketest",
+		"_postman_id": "30b59381-756a-409e-8a99-9c6ca6a4e1f3",
+		"name": "create_customers",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "create customer",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "31d50fd3-747e-4c40-9f05-57d000f156d0",
+						"exec": [
+							"pm.environment.set(\"firstName\", \"{{$randomFirstName}}\");",
+							"pm.environment.set(\"lastName\", \"{{$randomLastName}}\");",
+							"pm.environment.set(\"contact\", \"contact\");",
+							"pm.environment.set(\"credit\", \"GC\");",
+							"pm.environment.set(\"creditLimit\", 1000.0);",
+							"pm.environment.set(\"balance\",  200.0);",
+							"pm.environment.set(\"ytdPayment\", 10.0);",
+							"pm.environment.set(\"street1\", \"{{$randomStreetName}}\");",
+							"pm.environment.set(\"street2\", \"{{$randomStreetName\"}});",
+							"pm.environment.set(\"city\", \"{{$randomCity}}\");",
+							"pm.environment.set(\"state\", \"state\");",
+							"pm.environment.set(\"country\", \"{{$randomCountry}}\");",
+							"pm.environment.set(\"zip\", \"zip\");",
+							"pm.environment.set(\"phone\", \"{{$randomPhoneNumber}}\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "adminpwd",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "\n        \"firstName\": \"firstName\",\n        \"lastName\": \"lastNAme\",\n        \"contact\": \"contact\",\n        \"credit\": \"GC\",\n        \"creditLimit\": \"1000.0\",\n        \"balance\": \"200.0\",\n        \"ytdPayment\": \"100.0\",\n        \"customerInventories\": [],\n        \"address\": {\n                \"street1\": \"street1\",\n                \"street2\": \"street2\",\n                \"city\": \"city\",\n                \"state\": \"state\",\n                \"country\": \"county\",\n                \"zip\": \"zip\",\n                \"phone\": \"phone\"\n        }\n}"
+					"raw": "{\n        \"firstName\": \"{{firstName}}\",\n        \"lastName\": \"{{lastName}}\",\n        \"contact\": \"{{contact}}\",\n        \"credit\": \"{{credit}}\",\n        \"creditLimit\": \"{{creditLimit}}\",\n        \"balance\": \"{{balance}}\",\n        \"ytdPayment\": \"{{ytdPayment}}\",\n        \"customerInventories\": [],\n        \"address\": {\n                \"street1\": \"{{street1}}\",\n                \"street2\": \"{{street2}}\",\n                \"city\": \"{{city}}\",\n                \"state\": \"{{state}}\",\n                \"country\": \"{{country}}\",\n                \"zip\": \"{{zip}}\",\n                \"phone\": \"{{phone}}\"\n        }\n}"
 				},
 				"url": {
 					"raw": "http://localhost:9080/orderdomain/customer",

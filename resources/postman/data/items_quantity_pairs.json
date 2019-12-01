@@ -1,0 +1,35 @@
+[
+	{
+		"item": {
+			"id": "1",
+			"name": "name1",
+			"description": "description1",
+			"price": "100.00",
+			"discount": "0.0",
+			"category": 1
+		},
+		"quantity": 1
+	},
+	{
+		"item": {
+			"id": "2",
+			"name": "name2",
+			"description": "description2",
+			"price": "100.00",
+			"discount": "0.0",
+			"category": 1
+		},
+		"quantity": 2
+	},
+	{
+		"item": {
+			"id": "3",
+			"name": "name3",
+			"description": "description3",
+			"price": "200.00",
+			"discount": "10.0",
+			"category": 2
+		},
+		"quantity": 3
+	}
+]
