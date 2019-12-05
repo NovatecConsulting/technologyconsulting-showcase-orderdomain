@@ -65,22 +65,23 @@ abstract public class ResourceITBase {
 	}
 
 	public static void assertResponse200(String url, Response response) {
-		assertEquals("Incorrect response code from " + url, Response.Status.OK.getStatusCode(), response.getStatus());
+		assertResponse(url, response, Response.Status.OK);
 	}
 
 	public static void assertResponse201(String url, Response response) {
-		assertEquals("Incorrect response code from " + url, Response.Status.CREATED.getStatusCode(),
-				response.getStatus());
+		assertResponse(url, response, Response.Status.CREATED);
 	}
 
 	public static void assertResponse404(String url, Response response) {
-		assertEquals("Incorrect response code from " + url, Response.Status.NOT_FOUND.getStatusCode(),
-				response.getStatus());
+		assertResponse(url, response, Response.Status.NOT_FOUND);
 	}
 
 	public static void assertResponse500(String url, Response response) {
-		assertEquals("Incorrect response code from " + url, Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
-				response.getStatus());
+		assertResponse(url, response, Response.Status.INTERNAL_SERVER_ERROR);
+	}
+
+	public static void assertResponse(String url, Response response, Response.Status status) {
+		assertEquals("Incorrect response code from " + url, status.getStatusCode(), response.getStatus());
 	}
 
 	protected static Calendar constantDate() {
@@ -145,17 +146,18 @@ abstract public class ResourceITBase {
 		assertResponse200(CUSTOMER_URL, response);
 		return response.readEntity(Customer.class);
 	}
-	
-	protected static Builder asAdmin(Builder builder)
-	{
-		return builder.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, "admin")
-	    .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, "adminpwd");
+
+	protected static Builder asAdmin(Builder builder) {
+		return asUser(builder, "admin", "adminpwd");
 	}
 
-	protected static Builder asTestUser(Builder builder)
-	{
-		return builder.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, "testuser")
-				.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, "pwd");
+	protected static Builder asTestUser(Builder builder) {
+		return asUser(builder, "testuser", "pwd");
 	}
-	
+
+	protected static Builder asUser(Builder builder, String userName, String password) {
+		return builder.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, userName)
+				.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, password);
+	}
+
 }
