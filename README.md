@@ -1,16 +1,17 @@
-# technologyconsulting-security-showcase-orderdomain-showcase
-orderdomain is a part of a showcase implementation which is running on a open liberty instance. It ist structured right now like this
+# technologyconsulting-security-showcase-orderdomain
+orderdomain is a part of a showcase implementation which is running on a open liberty instance. It is structured right now like this
 
 - **orderdomainParent** Parent maven module
   - **orderdomainDTO** - contains all classes used in the rest controllers
   - **orderdomainWAR** - contains the rest controllers and all EJB classes and entities
   - **orderdomainEAR** - contains the war module
 
-#### The project consists of the following packages
+#### The projects consists of the following packages
 
-- **de.novatec.showcase.orders.entity** - with all related order domain entities
-- **de.novatec.showcase.orders.session** - with the order domain EJB session beans
-- **de.novatec.showcase.Controller** - with corresponding REST controllers for Item, Customer and Order
+- **de.novatec.showcase.order.ejb.entity** - with all related order domain entities
+- **de.novatec.showcase.order.ejb.session** - with the order domain EJB session beans
+- **de.novatec.showcase.order.controller** - with corresponding REST controllers for Item, Customer and Order
+- **de.novatec.showcase.order.mapper** - with orika mapper fro dto/entity mapping
 
 #### build, run and stop orderdomain on an open liberty server
 - **build:** mvn clean install
