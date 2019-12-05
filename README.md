@@ -2,9 +2,9 @@
 orderdomain is a part of a showcase implementation which is running on a open liberty instance. It is structured right now like this
 
 - **orderdomainParent** Parent maven module
-  - **orderdomainDTO** - contains all classes used in the rest controllers
-  - **orderdomainWAR** - contains the rest controllers and all EJB classes and entities
-  - **orderdomainEAR** - contains the war module
+    - **orderdomainDTO** - contains all classes used in the rest controllers
+    - **orderdomainWAR** - contains the rest controllers and all EJB classes and entities
+    - **orderdomainEAR** - contains the war module
 
 #### The projects consists of the following packages
 
