@@ -19,7 +19,7 @@ import de.novatec.showcase.order.dto.Customer;
 import de.novatec.showcase.order.dto.CustomerInventory;
 import de.novatec.showcase.order.dto.Order;
 
-public class CustomerResourceIT extends ResourcdITBase {
+public class CustomerResourceIT extends ResourceITBase {
 
 	@Test
 	public void testGetCustomerWithNonExistingId() {

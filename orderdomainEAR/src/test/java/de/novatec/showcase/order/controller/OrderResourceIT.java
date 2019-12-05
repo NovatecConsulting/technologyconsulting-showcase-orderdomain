@@ -15,7 +15,7 @@ import org.junit.Test;
 import de.novatec.showcase.order.dto.Order;
 import de.novatec.showcase.order.dto.OrderStatus;
 
-public class OrderResourceIT extends ResourcdITBase {
+public class OrderResourceIT extends ResourceITBase {
 
 	@Test
 	public void testGetOrderWithNonExistingId() {

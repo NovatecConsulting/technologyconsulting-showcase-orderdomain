@@ -34,7 +34,7 @@ import de.novatec.showcase.order.dto.ItemQuantityPair;
 import de.novatec.showcase.order.dto.ItemQuantityPairs;
 import de.novatec.showcase.order.dto.Order;
 
-abstract public class ResourcdITBase {
+abstract public class ResourceITBase {
 
 	protected static final String PORT = System.getProperty("http.port");
 	protected static final String BASE_URL = "http://localhost:" + PORT + "/orderdomain/";

@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import de.novatec.showcase.order.dto.Item;
 
-public class ItemResourceIT extends ResourcdITBase {
+public class ItemResourceIT extends ResourceITBase {
 
 	@Test
 	public void testGetItemWithNonExistingId() {
