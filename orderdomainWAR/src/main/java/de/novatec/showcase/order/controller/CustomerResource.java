@@ -144,8 +144,6 @@ public class CustomerResource {
 		// TODO validate customer
 		customer.setSince(Calendar.getInstance());
 		Integer id = bean.createCustomer(DtoMapper.mapToCustomerEntity(customer));
-        JsonObjectBuilder builder = Json.createObjectBuilder();
-		builder.add("id", id);
-		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(builder.build()).build();
+		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToCustomerDto(bean.getCustomer(id))).build();
 	}
 }

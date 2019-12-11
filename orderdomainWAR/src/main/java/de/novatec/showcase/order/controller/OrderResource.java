@@ -98,10 +98,7 @@ public class OrderResource {
 			return Response.status(Response.Status.PRECONDITION_FAILED)
 					.entity("The customer with id '" + customerId + "' has insufficient credit!").build();
 		}
-
-		JsonObjectBuilder builder = Json.createObjectBuilder();
-		builder.add("id", id);
-		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(builder.build()).type(MediaType.APPLICATION_JSON_TYPE).build();
+		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToOrderDto(bean.getOrder(id))).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@DELETE

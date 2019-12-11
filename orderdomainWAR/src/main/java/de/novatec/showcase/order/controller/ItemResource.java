@@ -39,9 +39,7 @@ public class ItemResource {
 	@RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME})
 	public Response createItem(Item item, @Context UriInfo uriInfo) {
 		String id = itemBean.createItem(DtoMapper.mapToItemEntity(item));
-		JsonObjectBuilder builder = Json.createObjectBuilder();
-		builder.add("id", id);
-		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(builder.build()).type(MediaType.APPLICATION_JSON_TYPE).build();
+		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToItemDto(itemBean.getItems(id)).get(0)).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@GET

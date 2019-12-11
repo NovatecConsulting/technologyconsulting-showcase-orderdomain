@@ -120,7 +120,7 @@ public class OrderSession implements OrderSessionLocal {
 			// make a call for each Orderline of the Order
 		} else if (shoppingCartSize <= MIN_SHOPPING_CART_SIZE) {
 			// its a small order
-			// TODO Call Customer.addInventory(Order) if not an OrderStatsu.DEFFERED
+			// TODO Call Customer.addInventory(Order) if not an OrderStatus.DEFFERED
 			// purchase
 		} else {
 			throw new RuntimeException("Size of the ShoppingCart violates the specification. Cart size: " + shoppingCartSize);

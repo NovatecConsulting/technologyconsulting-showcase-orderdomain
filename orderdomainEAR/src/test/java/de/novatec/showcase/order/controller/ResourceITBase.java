@@ -9,7 +9,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import javax.json.JsonObject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -106,7 +105,7 @@ abstract public class ResourceITBase {
 		assertResponse201(ORDER_URL, response);
 
 		target = client.target(ORDER_URL)
-				.path(Integer.valueOf(response.readEntity(JsonObject.class).getInt("id")).toString());
+				.path(response.readEntity(Order.class).getId().toString());
 		response = asAdmin(target.request()).get();
 		assertResponse200(ORDER_URL, response);
 
@@ -121,7 +120,7 @@ abstract public class ResourceITBase {
 		assertResponse201(ITEM_URL, response);
 
 		target = client.target(ITEM_URL)
-				.path(Integer.valueOf(response.readEntity(JsonObject.class).getString("id")).toString());
+				.path(response.readEntity(Item.class).getId().toString());
 		response = asAdmin(target.request()).get();
 		assertResponse200(ITEM_URL, response);
 
@@ -141,7 +140,7 @@ abstract public class ResourceITBase {
 		assertResponse201(CUSTOMER_URL, response);
 
 		target = client.target(CUSTOMER_URL)
-				.path(Integer.valueOf(response.readEntity(JsonObject.class).getInt("id")).toString());
+				.path(response.readEntity(Customer.class).getId().toString());
 		response = asAdmin(target.request(MediaType.APPLICATION_JSON_TYPE)).get();
 		assertResponse200(CUSTOMER_URL, response);
 		return response.readEntity(Customer.class);
