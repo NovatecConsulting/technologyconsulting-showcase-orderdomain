@@ -18,13 +18,19 @@ import javax.persistence.Version;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "O_Item")
-@NamedQueries(value = { @NamedQuery(name = "QUERY_BY_CATEGORY", query = Item.QUERY_BY_CATEGORY),
-		@NamedQuery(name = "QUERY_BY_ITEM_IDS", query = Item.QUERY_BY_ITEM_IDS) })
+@NamedQueries(value = { @NamedQuery(name = Item.BY_CATEGORY, query = Item.BY_CATEGORY_QUERY),
+		@NamedQuery(name = Item.BY_ITEM_IDS, query = Item.BY_ITEM_IDS_QUERY),
+		@NamedQuery(name = Item.COUNT_ITEMS, query = Item.COUNT_ITEMS_QUERY), })
 
 public class Item implements Serializable {
 
-	public static final String QUERY_BY_CATEGORY = "Select i From Item i Where i.category=:category";
-	public static final String QUERY_BY_ITEM_IDS = "Select i From Item i Where i.id in :ids";
+	public static final String BY_CATEGORY = "QUERY_BY_CATEGORY";
+	public static final String BY_ITEM_IDS = "QUERY_BY_ITEM_IDS";
+	public static final String COUNT_ITEMS = "COUNT_ITEMS";
+
+	public static final String BY_CATEGORY_QUERY = "Select i From Item i Where i.category=:category";
+	public static final String BY_ITEM_IDS_QUERY = "Select i From Item i Where i.id in :ids";
+	public static final String COUNT_ITEMS_QUERY = "SELECT COUNT(i) FROM Item i";
 
 	@Id
 	@Column(name = "I_ID")

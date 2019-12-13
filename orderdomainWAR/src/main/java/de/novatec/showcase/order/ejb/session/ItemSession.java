@@ -9,7 +9,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -52,12 +52,11 @@ public class ItemSession implements ItemSessionLocal {
 		return this.batchSize;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<Item> getItems(String itemIds) {
 
-		Query itemsQuery = em.createNamedQuery("QUERY_BY_ITEM_IDS");
+		TypedQuery<Item> itemsQuery = em.createNamedQuery(Item.BY_ITEM_IDS, Item.class);
 		itemsQuery.setParameter("ids", idsAsLong(Arrays.asList(StringUtils.stripEnd(itemIds, ",").split(",", 10))));
 		return itemsQuery.getResultList();
 	}
@@ -98,8 +97,8 @@ public class ItemSession implements ItemSessionLocal {
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public long getTotalItems() {
-		Query totalQuery = em.createQuery("SELECT COUNT(i) FROM Item i");
-		return (Long) totalQuery.getSingleResult();
+		TypedQuery<Long> totalQuery = em.createNamedQuery(Item.COUNT_ITEMS, Long.class);
+		return totalQuery.getSingleResult();
 	}
 
 	@Override
@@ -118,7 +117,6 @@ public class ItemSession implements ItemSessionLocal {
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public String createItem(Item item) {
 		em.persist(item);
-		em.flush();
 		return item.getId();
 	}
 

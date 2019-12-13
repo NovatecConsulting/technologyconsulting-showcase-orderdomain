@@ -12,6 +12,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import de.novatec.showcase.order.ejb.entity.Customer;
 import de.novatec.showcase.order.ejb.entity.Order;
@@ -46,18 +47,16 @@ public class OrderSession implements OrderSessionLocal {
 	@Override
 	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Long getOrderCount(Integer customerId) {
-		Query orderCount = em.createNamedQuery("COUNT_BY_CUSTOMER");
+		TypedQuery<Long> orderCount = em.createNamedQuery(Order.COUNT_BY_CUSTOMER, Long.class);
 		orderCount.setParameter("id", customerId);
-		@SuppressWarnings("unchecked")
 		List<Long> elementList = orderCount.getResultList();
 		return elementList != null ? elementList.get(0).longValue() : Long.valueOf(0).longValue();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public List<Order> getOpenOrders(Integer customerId) {
-		Query orderQuery = em.createNamedQuery("QUERY_BY_CUSTOMER_AND_ORDER_STATUS");
+		TypedQuery<Order> orderQuery = em.createNamedQuery(Order.BY_CUSTOMER_AND_ORDER_STATUS, Order.class);
 		orderQuery.setParameter("id", customerId);
 		orderQuery.setParameter("status", OrderStatus.DEFERRED);
 		return orderQuery.getResultList();
@@ -91,7 +90,6 @@ public class OrderSession implements OrderSessionLocal {
 
 		Order order = new Order(shoppingCart.getTotalPrice(), shoppingCart.getTotalDiscount(), customer);
 		em.persist(order);
-//		em.flush();
 
 		int lineNumber = 1;
 
@@ -99,7 +97,6 @@ public class OrderSession implements OrderSessionLocal {
 			OrderLine orderLine = new OrderLine(lineNumber, order.getId(), shoppingCart.getQuantity(item), shoppingCart.getPrice(item),
 					item.getPrice(), order, DtoMapper.mapToItemEntity(item));
 			em.persist(orderLine);
-			em.flush();
 			order.addOrderLine(orderLine);
 			lineNumber++;
 		}

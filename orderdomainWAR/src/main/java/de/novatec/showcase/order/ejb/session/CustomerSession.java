@@ -12,7 +12,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import de.novatec.showcase.order.ejb.entity.Customer;
 import de.novatec.showcase.order.ejb.entity.CustomerInventory;
@@ -38,8 +38,8 @@ public class CustomerSession implements CustomerSessionLocal {
 
 	@Override
 	public long countCustomer() {
-		Query queryCustomerCount = em.createNamedQuery("QUERY_COUNT");
-		return (Long) queryCustomerCount.getSingleResult();
+		TypedQuery<Long> queryCustomerCount = em.createNamedQuery(Customer.COUNT_CUSTOMERS, Long.class);
+		return queryCustomerCount.getSingleResult();
 	}
 
 	@Override
@@ -58,10 +58,9 @@ public class CustomerSession implements CustomerSessionLocal {
 		return customer.getCustomerInventories();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Customer> selectCustomerWithGoodCredit() {
-		Query creditQuery = em.createNamedQuery("QUERY_BY_CREDIT");
+		TypedQuery<Customer> creditQuery = em.createNamedQuery(Customer.CUSTOMERS_BY_CREDIT, Customer.class);
 		creditQuery.setParameter("credit", "GC");
 		return creditQuery.getResultList();
 	}
@@ -191,7 +190,6 @@ public class CustomerSession implements CustomerSessionLocal {
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Integer createCustomer(Customer customer) {
 		em.persist(customer);
-		em.flush();
 		return customer.getId();
 	}
 

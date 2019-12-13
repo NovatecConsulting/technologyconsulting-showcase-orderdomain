@@ -29,20 +29,25 @@ import javax.persistence.Version;
 
 @Entity
 @Table(name = "O_ORDERS")
-@NamedQueries(value = { @NamedQuery(name = "COUNT_BY_CUSTOMER", query = Order.COUNT_BY_CUSTOMER),
-		@NamedQuery(name = "QUERY_BY_CUSTOMER_AND_ORDER_STATUS", query = Order.QUERY_BY_CUSTOMER_AND_ORDER_STATUS),
-		@NamedQuery(name = "QUERY_BY_OUTSTANDING", query = Order.QUERY_BY_OUTSTANDING),
-		@NamedQuery(name = "COUNT_BY_PERIOD", query = Order.COUNT_BY_PERIOD) })
+@NamedQueries(value = { @NamedQuery(name = Order.COUNT_BY_CUSTOMER, query = Order.COUNT_BY_CUSTOMER_QUERY),
+		@NamedQuery(name = Order.BY_CUSTOMER_AND_ORDER_STATUS, query = Order.BY_CUSTOMER_AND_ORDER_STATUS_QUERY),
+		@NamedQuery(name = Order.BY_OUTSTANDING, query = Order.BY_OUTSTANDING_QUERY),
+		@NamedQuery(name = Order.COUNT_BY_PERIOD, query = Order.COUNT_BY_PERIOD_QUERY) })
 public class Order implements Serializable {
 
 	private static final long serialVersionUID = 4097897801304129622L;
+	
+	public static final String COUNT_BY_CUSTOMER = "COUNT_BY_CUSTOMER";
+	public static final String BY_CUSTOMER_AND_ORDER_STATUS = "QUERY_BY_CUSTOMER_AND_ORDER_STATUS";
+	public static final String BY_OUTSTANDING = "QUERY_BY_OUTSTANDING";
+	public static final String COUNT_BY_PERIOD = "COUNT_BY_PERIOD";
 
-	public static final String COUNT_BY_CUSTOMER = "SELECT COUNT(o) FROM Order o JOIN o.customer AS c WHERE c.id = :id";
-	public static final String QUERY_BY_CUSTOMER_AND_ORDER_STATUS = "SELECT o FROM Order o JOIN o.customer AS c WHERE c.id = :id and o.status = :status";
-	public static final String QUERY_BY_OUTSTANDING = "SELECT o FROM Order o WHERE o.status = de.novatec.showcase.order.ejb.entity.OrderStatus.DEFERRED OR "
+	public static final String COUNT_BY_CUSTOMER_QUERY = "SELECT COUNT(o) FROM Order o JOIN o.customer AS c WHERE c.id = :id";
+	public static final String BY_CUSTOMER_AND_ORDER_STATUS_QUERY = "SELECT o FROM Order o JOIN o.customer AS c WHERE c.id = :id and o.status = :status";
+	public static final String BY_OUTSTANDING_QUERY = "SELECT o FROM Order o WHERE o.status = de.novatec.showcase.order.ejb.entity.OrderStatus.DEFERRED OR "
 			+ "o.status =de.novatec.showcase.order.ejb.entity.OrderStatus.PENDING_MANUFACTUR OR "
 			+ "o.status =de.novatec.showcase.order.ejb.entity.OrderStatus.UNKNOWN";
-	public static final String COUNT_BY_PERIOD = "SELECT COUNT(o) FROM Order o WHERE o.entryDate > :startDate AND o.entryDate < :endDate";
+	public static final String COUNT_BY_PERIOD_QUERY = "SELECT COUNT(o) FROM Order o WHERE o.entryDate > :startDate AND o.entryDate < :endDate";
 
 	@Id
 	@Column(name = "O_ID")

@@ -27,19 +27,24 @@ import javax.persistence.Version;
 
 @Entity
 @Table(name = "O_CUSTOMER")
-@NamedQueries(value = { @NamedQuery(name = "QUERY_ALL", query = Customer.QUERY_ALL),
-		@NamedQuery(name = "QUERY_COUNT", query = Customer.QUERY_COUNT),
-		@NamedQuery(name = "QUERY_BY_CREDIT", query = Customer.QUERY_BY_CREDIT),
-		@NamedQuery(name = "BAD_CREDIT", query = Customer.BAD_CREDIT)
+@NamedQueries(value = { @NamedQuery(name = Customer.ALL_CUSTOMERS, query = Customer.ALL_CUSTOMERS_QUERY),
+		@NamedQuery(name = Customer.COUNT_CUSTOMERS, query = Customer.COUNT_CUSTOMERS_QUERY),
+		@NamedQuery(name = Customer.CUSTOMERS_BY_CREDIT, query = Customer.CUSOMERS_BY_CREDIT_QUERY),
+		@NamedQuery(name = Customer.BAD_CREDIT_CUSTOMERS, query = Customer.BAD_CREDIT_CUSTOMERS_QUERY)
 
 })
 public class Customer implements Serializable {
 	private static final long serialVersionUID = 3961431086357095469L;
+	
+	public static final String ALL_CUSTOMERS = "QUERY_ALL";
+	public static final String COUNT_CUSTOMERS = "QUERY_COUNT";
+	public static final String CUSTOMERS_BY_CREDIT = "QUERY_BY_CREDIT";
+	public static final String BAD_CREDIT_CUSTOMERS = "BAD_CREDIT";
 
-	public static final String QUERY_ALL = "SELECT c FROM Customer c";
-	public static final String QUERY_COUNT = "SELECT COUNT(c) FROM Customer c";
-	public static final String QUERY_BY_CREDIT = "SELECT c FROM Customer c WHERE c.credit = :credit";
-	public static final String BAD_CREDIT = "SELECT c FROM Customer c WHERE c.credit = 'BC'";
+	public static final String ALL_CUSTOMERS_QUERY = "SELECT c FROM Customer c";
+	public static final String COUNT_CUSTOMERS_QUERY = "SELECT COUNT(c) FROM Customer c";
+	public static final String CUSOMERS_BY_CREDIT_QUERY = "SELECT c FROM Customer c WHERE c.credit = :credit";
+	public static final String BAD_CREDIT_CUSTOMERS_QUERY = "SELECT c FROM Customer c WHERE c.credit = 'BC'";
 
 	@Id
 	@Column(name = "C_ID")
