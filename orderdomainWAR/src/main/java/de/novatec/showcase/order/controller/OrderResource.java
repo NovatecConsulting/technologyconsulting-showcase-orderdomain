@@ -20,12 +20,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import de.novatec.showcase.order.GlobalConstants;
+import de.novatec.showcase.order.client.manufacture.RestcallException;
 import de.novatec.showcase.order.dto.ItemQuantityPair;
 import de.novatec.showcase.order.dto.ItemQuantityPairs;
 import de.novatec.showcase.order.dto.Order;
 import de.novatec.showcase.order.ejb.entity.ShoppingCart;
-import de.novatec.showcase.order.ejb.session.InsufficientCreditException;
 import de.novatec.showcase.order.ejb.session.OrderSessionLocal;
+import de.novatec.showcase.order.ejb.session.exception.InsufficientCreditException;
+import de.novatec.showcase.order.ejb.session.exception.PriceException;
+import de.novatec.showcase.order.ejb.session.exception.SpecificationException;
 import de.novatec.showcase.order.mapper.DtoMapper;
 
 @ManagedBean
@@ -97,6 +100,15 @@ public class OrderResource {
 		} catch (InsufficientCreditException e) {
 			return Response.status(Response.Status.PRECONDITION_FAILED)
 					.entity("The customer with id '" + customerId + "' has insufficient credit!").build();
+		} catch (PriceException e) {
+			return Response.status(Response.Status.PRECONDITION_FAILED)
+					.entity(e.getMessage()).build();
+		} catch (SpecificationException e) {
+			return Response.status(Response.Status.PRECONDITION_FAILED)
+					.entity(e.getMessage()).build();
+		} catch (RestcallException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.entity(e.getMessage()).build();
 		}
 		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToOrderDto(bean.getOrder(id))).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}

@@ -6,4 +6,7 @@ public interface GlobalConstants {
 	public static final String ITEM_READ_ROLE_NAME = "ORDERDOMAIN.ITEM";
 	public static final String CUSTOMER_READ_ROLE_NAME = "ORDERDOMAIN.CUSTOMER";
 	public static final String ORDER_READ_ROLE_NAME = "ORDERDOMAIN.ORDER";
+
+	public static final Boolean IS_SINGLE_EAR_DEPLOYMENT = Boolean
+			.valueOf(System.getProperty("isSingleEarDeployment", Boolean.FALSE.toString()));
 }

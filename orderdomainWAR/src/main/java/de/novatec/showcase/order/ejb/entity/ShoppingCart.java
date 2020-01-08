@@ -13,7 +13,7 @@ public class ShoppingCart implements Serializable {
 
 	private static final long serialVersionUID = 9045321423835602714L;
 
-	private final Map<Item, Integer> items = new HashMap<Item, Integer>();
+	private final Map<Item, Integer> itemQuantity = new HashMap<Item, Integer>();
 
 	private BigDecimal totalPrice = BigDecimal.ZERO;
 	private BigDecimal totalOrginalPrice = BigDecimal.ZERO;
@@ -23,14 +23,14 @@ public class ShoppingCart implements Serializable {
 	}
 
 	public boolean isEmpty() {
-		return this.items.isEmpty();
+		return this.itemQuantity.isEmpty();
 	}
 
 	public synchronized BigDecimal getTotalPrice() {
 		BigDecimal totalPrice = BigDecimal.ZERO;
 		for (Item item : this.getItems()) {
 			totalPrice = totalPrice.add(this.calculatePrice(item.getPrice().subtract(item.getDiscount()),
-					new BigDecimal(this.items.get(item))));
+					new BigDecimal(this.itemQuantity.get(item))));
 
 		}
 		return totalPrice;
@@ -40,13 +40,13 @@ public class ShoppingCart implements Serializable {
 		BigDecimal totalDiscount = BigDecimal.ZERO;
 		for (Item item : this.getItems()) {
 			totalDiscount = totalDiscount
-					.add(this.calculatePrice(item.getDiscount(), new BigDecimal(this.items.get(item))));
+					.add(this.calculatePrice(item.getDiscount(), new BigDecimal(this.itemQuantity.get(item))));
 		}
 		return totalDiscount;
 	}
 
 	public synchronized Item getItem(String itemId) {
-		for (Item item : this.items.keySet()) {
+		for (Item item : this.itemQuantity.keySet()) {
 			if (item.getId().equals(itemId)) {
 				return item;
 			}
@@ -55,31 +55,31 @@ public class ShoppingCart implements Serializable {
 	}
 
 	public synchronized List<Item> getItems() {
-		return new ArrayList<>(this.items.keySet());
+		return new ArrayList<>(this.itemQuantity.keySet());
 	}
 
 	public synchronized int getItemCount() {
-		return this.items.values().size();
+		return this.itemQuantity.values().size();
 	}
 
 	public Integer getQuantity(Item item) {
-		return this.items.get(this.getItem(item.getId()));
+		return this.itemQuantity.get(this.getItem(item.getId()));
 	}
 
 	public BigDecimal getPrice(Item item) {
 		Item i = this.getItem(item.getId());
 		BigDecimal discountPrice = item.getPrice().subtract(item.getDiscount());
-		return new BigDecimal(this.items.get(i)).multiply(discountPrice);
+		return new BigDecimal(this.itemQuantity.get(i)).multiply(discountPrice);
 	}
 
 	public synchronized void addItem(Item item, Integer quantity) {
 		Item i = this.getItem(item.getId());
 		if (i != null) {
-			this.items.put(i, quantity + this.items.get(i));
+			this.itemQuantity.put(i, quantity + this.itemQuantity.get(i));
 			return;
 		}
 
-		this.items.put(item, quantity);
+		this.itemQuantity.put(item, quantity);
 
 		BigDecimal decQuantity = new BigDecimal(quantity);
 
@@ -89,13 +89,13 @@ public class ShoppingCart implements Serializable {
 	}
 
 	public synchronized void removeItem(Item key) {
-		Integer quantity = this.items.get(this.getItem(key.getId()));
+		Integer quantity = this.itemQuantity.get(this.getItem(key.getId()));
 
 		if (quantity == null) {
 			return;
 		}
 
-		this.items.remove(key);
+		this.itemQuantity.remove(key);
 
 		BigDecimal decQuantity = new BigDecimal(quantity);
 
@@ -111,7 +111,7 @@ public class ShoppingCart implements Serializable {
 	}
 
 	public synchronized void clear() {
-		this.items.clear();
+		this.itemQuantity.clear();
 		this.totalOrginalPrice = BigDecimal.ZERO;
 		this.totalPrice = BigDecimal.ZERO;
 	}
@@ -122,7 +122,7 @@ public class ShoppingCart implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "ShoppingCart [items=" + items + ", totalPrice=" + totalPrice + ", totalOrginalPrice="
+		return "ShoppingCart [items=" + itemQuantity + ", totalPrice=" + totalPrice + ", totalOrginalPrice="
 				+ totalOrginalPrice + "]";
 	}
 

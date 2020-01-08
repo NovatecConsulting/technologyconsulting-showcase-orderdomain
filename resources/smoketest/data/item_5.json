@@ -1,0 +1,7 @@
+{
+	"name": "Assembly 2",
+	"description": "Assembly 2 which is build from 2 parts",
+	"price": "200.00",
+	"discount": "10.0",
+	"category": 2
+}

@@ -1,4 +1,4 @@
-package de.novatec.showcase.order.ejb.session;
+package de.novatec.showcase.order.ejb.session.exception;
 
 import javax.ejb.ApplicationException;
 

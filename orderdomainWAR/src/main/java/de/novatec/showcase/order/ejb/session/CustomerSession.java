@@ -85,6 +85,7 @@ public class CustomerSession implements CustomerSessionLocal {
 			return false;
 		}
 
+		System.out.println("customerInventory.getQuantity() = "+customerInventory.getQuantity());
 		if (customerInventory.getQuantity() - quantity >= 0) {
 			BigDecimal priceInclDiscount = item.getPrice().subtract(item.getDiscount());
 
@@ -92,8 +93,8 @@ public class CustomerSession implements CustomerSessionLocal {
 			customerInventory.addQuantity(-1 * quantity, priceInclDiscount.multiply(new BigDecimal(-1)));
 
 			// add money to the balance of customer
-			Customer cust = this.getCustomer(customerId);
-			cust.addBalance(priceInclDiscount.multiply(new BigDecimal(quantity)));
+			Customer customer = this.getCustomer(customerId);
+			customer.addBalance(priceInclDiscount.multiply(new BigDecimal(quantity)));
 
 			if (customerInventory.getQuantity() == 0) {
 				em.remove(customerInventory);

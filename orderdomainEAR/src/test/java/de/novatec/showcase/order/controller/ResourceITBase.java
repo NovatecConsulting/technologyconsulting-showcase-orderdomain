@@ -99,7 +99,7 @@ abstract public class ResourceITBase {
 
 		WebTarget target = client.target(ORDER_URL).path(customerId.toString());
 		ItemQuantityPairs itemQuantityPairs = new ItemQuantityPairs()
-				.setItemQuantityPairs(Arrays.asList(new ItemQuantityPair(item, 1)));
+				.setItemQuantityPairs(Arrays.asList(new ItemQuantityPair(item, 1), new ItemQuantityPair(item, 1),new ItemQuantityPair(item, 1)));
 		Builder builder = asAdmin(target.request(MediaType.APPLICATION_JSON));
 		Response response = builder.accept(MediaType.APPLICATION_JSON_TYPE).post(Entity.json(itemQuantityPairs));
 		assertResponse201(ORDER_URL, response);

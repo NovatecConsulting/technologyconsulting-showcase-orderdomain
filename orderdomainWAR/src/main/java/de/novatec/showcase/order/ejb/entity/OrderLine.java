@@ -138,7 +138,8 @@ public class OrderLine implements Serializable {
 	@Override
 	public String toString() {
 		return "OrderLine [pk=" + pk + ", quantity=" + quantity + ", shipDate=" + shipDate + ", status=" + status
-				+ ", totalValue=" + totalValue + ", msrpAtPurchase=" + msrpAtPurchase + ", order=" + order + ", item="
+				+ ", totalValue=" + totalValue + ", msrpAtPurchase=" + msrpAtPurchase + ", item="
+//				+ ", totalValue=" + totalValue + ", msrpAtPurchase=" + msrpAtPurchase + ", order=" + order + ", item="
 				+ item + ", version=" + version + "]";
 	}
 

@@ -72,7 +72,7 @@ public class CustomerResourceIT extends ResourceITBase {
 		// and a new order
 		Order order = createOrder(customer.getId(), testItem);
 
-		// check if inventories is empty
+		// check if inventories are empty
 		WebTarget target = client.target(CUSTOMER_URL).path("inventories/" + customer.getId().toString());
 		Response response = asTestUser(target.request()).get();
 		assertResponse404(CUSTOMER_URL, response);
@@ -88,8 +88,10 @@ public class CustomerResourceIT extends ResourceITBase {
 		target = client.target(CUSTOMER_URL).path("inventories/" + customer.getId().toString());
 		response = asTestUser(target.request()).get();
 		assertResponse200(CUSTOMER_URL, response);
-		assertEquals("Customer with id '" + customer.getId() + "' should should have 1 entry!", 1,
-		response.readEntity(new GenericType<List<CustomerInventory>>() {}).size());
+		assertEquals("Customer with id '" + customer.getId() + "' should should have 1 inventory!", 1,
+			response.readEntity(new GenericType<List<CustomerInventory>>() {}).size());
+		CustomerInventory customerInventory = response.readEntity(new GenericType<List<CustomerInventory>>() {}).get(0);
+		assertEquals("CustomerInventory should have a quantity of 2", Integer.valueOf(3), Integer.valueOf(customerInventory.getQuantity()));
 	}
 
 	@Test
@@ -99,7 +101,7 @@ public class CustomerResourceIT extends ResourceITBase {
 		// and a new order
 		Order order = createOrder(customer.getId(), testItem);
 
-		// check if inventories is empty
+		// check if inventories are empty
 		WebTarget target = client.target(CUSTOMER_URL).path("inventories/" + customer.getId().toString());
 		Response response = asTestUser(target.request()).get();
 		assertResponse404(CUSTOMER_URL, response);
@@ -115,11 +117,14 @@ public class CustomerResourceIT extends ResourceITBase {
 		target = client.target(CUSTOMER_URL).path("inventories/" + customer.getId().toString());
 		response = asTestUser(target.request()).get();
 		assertResponse200(CUSTOMER_URL, response);
-		assertEquals("Customer with id '" + customer.getId() + "' should should have 1 entry!", 1,
-		response.readEntity(new GenericType<List<CustomerInventory>>() {}).size());
+		assertEquals("Customer with id '" + customer.getId() + "' should should have 1 inventory!", 1,
+				response.readEntity(new GenericType<List<CustomerInventory>>() {}).size());
+		CustomerInventory customerInventory = response.readEntity(new GenericType<List<CustomerInventory>>() {}).get(0);
+		assertEquals("CustomerInventory should have a quantity of 2", Integer.valueOf(3), Integer.valueOf(customerInventory.getQuantity()));
 
 		// call sell inventories
 		Integer quantity = Integer.valueOf("1");
+		System.out.println("customerId = "+ customer.getId().toString());
 		target = client.target(CUSTOMER_URL)
 				.path("sell_inventory/" + customer.getId().toString() + "/" + testItem.getId() + "/" + quantity);
 		response = asTestUser(target.request()).put(Entity.json(customer));
@@ -129,9 +134,11 @@ public class CustomerResourceIT extends ResourceITBase {
 		// there should be no entry in inventory - no inventory for customer
 		target = client.target(CUSTOMER_URL).path("inventories/" + customer.getId().toString());
 		response = asTestUser(target.request()).get();
-		assertResponse404(CUSTOMER_URL, response);
-		assertEquals("Customer with id '" + customer.getId() + "' has no inventory!",
-		response.readEntity(String.class));
+		assertResponse200(CUSTOMER_URL, response);
+		assertEquals("Customer with id '" + customer.getId() + "' should have 1 inventory!", 1,
+				response.readEntity(new GenericType<List<CustomerInventory>>() {}).size());
+		customerInventory = response.readEntity(new GenericType<List<CustomerInventory>>() {}).get(0);
+		assertEquals("CustomerInventory should have a quantity of 2", Integer.valueOf(2), Integer.valueOf(customerInventory.getQuantity()));
 	}
 
 	@Test
