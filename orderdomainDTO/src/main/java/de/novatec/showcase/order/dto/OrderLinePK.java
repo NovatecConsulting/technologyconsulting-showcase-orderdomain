@@ -3,10 +3,15 @@ package de.novatec.showcase.order.dto;
 import java.io.Serializable;
 import java.util.Objects;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+@Schema(name="OrderLinePK", description="POJO that represents a order line priomary key.")
 public class OrderLinePK implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	@Schema(required = true)
 	private Integer orderId;
+	@Schema(required = true)
 	private int number;
 
 	public OrderLinePK() {

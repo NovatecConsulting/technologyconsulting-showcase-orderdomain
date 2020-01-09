@@ -7,6 +7,9 @@ import java.util.Objects;
 
 import javax.json.bind.annotation.JsonbTransient;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+@Schema(name="CustomerInventory", description="POJO that represents a customer inventory.")
 public class CustomerInventory implements Comparator<CustomerInventory>, Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -7,6 +7,9 @@ import java.util.Objects;
 
 import javax.json.bind.annotation.JsonbTransient;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+@Schema(name="OrderLine", description="POJO that represents a order line.")
 public class OrderLine implements Serializable {
 
 	private static final long serialVersionUID = -3556060565328926516L;

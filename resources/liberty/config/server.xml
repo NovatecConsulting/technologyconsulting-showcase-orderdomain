@@ -1,6 +1,7 @@
 <server description="order domain server">
 	<featureManager>
 		<feature>javaee-8.0</feature>
+		<feature>openapi-3.1</feature>
 	</featureManager>
 
 	<logging
@@ -21,14 +22,9 @@
 			includes="h2-1.4.200.jar" />
 	</library>
 
-	<dataSource id="h2-db1" jndiName="jdbc/order_db"
+	<dataSource id="h2-db" jndiName="jdbc/order_db"
 		type="javax.sql.DataSource" jdbcDriverRef="H2Driver">
 		<properties	url="jdbc:h2:mem:order_db;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;TRACE_LEVEL_FILE=4" />
-	</dataSource>
-
-	<dataSource id="h2-db2" jndiName="jdbc/manufacture_db"
-		type="javax.sql.DataSource" jdbcDriverRef="H2Driver">
-		<properties	url="jdbc:h2:mem:manufacture_db;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;TRACE_LEVEL_FILE=4" />
 	</dataSource>
 
 	<basicRegistry id="basic" realm="defaultRealm">
@@ -66,4 +62,6 @@
 			</security-role>
 		</application-bnd>
 	</enterpriseApplication>
+	
+	<webApplication contextRoot="/" location="examples" name="examples"/>
 </server>

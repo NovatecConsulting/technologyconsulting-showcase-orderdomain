@@ -6,10 +6,12 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import de.novatec.showcase.order.GlobalConstants;
-
+@Schema(name="Customer", description="POJO that represents a customer.")
 public class Customer implements Serializable {
 
 	private static final long serialVersionUID = 1L;

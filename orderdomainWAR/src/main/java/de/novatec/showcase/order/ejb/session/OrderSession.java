@@ -36,6 +36,7 @@ public class OrderSession implements OrderSessionLocal {
 	
 	private static Logger log = LoggerFactory.getLogger(OrderSession.class);
 
+
 	private static final int MAX_SHOPPING_CART_SIZE = 200;
 
 	private static final int MIN_SHOPPING_CART_SIZE = 20;

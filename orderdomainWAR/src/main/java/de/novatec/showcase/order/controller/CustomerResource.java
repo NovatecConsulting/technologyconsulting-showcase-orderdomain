@@ -8,6 +8,7 @@ import javax.annotation.ManagedBean;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.json.Json;
+import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -21,9 +22,19 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+
 import de.novatec.showcase.order.GlobalConstants;
 import de.novatec.showcase.order.dto.Customer;
 import de.novatec.showcase.order.dto.CustomerInventory;
+import de.novatec.showcase.order.dto.Order;
 import de.novatec.showcase.order.ejb.session.CustomerSessionLocal;
 import de.novatec.showcase.order.mapper.DtoMapper;
 
@@ -38,7 +49,31 @@ public class CustomerResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "{id}")
-	public Response getCustomer(@PathParam("id") Integer customerId) {
+	@APIResponses(
+	        value = {
+	            @APIResponse(
+	                responseCode = "404",
+	                description = "Customer not found",
+	                content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+	            @APIResponse(
+	            		responseCode = "500",
+	            		description = "Customer id is less than 1",
+	            		content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+	            @APIResponse(
+	                responseCode = "200",
+	                description = "The customer with the given id.",
+	                content = @Content(mediaType = MediaType.APPLICATION_JSON,
+	                schema = @Schema(implementation = Order.class))) })
+	    @Operation(
+	        summary = "Get the customer by id",
+	        description = "Get the customer by id where the id has to be higher than 0.")
+	public Response getCustomer(
+			@Parameter(
+		            description = "The id of the customer which should be retrieved.",
+		            required = true,
+		            example = "1",
+		            schema = @Schema(type = SchemaType.INTEGER)) 
+			@PathParam("id") Integer customerId) {
 		if (customerId <= 0) {
 			return Response.serverError().entity("Id cannot be less than 1!").build();
 		}
@@ -53,6 +88,16 @@ public class CustomerResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "count")
+	@APIResponses(
+	        value = {
+	            @APIResponse(
+	                responseCode = "200",
+	                description = "The number of customers.",
+	                content = @Content(mediaType = MediaType.APPLICATION_JSON,
+	                schema = @Schema(implementation = JsonObject.class ))) })
+	@Operation(
+			summary = "Count the number of customer",
+			description = "Count the number of customers in the database.")
 	public Response countCustomer() {
 		long count = bean.countCustomer();
         JsonObjectBuilder builder = Json.createObjectBuilder();
@@ -63,7 +108,23 @@ public class CustomerResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "exist/{id}")
-	public Response customerIdExist(@PathParam("id") Integer customerId) {
+	@APIResponses(
+	        value = {
+	            @APIResponse(
+	                responseCode = "200",
+	                description = "Boolean value if a customers exist.",
+	                content = @Content(mediaType = MediaType.APPLICATION_JSON,
+	                schema = @Schema(implementation = JsonObject.class ))) })
+	@Operation(
+			summary = "Check if a customers exists",
+			description = "Check if a customer with the given id exists in the database.")
+	public Response customerIdExist(
+			@Parameter(
+		            description = "The id of the customer where to check existence.",
+		            required = true,
+		            example = "1",
+		            schema = @Schema(type = SchemaType.INTEGER)) 
+			@PathParam("id") Integer customerId) {
 		if (customerId <= 0) {
 			return Response.serverError().entity("Id cannot be less than 1!").build();
 		}
@@ -76,7 +137,31 @@ public class CustomerResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "inventories/{id}")
-	public Response getInventories(@PathParam("id") Integer customerId) {
+	@APIResponses(
+	        value = {
+		        @APIResponse(
+		        	responseCode = "404",
+			        description = "Customer not found",
+			        content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+			    @APIResponse(
+			        responseCode = "500",
+			        description = "Customer id is less than 1",
+			        content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+	            @APIResponse(
+	                responseCode = "200",
+	                description = "The customer inventories for a given customer id.",
+	                content = @Content(mediaType = MediaType.APPLICATION_JSON,
+	                schema = @Schema(type= SchemaType.ARRAY, implementation = CustomerInventory.class ))) })
+	@Operation(
+			summary = "Get the customer inventories",
+			description = "Get the customer inventories for a given customer id.")
+	public Response getInventories(
+			@Parameter(
+		            description = "The id of the customer where to where to get the customer inventories for.",
+		            required = true,
+		            example = "1",
+		            schema = @Schema(type = SchemaType.INTEGER)) 
+			@PathParam("id") Integer customerId) {
 		if (customerId <= 0) {
 			return Response.serverError().entity("Id cannot be less than 1!").build();
 		}
@@ -91,6 +176,20 @@ public class CustomerResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "with_good_credit")
+	@APIResponses(
+	        value = {
+		        @APIResponse(
+			        responseCode = "404",
+			        description = "No customer with good credit found",
+			        content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+	            @APIResponse(
+	                responseCode = "200",
+	                description = "The customers with good credit.",
+	                content = @Content(mediaType = MediaType.APPLICATION_JSON,
+	                schema = @Schema(type= SchemaType.ARRAY, implementation = Customer.class))) })
+	@Operation(
+			summary = "Get the customer with good credit",
+			description = "Get the customer with good credit.")
 	public Response customersWithGoodCredit() {
 		List<Customer> customers = DtoMapper.mapToCustomerDto(bean.selectCustomerWithGoodCredit());
 		if (customers == null || customers.isEmpty()) {
@@ -102,7 +201,33 @@ public class CustomerResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "check_credit/{id}/{costs}")
-	public Response checkCustomerCredit(@PathParam("id") Integer customerId, @PathParam("costs") BigDecimal costs) {
+	@APIResponses(
+	        value = {
+				@APIResponse(
+					responseCode = "500",
+					description = "Customer id is less than 1",
+					content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+	            @APIResponse(
+	                responseCode = "200",
+	                description = "Boolean Value if the customer has credit.",
+	                content = @Content(mediaType = MediaType.APPLICATION_JSON,
+	                schema = @Schema(implementation = Customer.class))) })
+	@Operation(
+			summary = "Check if the customer has credit",
+			description = "Check if the customer with the given id has credit.")
+	public Response checkCustomerCredit(
+			@Parameter(
+		            description = "The id of the customer where to where to check the customer credit for.",
+		            required = true,
+		            example = "1",
+		            schema = @Schema(type = SchemaType.INTEGER)) 
+			@PathParam("id") Integer customerId, 
+			@Parameter(
+		            description = "The cost.",
+		            required = true,
+		            example = "100",
+		            schema = @Schema(type = SchemaType.NUMBER)) 
+			@PathParam("costs") BigDecimal costs) {
 		if (customerId <= 0) {
 			return Response.serverError().entity("Id cannot be less than 1!").build();
 		}
@@ -115,7 +240,21 @@ public class CustomerResource {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "add_inventory/{id}")
-	public Response addInventory(@PathParam("id") Integer orderId) {
+	@APIResponses(
+	        value = {
+				@APIResponse(
+	                responseCode = "200",
+	                description = "The inventory has been added.") })
+	@Operation(
+			summary = "Add inventory",
+			description = "Add inventory to customer from the given oder id.")
+	public Response addInventory(
+			@Parameter(
+		            description = "The order id where to add the inventory for.",
+		            required = true,
+		            example = "1",
+		            schema = @Schema(type = SchemaType.INTEGER)) 
+			@PathParam("id") Integer orderId) {
 		// TODO addInventory method should return the changed customer id
 		// and if the id is not found an exception should be thrown, so that the
 		// Response with Response.Status.NOT_FOUND could returned
@@ -126,7 +265,32 @@ public class CustomerResource {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "sell_inventory/{customerId}/{itemId}/{quantity}")
-	public Response sellInventory(@PathParam("customerId") Integer customerId, @PathParam("itemId") String itemId,
+	@APIResponses(
+	        value = {
+				@APIResponse(
+	                responseCode = "200",
+	                description = "The quantity of items has been sold for a customer inventory.") })
+	@Operation(
+			summary = "Sell inventory",
+			description = "Sell the quantity of items for a customer inventory.")
+	public Response sellInventory(
+			@Parameter(
+		            description = "The customer id where to sell items.",
+		            required = true,
+		            example = "1",
+		            schema = @Schema(type = SchemaType.INTEGER)) 
+			@PathParam("customerId") Integer customerId, 
+			@Parameter(
+		            description = "The item id which has to be sold.",
+		            required = true,
+		            example = "1",
+		            schema = @Schema(type = SchemaType.STRING)) 
+			@PathParam("itemId") String itemId,
+			@Parameter(
+		            description = "The quantity of the item which has to be sold.",
+		            required = true,
+		            example = "1",
+		            schema = @Schema(type = SchemaType.INTEGER)) 
 			@PathParam("quantity") int quantity) {
 		// TODO if the one of the ids is not found an exception should be thrown, so
 		// that the Response with Response.Status.NOT_FOUND could returned
@@ -140,6 +304,24 @@ public class CustomerResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME})
+	@APIResponses(
+	        value = {
+	            @APIResponse(
+	                responseCode = "201",
+	                description = "The new item.",
+	                content = @Content(mediaType = MediaType.APPLICATION_JSON,
+	                schema = @Schema(implementation = Customer.class))) })
+	@RequestBody(
+            name="customer",
+            content = @Content(
+                mediaType = MediaType.APPLICATION_JSON,
+                schema = @Schema(implementation = Customer.class)),
+            required = true,
+            description = "example of a customer"
+        )
+	@Operation(
+			summary = "Create an new customer",
+			description = "Create an new customer with the given customer.")
 	public Response createCustomer(Customer customer, @Context UriInfo uriInfo) {
 		// TODO validate customer
 		customer.setSince(Calendar.getInstance());

@@ -1,11 +1,13 @@
 package de.novatec.showcase.order.dto;
 
-/**
- * Simple class for holding an <code>Item</code> and it's quantity
- */
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+@Schema(name="ItemQuantityPair", description="POJO that represents an item and its corrensponding quantity.")
 public class ItemQuantityPair {
 
+    @Schema(required = true)
 	private Item item = null;
+    @Schema(required = true)
 	private int quantity = 0;
 
 	public ItemQuantityPair() {
