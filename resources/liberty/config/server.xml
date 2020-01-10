@@ -62,6 +62,4 @@
 			</security-role>
 		</application-bnd>
 	</enterpriseApplication>
-	
-	<webApplication contextRoot="/" location="examples" name="examples"/>
 </server>

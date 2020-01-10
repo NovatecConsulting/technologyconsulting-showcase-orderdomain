@@ -21,7 +21,13 @@ import javax.ws.rs.core.Response;
 import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.mockserver.client.MockServerClient;
+import org.mockserver.junit.MockServerRule;
+import org.mockserver.model.HttpRequest;
+import org.mockserver.model.HttpResponse;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
@@ -32,6 +38,7 @@ import de.novatec.showcase.order.dto.Item;
 import de.novatec.showcase.order.dto.ItemQuantityPair;
 import de.novatec.showcase.order.dto.ItemQuantityPairs;
 import de.novatec.showcase.order.dto.Order;
+import io.netty.handler.codec.http.HttpMethod;
 
 abstract public class ResourceITBase {
 
@@ -45,6 +52,25 @@ abstract public class ResourceITBase {
 	protected static Item testItem = null;
 	protected static Customer testCustomer = null;
 	protected static Order testOrder = null;
+
+	@Rule
+	public MockServerRule mockServerRule = new MockServerRule(this, Integer.valueOf(System.getProperty("http.port.manufacture")));
+
+	protected MockServerClient mockServerClient;
+	
+	private static final String WORKORDER_JSON_RESPONSE = "{"+
+			"\"id\": 1," + 
+			"\"location\": 1," + 
+			"\"salesId\": 1," + 
+			"\"orderLineId\": 1," + 
+			"\"originalQuantity\": 10," + 
+			"\"completedQuantity\": -1," + 
+			"\"status\": \"OPEN\"," + 
+			"\"dueDate\": \"2020-12-16\"," + 
+			"\"startDate\": \"2020-01-10\"," + 
+			"\"assemblyId\": \"4\"," + 
+			"\"version\": 0"
+			+ "}";
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -61,6 +87,21 @@ abstract public class ResourceITBase {
 	@AfterClass
 	public static void teardown() {
 		client.close();
+	}
+	
+	@Before
+	public void before()
+	{
+		mockServerClient.when(
+				new HttpRequest()
+	            .withMethod(HttpMethod.POST.toString())
+	            .withPath("/manufacturedomain/workorder/")
+	    )
+	    .respond(
+	        new HttpResponse()
+	        	.withStatusCode(Response.Status.CREATED.getStatusCode())
+	            .withBody(WORKORDER_JSON_RESPONSE, org.mockserver.model.MediaType.APPLICATION_JSON)
+	    );
 	}
 
 	public static void assertResponse200(String url, Response response) {
@@ -112,7 +153,7 @@ abstract public class ResourceITBase {
 		return response.readEntity(Order.class);
 	}
 
-	private static Item createItem() {
+	protected static Item createItem() {
 		WebTarget target = client.target(ITEM_URL);
 		Item item = new Item("name", "description", new BigDecimal(100.0), new BigDecimal(0.0), 1, 0);
 		Builder builder = asAdmin(target.request(MediaType.APPLICATION_JSON));
@@ -132,8 +173,8 @@ abstract public class ResourceITBase {
 
 	protected static Customer createCustomer() {
 		WebTarget target = client.target(CUSTOMER_URL);
-		Customer customer = new Customer("firstname", "lastname", "contact", "GC", new BigDecimal(1000.0),
-				constantDate(), new BigDecimal(100.0), new BigDecimal(10.0), null,
+		Customer customer = new Customer("firstname", "lastname", "contact", "GC", new BigDecimal(10000.0),
+				constantDate(), new BigDecimal(10000.0), new BigDecimal(10.0), null,
 				new Address("street1", "street2", "city", "state", "county", "zip", "phone"));
 		Builder builder = asAdmin(target.request(MediaType.APPLICATION_JSON));
 		Response response = builder.accept(MediaType.APPLICATION_JSON_TYPE).post(Entity.json(customer));

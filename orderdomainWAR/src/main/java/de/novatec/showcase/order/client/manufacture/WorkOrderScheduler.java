@@ -20,7 +20,7 @@ import de.novatec.showcase.order.ejb.entity.OrderLine;
 public class WorkOrderScheduler {
 
 	private static final int DEFAULT_LOCATION = 1;
-	private static final String PORT = System.getProperty("http.port");
+	private static final String PORT = System.getProperty("http.port.manufacture");
 	private static final String BASE_URL = "http://localhost:" + PORT + "/manufacturedomain/";
 
 	private static final String WORKORDER_URL = BASE_URL + "workorder/";

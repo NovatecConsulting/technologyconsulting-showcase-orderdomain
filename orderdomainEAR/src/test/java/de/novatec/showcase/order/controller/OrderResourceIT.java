@@ -2,9 +2,12 @@ package de.novatec.showcase.order.controller;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.json.JsonObject;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
@@ -12,11 +15,46 @@ import javax.ws.rs.core.Response;
 
 import org.junit.Test;
 
+import de.novatec.showcase.order.dto.ItemQuantityPair;
+import de.novatec.showcase.order.dto.ItemQuantityPairs;
 import de.novatec.showcase.order.dto.Order;
 import de.novatec.showcase.order.dto.OrderStatus;
 
 public class OrderResourceIT extends ResourceITBase {
 
+	@Test
+	public void testLargeOrder()
+	{
+		WebTarget target = client.target(ORDER_URL).path(createCustomer().getId().toString());
+		ItemQuantityPairs itemQuantityPairs = new ItemQuantityPairs()
+				.setItemQuantityPairs(Arrays.asList(
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1), 
+						new ItemQuantityPair(createItem(), 1),
+						new ItemQuantityPair(createItem(), 1),
+						new ItemQuantityPair(createItem(), 1),
+						new ItemQuantityPair(createItem(), 1),
+						new ItemQuantityPair(createItem(), 1)));
+		Builder builder = asAdmin(target.request(MediaType.APPLICATION_JSON));
+		Response response = builder.accept(MediaType.APPLICATION_JSON_TYPE).post(Entity.json(itemQuantityPairs));
+		assertResponse201(ORDER_URL, response);
+	}
+	
+	
 	@Test
 	public void testGetOrderWithNonExistingId() {
 		WebTarget target = client.target(ORDER_URL).path(NON_EXISTING_ID);
@@ -64,9 +102,9 @@ public class OrderResourceIT extends ResourceITBase {
 		WebTarget target = client.target(ORDER_URL).path("open_orders_by_customer/" + testCustomer.getId().toString());
 		Response response = asTestUser(target.request()).get();
 		assertResponse200(ORDER_URL, response);
-		List<Order> jsonOpenOrders = response.readEntity(new GenericType<List<Order>>() {});
+		List<Order> openOrders = response.readEntity(new GenericType<List<Order>>() {});
 		assertEquals("There should be only one open order with customer " + testCustomer + "!", 1,
-				jsonOpenOrders.size());
+				openOrders.size());
 	}
 
 	@Test

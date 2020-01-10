@@ -85,7 +85,6 @@ public class CustomerSession implements CustomerSessionLocal {
 			return false;
 		}
 
-		System.out.println("customerInventory.getQuantity() = "+customerInventory.getQuantity());
 		if (customerInventory.getQuantity() - quantity >= 0) {
 			BigDecimal priceInclDiscount = item.getPrice().subtract(item.getDiscount());
 

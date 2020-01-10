@@ -88,6 +88,20 @@
 			<version>2.29.1</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.mock-server</groupId>
+			<artifactId>mockserver-netty</artifactId>
+			<version>5.8.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -113,7 +127,7 @@
 				<groupId>io.openliberty.tools</groupId>
 				<artifactId>liberty-maven-plugin</artifactId>
 				<!-- see https://github.com/OpenLiberty/ci.common/issues/110 -->
-<!-- 				<version>3.2-SNAPSHOT</version> -->
+				<!-- <version>3.2-SNAPSHOT</version> -->
 				<configuration>
 					<assemblyArtifact>
 						<groupId>io.openliberty</groupId>
@@ -122,17 +136,16 @@
 						<type>zip</type>
 					</assemblyArtifact>
 					<serverName>${project.artifactId}Server</serverName>
-<!-- 					<stripVersion>true</stripVersion> -->
+					<!-- <stripVersion>true</stripVersion> -->
 					<configFile>../resources/liberty/config/server.xml</configFile>
 					<packageFile>${package.file}</packageFile>
 					<include>${packaging.type}</include>
 					<bootstrapProperties>
 						<default.http.port>${liberty.var.default.http.port}</default.http.port>
 						<default.https.port>${liberty.var.default.https.port}</default.https.port>
-<!-- 						<app.context.root>orderdomain</app.context.root> -->
+						<!-- <app.context.root>orderdomain</app.context.root> -->
 						<!-- needed to access via System.getProperty call in WorkOrderScheduler -->
-						<http.port>${liberty.var.default.http.port}</http.port>
-						<isSingleEarDeployment>true</isSingleEarDeployment>
+						<http.port.manufacture>9090</http.port.manufacture>
 					</bootstrapProperties>
 				</configuration>
 				<executions>
@@ -198,6 +211,7 @@
 					<systemPropertyVariables>
 						<https.port>${liberty.var.default.https.port}</https.port>
 						<http.port>${liberty.var.default.http.port}</http.port>
+						<http.port.manufacture>9090</http.port.manufacture>
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>

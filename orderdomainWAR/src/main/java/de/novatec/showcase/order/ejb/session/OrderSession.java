@@ -16,7 +16,6 @@ import javax.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.novatec.showcase.order.GlobalConstants;
 import de.novatec.showcase.order.client.manufacture.RestcallException;
 import de.novatec.showcase.order.client.manufacture.WorkOrderScheduler;
 import de.novatec.showcase.order.dto.WorkOrder;
@@ -127,8 +126,6 @@ public class OrderSession implements OrderSessionLocal {
 
 		int shoppingCartSize = shoppingCart.getItemCount();
 		if (shoppingCartSize > MIN_SHOPPING_CART_SIZE && shoppingCartSize <= MAX_SHOPPING_CART_SIZE) {
-			if(!GlobalConstants.IS_SINGLE_EAR_DEPLOYMENT)
-			{
 				
 			
 			// TODO place a large order
@@ -153,11 +150,6 @@ public class OrderSession implements OrderSessionLocal {
 					}
 					// do more with the workorder? or trigger actions via REST like described above? What about setting OrderStatus.PENDING_MANUFACTURE?
 				}
-			}
-			else
-			{
-				log.info("OrderdomainEAR is deployed as a single EAR -> calls to manfaturedomain.scheduleWorkOrder are ignored!");
-			}
 		} else if (shoppingCartSize <= MIN_SHOPPING_CART_SIZE) {
 			// this should be done by a the corresponding REST call 
 //			customerService.addInventory(order);

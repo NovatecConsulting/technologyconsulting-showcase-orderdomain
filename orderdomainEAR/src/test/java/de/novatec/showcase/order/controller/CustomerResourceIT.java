@@ -124,7 +124,6 @@ public class CustomerResourceIT extends ResourceITBase {
 
 		// call sell inventories
 		Integer quantity = Integer.valueOf("1");
-		System.out.println("customerId = "+ customer.getId().toString());
 		target = client.target(CUSTOMER_URL)
 				.path("sell_inventory/" + customer.getId().toString() + "/" + testItem.getId() + "/" + quantity);
 		response = asTestUser(target.request()).put(Entity.json(customer));
