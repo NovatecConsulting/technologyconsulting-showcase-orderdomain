@@ -166,10 +166,10 @@ public class OrderResource {
 	@RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME})
 	@APIResponses(
 	        value = {
-	 		       @APIResponse(
-	 			    		responseCode = "500",
-	 			            description = "The REST call to manufature schedule workorder failed for a large order",
-	 			            content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+	 		   @APIResponse(
+	 				responseCode = "500",
+	 			    description = "The REST call to manufature schedule workorder failed for a large order",
+	 			    content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 	            @APIResponse(
 	                responseCode = "412",
 	                description = "One of the preconditions failed",

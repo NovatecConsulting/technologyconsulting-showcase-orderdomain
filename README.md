@@ -31,11 +31,10 @@ There is a little script smoketest.sh in the orderdomainParent\resources\smokete
 - call sellInventory for created customer 
 
 ## openAPI
-check [openAPI](http://localhost:9080/api/explorer/) if the server is running for the  API of the domains
+check [openAPI](http://localhost:9080/api/explorer/) if the server is running for the  API of the domain
 
 ## TODOs:
 
-- replace formerly existing MDB/JMS code with REST clients to other domains (manufacturing, supplier)
 - Better REST Responses including status codes
 - some validations to avoid NPE's
 - check functionality of ItemSession.getSubList -> refactor this "PARTS"-thing...
