@@ -27,6 +27,8 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.eclipse.microprofile.openapi.annotations.tags.Tags;
 
 import de.novatec.showcase.order.GlobalConstants;
 import de.novatec.showcase.order.client.manufacture.RestcallException;
@@ -43,6 +45,7 @@ import de.novatec.showcase.order.mapper.DtoMapper;
 @ManagedBean
 @Path(value = "/order")
 @RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME, GlobalConstants.ORDER_READ_ROLE_NAME})
+@Tags(value= {@Tag(name = "Order")})
 public class OrderResource {
 
 	@EJB

@@ -27,6 +27,8 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.eclipse.microprofile.openapi.annotations.tags.Tags;
 
 import de.novatec.showcase.order.GlobalConstants;
 import de.novatec.showcase.order.dto.Item;
@@ -36,6 +38,7 @@ import de.novatec.showcase.order.mapper.DtoMapper;
 @ManagedBean
 @Path(value = "/item")
 @RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME, GlobalConstants.ITEM_READ_ROLE_NAME})
+@Tags(value= {@Tag(name = "Item")})
 public class ItemResource {
 
 
