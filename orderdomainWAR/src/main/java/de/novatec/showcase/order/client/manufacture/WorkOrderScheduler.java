@@ -20,6 +20,8 @@ import de.novatec.showcase.order.ejb.entity.OrderLine;
 public class WorkOrderScheduler {
 
 	private static final int DEFAULT_LOCATION = 1;
+	private static final String USERNAME = System.getProperty("username.manufacture");
+	private static final String PASSWORD = System.getProperty("password.manufacture");
 	private static final String PORT = System.getProperty("http.port.manufacture");
 	private static final String BASE_URL = "http://localhost:" + PORT + "/manufacturedomain/";
 
@@ -53,7 +55,7 @@ public class WorkOrderScheduler {
 	}
 
 	private static Builder asAdmin(Builder builder) {
-		return asUser(builder, "admin", "adminpwd");
+		return asUser(builder, USERNAME, PASSWORD);
 	}
 
 	private static Builder asUser(Builder builder, String userName, String password) {
