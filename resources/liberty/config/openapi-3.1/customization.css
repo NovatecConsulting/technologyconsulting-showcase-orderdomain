@@ -1,0 +1,13 @@
+.swagger-ui .headerbar {
+   background-color: #ffffff;
+}
+ .swagger-ui .headerbar .headerbar-wrapper {
+   background-image: url(images/custom-logo.png);
+}
+ .swagger-ui .headerbar .filter-wrapper .filter-button {
+    background: rgba(252, 48, 81, 0.53);
+   color: #e8e8e8;
+}
+ .swagger-ui .headerbar .filter-wrapper input[type=text] {
+        border: 1px solid #ebebeb;
+}

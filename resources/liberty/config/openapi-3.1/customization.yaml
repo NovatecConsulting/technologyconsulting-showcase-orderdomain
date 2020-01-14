@@ -1,0 +1,7 @@
+---
+openapi: 3.0.0
+info:
+  title: Novatec security showcase 
+  description: A showcase based on Specj 2010
+  version: 1.0.0
+  x-ibm-css: ${server.config.dir}/openapi-3.1/customization.css

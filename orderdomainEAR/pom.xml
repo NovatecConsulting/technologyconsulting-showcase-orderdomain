@@ -137,14 +137,11 @@
 						<type>zip</type>
 					</assemblyArtifact>
 					<serverName>${project.artifactId}Server</serverName>
-					<!-- <stripVersion>true</stripVersion> -->
-					<configFile>../resources/liberty/config/server.xml</configFile>
-					<packageFile>${package.file}</packageFile>
-					<include>${packaging.type}</include>
+					<stripVersion>true</stripVersion>
+					<configDirectory>../resources/liberty/config</configDirectory>
 					<bootstrapProperties>
 						<default.http.port>${liberty.var.default.http.port}</default.http.port>
 						<default.https.port>${liberty.var.default.https.port}</default.https.port>
-						<!-- <app.context.root>orderdomain</app.context.root> -->
 						<!-- needed to access via System.getProperty call in WorkOrderScheduler -->
 						<http.port.manufacture>${http.port.manufacture}</http.port.manufacture>
 					</bootstrapProperties>
