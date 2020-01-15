@@ -39,7 +39,7 @@ public class Customer implements Serializable {
 
 	private Address address;
 
-	private int version;
+	private Integer version;
 
 	public Customer() {
 		super();
@@ -149,7 +149,7 @@ public class Customer implements Serializable {
 		this.customerInventories.add(inventory);
 	}
 
-	public int getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 

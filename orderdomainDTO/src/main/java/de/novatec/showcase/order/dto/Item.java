@@ -24,7 +24,7 @@ public class Item implements Serializable {
 
 	private int category;
 
-	private int version;
+	private Integer version;
 
 	public Item() {
 		super();
@@ -88,7 +88,7 @@ public class Item implements Serializable {
 		this.category = category;
 	}
 
-	public int getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 

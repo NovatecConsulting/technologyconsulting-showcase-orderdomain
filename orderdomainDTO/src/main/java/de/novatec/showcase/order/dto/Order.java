@@ -32,13 +32,11 @@ public class Order implements Serializable {
 
 	private BigDecimal discount;
 
-//	private int orderLineCount;
-
 	private List<OrderLine> orderLines;
 
 	private Customer customer;
 
-	private int version;
+	private Integer version;
 
 	protected Order() {
 		super();
@@ -52,7 +50,6 @@ public class Order implements Serializable {
 		this.discount = discount;
 		this.version = 0;
 		this.orderLines = new ArrayList<OrderLine>();
-//		this.orderLineCount = 0;
 		this.customer = customer;
 	}
 
@@ -64,13 +61,8 @@ public class Order implements Serializable {
 		return this.orderLines;
 	}
 
-//	public OrderLine getOrderLine(int ol_id) {
-//		return this.orderLines.get(ol_id - 1);
-//	}
-
 	public void addOrderLine(OrderLine ol) {
 		this.orderLines.add(ol);
-//		this.orderLineCount++;
 	}
 
 	public OrderStatus getStatus() {
@@ -109,7 +101,7 @@ public class Order implements Serializable {
 		return this.entryDate;
 	}
 
-	public int getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 
@@ -133,7 +125,7 @@ public class Order implements Serializable {
 		this.customer = customer;
 	}
 
-	public void setVersion(int version) {
+	public void setVersion(Integer version) {
 		this.version = version;
 	}
 

@@ -3,44 +3,42 @@ package de.novatec.showcase.order.ejb.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Embeddable;
-
-@Embeddable
 public class OrderLinePK implements Serializable {
 
 	private static final long serialVersionUID = 2378709934764446278L;
 
 	private Integer orderId;
-	private int number;
+	private Integer id;
 
 	public OrderLinePK() {
 		super();
 	}
 
-	public OrderLinePK(Integer orderID, int number) {
-		this.orderId = orderID;
-		this.number = number;
+	public OrderLinePK(Integer id, Integer orderId) {
+		super();
+		this.orderId = orderId;
+		this.id = id;
 	}
 
 	public Integer getOrderId() {
 		return orderId;
 	}
 
-	public int getNumber() {
-		return number;
+	public Integer getId() {
+		return id;
 	}
 
 	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
 
-	public void setNumber(int number) {
-		this.number = number;
+	public void setId(Integer number) {
+		this.id = number;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(number, orderId);
+		return Objects.hash(id, orderId);
 	}
 
 	@Override
@@ -52,11 +50,11 @@ public class OrderLinePK implements Serializable {
 			return false;
 		}
 		OrderLinePK other = (OrderLinePK) obj;
-		return number == other.number && Objects.equals(orderId, other.orderId);
+		return id == other.id && Objects.equals(orderId, other.orderId);
 	}
 
 	@Override
 	public String toString() {
-		return "OrderLinePK [orderId=" + orderId + ", number=" + number + "]";
+		return "OrderLinePK [orderId=" + orderId + ", number=" + id + "]";
 	}
 }

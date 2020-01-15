@@ -103,15 +103,12 @@ public class OrderSession implements OrderSessionLocal {
 		Order order = new Order(shoppingCart.getTotalPrice(), shoppingCart.getTotalDiscount(), customer);
 		em.persist(order);
 
-		int lineNumber = 1;
-
 		for (ShoppingCartItem shoppingCartItem : shoppingCart.getItems()) {
-			OrderLine orderLine = new OrderLine(lineNumber, order.getId(), shoppingCartItem.getQuantity(), shoppingCart.getPrice(shoppingCartItem.getItem().getId()),
+			OrderLine orderLine = new OrderLine(order.getId(), shoppingCartItem.getQuantity(), shoppingCart.getPrice(shoppingCartItem.getItem().getId()),
 					shoppingCartItem.getItem().getPrice(), order, DtoMapper.mapToItemEntity(shoppingCartItem.getItem()));
 			em.persist(orderLine);
 			order.addOrderLine(orderLine);
 			order = em.merge(order);
-			lineNumber++;
 		}
 
 		if(!order.isPriceWithDiscountEqualTotal())

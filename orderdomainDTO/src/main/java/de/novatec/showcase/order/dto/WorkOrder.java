@@ -25,7 +25,7 @@ public class WorkOrder implements Serializable {
 	@JsonFormat(pattern = GlobalConstants.DATE_FORMAT, locale = "de_DE")
 	private Calendar startDate;
 	private String assemblyId;
-	private int version;
+	private Integer version;
 
 	public WorkOrder() {
 		super();
@@ -98,11 +98,11 @@ public class WorkOrder implements Serializable {
 		this.status = status;
 	}
 
-	public void setVersion(int version) {
+	public void setVersion(Integer version) {
 		this.version = version;
 	}
 
-	public int getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 

@@ -36,8 +36,8 @@ public class WorkOrderScheduler {
 	}
 
 	public WorkOrder schedule(OrderLine orderLine) throws RestcallException {
-		WorkOrder workOrder = new WorkOrder(DEFAULT_LOCATION, orderLine.getPk().getOrderId(),
-				orderLine.getPk().getNumber(), orderLine.getQuantity(), Calendar.getInstance(),
+		WorkOrder workOrder = new WorkOrder(DEFAULT_LOCATION, orderLine.getOrderId(),
+				orderLine.getId(), orderLine.getQuantity(), Calendar.getInstance(),
 				orderLine.getItem().getId());
 		WebTarget target = client.target(WORKORDER_URL);
 		Builder builder = target.request(MediaType.APPLICATION_JSON);

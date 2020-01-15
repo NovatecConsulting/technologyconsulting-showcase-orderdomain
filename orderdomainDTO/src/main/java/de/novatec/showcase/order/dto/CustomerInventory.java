@@ -27,7 +27,7 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 
 	private int quantity;
 
-	private int version;
+	private Integer version;
 
 	public CustomerInventory() {
 		super();
@@ -77,7 +77,7 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 		}
 	}
 
-	public int getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 

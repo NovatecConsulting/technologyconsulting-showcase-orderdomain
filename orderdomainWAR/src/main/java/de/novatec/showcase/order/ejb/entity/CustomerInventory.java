@@ -26,7 +26,7 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 	private static final long serialVersionUID = 6026110084629827927L;
 
 	@Id
-	@Column(name = "CI_ID")
+	@Column(name = "CI_ID", nullable = false)
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "INV_ID_GEN")
 	@TableGenerator(name = "INV_ID_GEN", table = "U_SEQUENCES", pkColumnName = "S_ID", valueColumnName = "S_NEXTNUM", pkColumnValue = "INV_SEQ", allocationSize = 50)
 	private Integer id;
@@ -43,7 +43,7 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 	@JoinColumn(name = "CI_ITEMID")
 	private Item vehicle;
 
-	@Column(name = "CI_VALUE")
+	@Column(name = "CI_VALUE", precision = 12, scale = 2)
 	private BigDecimal totalCost;
 
 	@Column(name = "CI_QUANTITY")
@@ -51,20 +51,19 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 
 	@Version
 	@Column(name = "CI_VERSION")
-	private int version;
+	private Integer version;
 
 	public CustomerInventory() {
 		super();
 	}
 
-	public CustomerInventory(Customer customer, Item vehicle, BigDecimal totalCost, int quantity, int version) {
+	public CustomerInventory(Customer customer, Item vehicle, BigDecimal totalCost, int quantity) {
 		super();
 		this.customerId = customer.getId();
 		this.customer = customer;
 		this.vehicle = vehicle;
 		this.totalCost = totalCost;
 		this.quantity = quantity;
-		this.version = version;
 	}
 
 	public Integer getId() {
@@ -101,7 +100,7 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 		}
 	}
 
-	public int getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 

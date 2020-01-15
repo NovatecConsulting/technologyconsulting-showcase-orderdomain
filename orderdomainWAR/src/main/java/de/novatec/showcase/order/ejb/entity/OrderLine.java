@@ -5,29 +5,37 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Objects;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 @Table(name = "O_ORDERLINE")
 @Entity
+@IdClass(OrderLinePK.class)
 public class OrderLine implements Serializable {
 
 	private static final long serialVersionUID = -3556060565328926516L;
 
-	@EmbeddedId
-	@AttributeOverrides({ @AttributeOverride(name = "orderId", column = @Column(name = "OL_O_ID")),
-			@AttributeOverride(name = "number", column = @Column(name = "OL_ID")) })
-	private OrderLinePK pk;
+	@Id
+	@Column(name = "OL_ID", nullable = false)
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = "OL_ID_GEN")
+	@TableGenerator(name = "OL_ID_GEN", table = "U_SEQUENCES", pkColumnName = "S_ID", valueColumnName = "S_NEXTNUM", pkColumnValue = "OL_SEQ", allocationSize = 1)
+	private Integer id;
+
+	@Id
+	@Column(name = "OL_O_ID", nullable = false)
+	private Integer orderId;
 
 	@Column(name = "OL_QTY")
 	private int quantity;
@@ -39,10 +47,10 @@ public class OrderLine implements Serializable {
 	@Column(name = "OL_STATUS")
 	private OrderStatus status;
 
-	@Column(name = "OL_TOTAL_VALUE")
+	@Column(name = "OL_TOTAL_VALUE", precision = 12, scale = 2)
 	private BigDecimal totalValue;
 
-	@Column(name = "OL_MSRP")
+	@Column(name = "OL_MSRP", precision = 12, scale = 2)
 	private BigDecimal msrpAtPurchase;
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -55,36 +63,42 @@ public class OrderLine implements Serializable {
 
 	@Version
 	@Column(name = "OL_VERSION")
-	private int version;
+	private Integer version;
 
 	protected OrderLine() {
 		super();
 	}
 
-	public OrderLine(int number, Integer orderId, int quantity, BigDecimal totalValue, BigDecimal msrpAtPurchase,
-			Order order, Item item) {
+	public OrderLine(Integer orderId, int quantity, BigDecimal totalValue, BigDecimal msrpAtPurchase, Order order,
+			Item item) {
 		super();
-		this.pk = new OrderLinePK(orderId, number);
+		this.orderId = orderId;
 		this.quantity = quantity;
 		this.status = OrderStatus.DEFERRED;
 		this.totalValue = totalValue;
 		this.msrpAtPurchase = msrpAtPurchase;
 		this.order = order;
 		this.item = item;
-		this.version = 0;
-	}
-
-	
-	public OrderLinePK getPk() {
-		return pk;
-	}
-
-	public void setPk(OrderLinePK pk) {
-		this.pk = pk;
 	}
 
 	public Order getOrder() {
 		return order;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Integer orderId) {
+		this.orderId = orderId;
 	}
 
 	public Item getItem() {
@@ -131,26 +145,26 @@ public class OrderLine implements Serializable {
 		this.msrpAtPurchase = msrpAtPurchase;
 	}
 
-	public int getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 
 	@Override
 	public String toString() {
-		return "OrderLine [pk=" + pk + ", quantity=" + quantity + ", shipDate=" + shipDate + ", status=" + status
-				+ ", totalValue=" + totalValue + ", msrpAtPurchase=" + msrpAtPurchase + ", item="
-//				+ ", totalValue=" + totalValue + ", msrpAtPurchase=" + msrpAtPurchase + ", order=" + order + ", item="
+		return "OrderLine [id=" + id + ", orderId=" + orderId + ", quantity=" + quantity + ", shipDate=" + shipDate
+				+ ", status=" + status + ", totalValue=" + totalValue + ", msrpAtPurchase=" + msrpAtPurchase + ", item="
 				+ item + ", version=" + version + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(
+				id, 
 				item, 
-				msrpAtPurchase, 
-				// leave out order because of circular dependency! 
-				// order, 
-				pk, 
+				msrpAtPurchase,
+				// leave out order because of circular dependency!
+				// order,
+				orderId, 
 				quantity, 
 				shipDate, 
 				status, 
@@ -167,10 +181,11 @@ public class OrderLine implements Serializable {
 			return false;
 		}
 		OrderLine other = (OrderLine) obj;
-		return Objects.equals(item, other.item) && Objects.equals(msrpAtPurchase, other.msrpAtPurchase)
-				&& Objects.equals(order, other.order) && Objects.equals(pk, other.pk) && quantity == other.quantity
+		return Objects.equals(id, other.id) && Objects.equals(item, other.item)
+				&& Objects.equals(msrpAtPurchase, other.msrpAtPurchase) 
+				&& Objects.equals(orderId, other.orderId) && quantity == other.quantity
 				&& Objects.equals(shipDate, other.shipDate) && status == other.status
-				&& Objects.equals(totalValue, other.totalValue) && version == other.version;
+				&& Objects.equals(totalValue, other.totalValue) && Objects.equals(version, other.version);
 	}
 
 }

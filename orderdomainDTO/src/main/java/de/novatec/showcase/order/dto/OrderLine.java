@@ -13,8 +13,10 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 public class OrderLine implements Serializable {
 
 	private static final long serialVersionUID = -3556060565328926516L;
-
-	private OrderLinePK pk;
+	
+	private Integer id;
+	
+	private Integer orderId;
 
 	private int quantity;
 
@@ -31,38 +33,44 @@ public class OrderLine implements Serializable {
 
 	private Item item;
 
-	private int version;
+	private Integer version;
 
 	public OrderLine() {
 		super();
 	}
 
-	public OrderLine(int number, Integer orderId, int quantity, BigDecimal totalValue, BigDecimal msrpAtPurchase,
+	public OrderLine(Integer orderId, int quantity, BigDecimal totalValue, BigDecimal msrpAtPurchase,
 			Order order, Item item) {
 		super();
-		this.pk = new OrderLinePK(orderId, number);
+		this.orderId = orderId;
 		this.quantity = quantity;
 		this.status = OrderStatus.DEFERRED;
 		this.totalValue = totalValue;
 		this.msrpAtPurchase = msrpAtPurchase;
 		this.order = order;
 		this.item = item;
-		this.version = 0;
 	}
 
-	
-	public OrderLinePK getPk() {
-		return pk;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setPk(OrderLinePK pk) {
-		this.pk = pk;
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Integer orderId) {
+		this.orderId = orderId;
 	}
 
 	public Order getOrder() {
 		return order;
 	}
-
+	
 	public Item getItem() {
 		return item;
 	}
@@ -107,29 +115,29 @@ public class OrderLine implements Serializable {
 		this.msrpAtPurchase = msrpAtPurchase;
 	}
 
-	public int getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 
 	@Override
 	public String toString() {
-		return "OrderLine [pk=" + pk + ", quantity=" + quantity + ", shipDate=" + shipDate + ", status=" + status
-				+ ", totalValue=" + totalValue + ", msrpAtPurchase=" + msrpAtPurchase + ", order=" + order + ", item="
-				+ item + ", version=" + version + "]";
+		return "OrderLine [id=" + id + ", orderId=" + orderId + ", quantity=" + quantity + ", shipDate="
+				+ shipDate + ", status=" + status + ", totalValue=" + totalValue + ", msrpAtPurchase=" + msrpAtPurchase
+				+ ", order=" + order + ", item=" + item + ", version=" + version + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(
+		return Objects.hash(id, 
 				item, 
 				msrpAtPurchase, 
 				// leave out order because of circular dependency! 
 				// order, 
-				pk, 
+				orderId, 
 				quantity, 
 				shipDate, 
 				status, 
-				totalValue, 
+				totalValue,
 				version);
 	}
 
@@ -142,10 +150,11 @@ public class OrderLine implements Serializable {
 			return false;
 		}
 		OrderLine other = (OrderLine) obj;
-		return Objects.equals(item, other.item) && Objects.equals(msrpAtPurchase, other.msrpAtPurchase)
-				&& Objects.equals(order, other.order) && Objects.equals(pk, other.pk) && quantity == other.quantity
+		return Objects.equals(id, other.id) && Objects.equals(item, other.item)
+				&& Objects.equals(msrpAtPurchase, other.msrpAtPurchase) && Objects.equals(order, other.order)
+				&& Objects.equals(orderId, other.orderId) && quantity == other.quantity
 				&& Objects.equals(shipDate, other.shipDate) && status == other.status
-				&& Objects.equals(totalValue, other.totalValue) && version == other.version;
+				&& Objects.equals(totalValue, other.totalValue) && Objects.equals(version, other.version);
 	}
 
 }

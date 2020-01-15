@@ -175,7 +175,7 @@ abstract public class ResourceITBase {
 		WebTarget target = client.target(CUSTOMER_URL);
 		Customer customer = new Customer("firstname", "lastname", "contact", "GC", new BigDecimal(10000.0),
 				constantDate(), new BigDecimal(10000.0), new BigDecimal(10.0), null,
-				new Address("street1", "street2", "city", "state", "county", "zip", "phone"));
+				new Address("street1", "street2", "city", "DE", "country", "zip", "phone"));
 		Builder builder = asAdmin(target.request(MediaType.APPLICATION_JSON));
 		Response response = builder.accept(MediaType.APPLICATION_JSON_TYPE).post(Entity.json(customer));
 		assertResponse201(CUSTOMER_URL, response);

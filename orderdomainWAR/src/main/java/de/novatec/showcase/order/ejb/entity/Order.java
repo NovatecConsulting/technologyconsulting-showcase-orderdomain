@@ -50,7 +50,7 @@ public class Order implements Serializable {
 	public static final String COUNT_BY_PERIOD_QUERY = "SELECT COUNT(o) FROM Order o WHERE o.entryDate > :startDate AND o.entryDate < :endDate";
 
 	@Id
-	@Column(name = "O_ID")
+	@Column(name = "O_ID", nullable = false)
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "O_ID_GEN")
 	@TableGenerator(name = "O_ID_GEN", table = "U_SEQUENCES", pkColumnName = "S_ID", valueColumnName = "S_NEXTNUM", pkColumnValue = "O_SEQ", allocationSize = 1)
 	private Integer id;
@@ -67,10 +67,10 @@ public class Order implements Serializable {
 	@Temporal(value = TemporalType.TIMESTAMP)
 	private Calendar entryDate;
 
-	@Column(name = "O_TOTAL")
+	@Column(name = "O_TOTAL", precision = 12, scale = 2)
 	private BigDecimal total;
 
-	@Column(name = "O_DISCOUNT")
+	@Column(name = "O_DISCOUNT", precision = 12, scale = 2)
 	private BigDecimal discount;
 
 	@Column(name = "O_OL_CNT")

@@ -52,47 +52,47 @@ public class Customer implements Serializable {
 	@TableGenerator(name = "C_ID_GEN", table = "U_SEQUENCES", pkColumnName = "S_ID", valueColumnName = "S_NEXTNUM", pkColumnValue = "C_SEQ", allocationSize = 1)
 	private Integer id;
 
-	@Column(name = "C_FIRST")
+	@Column(name = "C_FIRST", length = 16)
 	private String firstName;
 
-	@Column(name = "C_LAST")
+	@Column(name = "C_LAST", length = 16)
 	private String lastName;
 
-	@Column(name = "C_CONTACT")
+	@Column(name = "C_CONTACT", length = 25)
 	private String contact;
 
-	@Column(name = "C_CREDIT")
+	@Column(name = "C_CREDIT", length = 2)
 	private String credit;
 
-	@Column(name = "C_CREDIT_LIMIT")
+	@Column(name = "C_CREDIT_LIMIT", precision = 12, scale = 2)
 	private BigDecimal creditLimit;
 
 	@Column(name = "C_SINCE")
 	@Temporal(value = TemporalType.DATE)
 	private Calendar since;
 
-	@Column(name = "C_BALANCE")
+	@Column(name = "C_BALANCE", precision = 12, scale = 2)
 	private BigDecimal balance;
 
-	@Column(name = "C_YTD_PAYMENT")
+	@Column(name = "C_YTD_PAYMENT", precision = 12, scale = 2)
 	private BigDecimal ytdPayment;
 
 	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private List<CustomerInventory> customerInventories;
 
 	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "street1", column = @Column(name = "C_STREET1")),
-			@AttributeOverride(name = "street2", column = @Column(name = "C_STREET2")),
-			@AttributeOverride(name = "city", column = @Column(name = "C_CITY")),
-			@AttributeOverride(name = "state", column = @Column(name = "C_STATE")),
-			@AttributeOverride(name = "country", column = @Column(name = "C_COUNTRY")),
-			@AttributeOverride(name = "zip", column = @Column(name = "C_ZIP")),
-			@AttributeOverride(name = "phone", column = @Column(name = "C_PHONE")) })
+	@AttributeOverrides({ @AttributeOverride(name = "street1", column = @Column(name = "C_STREET1", length = 20)),
+			@AttributeOverride(name = "street2", column = @Column(name = "C_STREET2", length = 20)),
+			@AttributeOverride(name = "city", column = @Column(name = "C_CITY", length = 20)),
+			@AttributeOverride(name = "state", column = @Column(name = "C_STATE", length = 2)),
+			@AttributeOverride(name = "country", column = @Column(name = "C_COUNTRY", length = 10)),
+			@AttributeOverride(name = "zip", column = @Column(name = "C_ZIP", length = 9)),
+			@AttributeOverride(name = "phone", column = @Column(name = "C_PHONE", length = 16)) })
 	private Address address;
 
 	@Version
 	@Column(name = "C_VERSION")
-	private int version;
+	private Integer version;
 
 	public Customer() {
 		super();
@@ -215,7 +215,7 @@ public class Customer implements Serializable {
 		this.customerInventories.add(inventory);
 	}
 
-	public int getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 

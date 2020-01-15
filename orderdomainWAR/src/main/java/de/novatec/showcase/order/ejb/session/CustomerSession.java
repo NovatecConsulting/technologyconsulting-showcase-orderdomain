@@ -143,7 +143,7 @@ public class CustomerSession implements CustomerSessionLocal {
 		} else {
 
 			customerInventory = new CustomerInventory(customer, orderLine.getItem(), totalPrice,
-					orderLine.getQuantity(), 0);
+					orderLine.getQuantity());
 			em.persist(customerInventory);
 			customer.addInventory(customerInventory);
 		}
