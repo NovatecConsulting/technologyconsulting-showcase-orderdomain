@@ -30,7 +30,7 @@ import de.novatec.showcase.order.ejb.session.exception.SpecificationException;
 import de.novatec.showcase.order.mapper.DtoMapper;
 
 @Stateless
-@TransactionAttribute(TransactionAttributeType.REQUIRED)
+@TransactionAttribute(TransactionAttributeType.NEVER)
 public class OrderSession implements OrderSessionLocal {
 	
 	private static Logger log = LoggerFactory.getLogger(OrderSession.class);
@@ -52,13 +52,11 @@ public class OrderSession implements OrderSessionLocal {
 	private WorkOrderScheduler workOrderScheduler = new WorkOrderScheduler();
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Order getOrder(int id) {
 		return em.find(Order.class, id);
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Long getOrderCount(Integer customerId) {
 		TypedQuery<Long> orderCount = em.createNamedQuery(Order.COUNT_BY_CUSTOMER, Long.class);
 		orderCount.setParameter("id", customerId);
@@ -67,7 +65,6 @@ public class OrderSession implements OrderSessionLocal {
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public List<Order> getOpenOrders(Integer customerId) {
 		TypedQuery<Order> orderQuery = em.createNamedQuery(Order.BY_CUSTOMER_AND_ORDER_STATUS, Order.class);
 		orderQuery.setParameter("id", customerId);
@@ -76,6 +73,7 @@ public class OrderSession implements OrderSessionLocal {
 	}
 
 	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public Integer newOrder(Integer customerId, ShoppingCart shoppingCart) throws InsufficientCreditException, PriceException, SpecificationException, RestcallException {
 		Customer customer = this.customerService.getCustomer(customerId);
 		if (customer == null) {
@@ -162,6 +160,7 @@ public class OrderSession implements OrderSessionLocal {
 	}
 
 	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void cancelOrder(Integer orderId) {
 		Order order = this.getOrder(orderId);
 		if (order != null) {
