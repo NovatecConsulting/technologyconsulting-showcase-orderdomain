@@ -3,8 +3,8 @@ package de.novatec.showcase.order.ejb.session;
 import java.util.List;
 
 import de.novatec.showcase.order.client.manufacture.RestcallException;
+import de.novatec.showcase.order.dto.ShoppingCart;
 import de.novatec.showcase.order.ejb.entity.Order;
-import de.novatec.showcase.order.ejb.entity.ShoppingCart;
 import de.novatec.showcase.order.ejb.session.exception.InsufficientCreditException;
 import de.novatec.showcase.order.ejb.session.exception.PriceException;
 import de.novatec.showcase.order.ejb.session.exception.SpecificationException;

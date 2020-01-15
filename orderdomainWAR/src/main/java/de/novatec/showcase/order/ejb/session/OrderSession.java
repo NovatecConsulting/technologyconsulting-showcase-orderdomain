@@ -18,12 +18,13 @@ import org.slf4j.LoggerFactory;
 
 import de.novatec.showcase.order.client.manufacture.RestcallException;
 import de.novatec.showcase.order.client.manufacture.WorkOrderScheduler;
+import de.novatec.showcase.order.dto.ShoppingCart;
+import de.novatec.showcase.order.dto.ShoppingCartItem;
 import de.novatec.showcase.order.dto.WorkOrder;
 import de.novatec.showcase.order.ejb.entity.Customer;
 import de.novatec.showcase.order.ejb.entity.Order;
 import de.novatec.showcase.order.ejb.entity.OrderLine;
 import de.novatec.showcase.order.ejb.entity.OrderStatus;
-import de.novatec.showcase.order.ejb.entity.ShoppingCart;
 import de.novatec.showcase.order.ejb.session.exception.InsufficientCreditException;
 import de.novatec.showcase.order.ejb.session.exception.PriceException;
 import de.novatec.showcase.order.ejb.session.exception.SpecificationException;
@@ -104,9 +105,9 @@ public class OrderSession implements OrderSessionLocal {
 
 		int lineNumber = 1;
 
-		for (de.novatec.showcase.order.dto.Item item : shoppingCart.getItems()) {
-			OrderLine orderLine = new OrderLine(lineNumber, order.getId(), shoppingCart.getQuantity(item), shoppingCart.getPrice(item),
-					item.getPrice(), order, DtoMapper.mapToItemEntity(item));
+		for (ShoppingCartItem shoppingCartItem : shoppingCart.getItems()) {
+			OrderLine orderLine = new OrderLine(lineNumber, order.getId(), shoppingCartItem.getQuantity(), shoppingCart.getPrice(shoppingCartItem.getItem().getId()),
+					shoppingCartItem.getItem().getPrice(), order, DtoMapper.mapToItemEntity(shoppingCartItem.getItem()));
 			em.persist(orderLine);
 			order.addOrderLine(orderLine);
 			order = em.merge(order);

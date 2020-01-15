@@ -35,7 +35,7 @@ import de.novatec.showcase.order.client.manufacture.RestcallException;
 import de.novatec.showcase.order.dto.ItemQuantityPair;
 import de.novatec.showcase.order.dto.ItemQuantityPairs;
 import de.novatec.showcase.order.dto.Order;
-import de.novatec.showcase.order.ejb.entity.ShoppingCart;
+import de.novatec.showcase.order.dto.ShoppingCart;
 import de.novatec.showcase.order.ejb.session.OrderSessionLocal;
 import de.novatec.showcase.order.ejb.session.exception.InsufficientCreditException;
 import de.novatec.showcase.order.ejb.session.exception.PriceException;
