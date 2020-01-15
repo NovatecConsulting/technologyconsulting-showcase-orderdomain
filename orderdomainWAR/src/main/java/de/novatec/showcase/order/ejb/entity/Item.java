@@ -15,60 +15,60 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Version;
 
-@SuppressWarnings("serial")
 @Entity
-@Table(name = "O_Item")
-@NamedQueries(value = { @NamedQuery(name = Item.BY_CATEGORY, query = Item.BY_CATEGORY_QUERY),
+@Table(name = "O_ITEM")
+@NamedQueries(value = { 
+		@NamedQuery(name = Item.BY_CATEGORY, query = Item.BY_CATEGORY_QUERY),
 		@NamedQuery(name = Item.BY_ITEM_IDS, query = Item.BY_ITEM_IDS_QUERY),
-		@NamedQuery(name = Item.COUNT_ITEMS, query = Item.COUNT_ITEMS_QUERY), })
-
+		@NamedQuery(name = Item.COUNT_ITEMS, query = Item.COUNT_ITEMS_QUERY) })
 public class Item implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	public static final String BY_CATEGORY = "QUERY_BY_CATEGORY";
 	public static final String BY_ITEM_IDS = "QUERY_BY_ITEM_IDS";
 	public static final String COUNT_ITEMS = "COUNT_ITEMS";
 
-	public static final String BY_CATEGORY_QUERY = "Select i From Item i Where i.category=:category";
-	public static final String BY_ITEM_IDS_QUERY = "Select i From Item i Where i.id in :ids";
+	public static final String BY_CATEGORY_QUERY = "SELECT i FROM Item i WHERE i.category = :category";
+	public static final String BY_ITEM_IDS_QUERY = "SELECT i FROM Item i WHERE i.id IN :ids";
 	public static final String COUNT_ITEMS_QUERY = "SELECT COUNT(i) FROM Item i";
 
 	@Id
-	@Column(name = "I_ID")
+	@Column(name = "I_ID", nullable = false, length = 20)
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "I_ID_GEN")
 	@TableGenerator(name = "I_ID_GEN", table = "U_SEQUENCES", pkColumnName = "S_ID", valueColumnName = "S_NEXTNUM", pkColumnValue = "I_SEQ", allocationSize = 1)
 	private String id;
 
-	@Column(name = "I_NAME")
+	@Column(name = "I_NAME", length = 35)
 	private String name;
 
-	@Column(name = "I_DESC")
+	@Column(name = "I_DESC", length = 100)
 	private String desc;
 
-	@Column(name = "I_PRICE")
+	@Column(name = "I_PRICE", precision = 12, scale =2)
 	private BigDecimal price;
 
-	@Column(name = "I_DISCOUNT")
+	@Column(name = "I_DISCOUNT", precision = 6, scale = 4)
 	private BigDecimal discount;
 
-	@Column(name = "I_CATEGORY")
+	@Column(name = "I_CATEGORY", nullable = false)
 	private int category;
 
 	@Version
 	@Column(name = "I_VERSION")
-	private int version;
+	private Integer version;
 
 	public Item() {
 		super();
 	}
 
-	public Item(String name, String desc, BigDecimal price, BigDecimal discount, int category, int version) {
+	public Item(String name, String desc, BigDecimal price, BigDecimal discount, int category) {
 		super();
 		this.name = name;
 		this.desc = desc;
 		this.price = price;
 		this.discount = discount;
 		this.category = category;
-		this.version = version;
 	}
 
 	public String getId() {
@@ -119,7 +119,11 @@ public class Item implements Serializable {
 		this.category = category;
 	}
 
-	public int getVersion() {
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
+	public Integer getVersion() {
 		return version;
 	}
 

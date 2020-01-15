@@ -104,8 +104,8 @@ public class OrderSession implements OrderSessionLocal {
 		em.persist(order);
 
 		for (ShoppingCartItem shoppingCartItem : shoppingCart.getItems()) {
-			OrderLine orderLine = new OrderLine(order.getId(), shoppingCartItem.getQuantity(), shoppingCart.getPrice(shoppingCartItem.getItem().getId()),
-					shoppingCartItem.getItem().getPrice(), order, DtoMapper.mapToItemEntity(shoppingCartItem.getItem()));
+			OrderLine orderLine = new OrderLine(shoppingCartItem.getQuantity(), shoppingCart.getPrice(shoppingCartItem.getItem().getId()), shoppingCartItem.getItem().getPrice(),
+					order, DtoMapper.mapToItemEntity(shoppingCartItem.getItem()));
 			em.persist(orderLine);
 			order.addOrderLine(orderLine);
 			order = em.merge(order);

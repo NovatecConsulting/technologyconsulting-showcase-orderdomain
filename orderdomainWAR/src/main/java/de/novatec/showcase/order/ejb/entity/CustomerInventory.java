@@ -2,7 +2,6 @@ package de.novatec.showcase.order.ejb.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -21,7 +20,7 @@ import javax.persistence.Version;
 @Entity
 @Table(name = "O_CUSTOMERINVENTORY")
 @IdClass(CustomerInventoryPK.class)
-public class CustomerInventory implements Comparator<CustomerInventory>, Serializable {
+public class CustomerInventory implements Serializable {
 
 	private static final long serialVersionUID = 6026110084629827927L;
 
@@ -35,7 +34,7 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 	@Column(name = "CI_CUSTOMERID")
 	private Integer customerId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "CI_CUSTOMERID", insertable = false, updatable = false)
 	private Customer customer;
 
@@ -100,25 +99,32 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 		}
 	}
 
-	public Integer getVersion() {
-		return version;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
-	@Override
-	public int compare(CustomerInventory o1, CustomerInventory o2) {
-		if (o1.equals(o2)) {
-			return 0;
-		} else if (o1.getCustomerId() < o2.getCustomerId()) {
-			return -1;
-		} else if (o1.getCustomerId() > o2.getCustomerId()) {
-			return 1;
-		} else {
-			if (o1.getId() < o2.getId()) {
-				return -1;
-			} else {
-				return 1;
-			}
-		}
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	public void setVehicle(Item vehicle) {
+		this.vehicle = vehicle;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
+	public Integer getVersion() {
+		return version;
 	}
 
 	@Override
@@ -138,7 +144,7 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 			return false;
 		}
 		CustomerInventory other = (CustomerInventory) obj;
-		return Objects.equals(customerId, other.customerId) && Objects.equals(customer, other.customer)
+		return Objects.equals(customerId, other.customerId) 
 				&& Objects.equals(id, other.id) && quantity == other.quantity
 				&& Objects.equals(totalCost, other.totalCost) && Objects.equals(vehicle, other.vehicle)
 				&& version == other.version;
@@ -146,7 +152,7 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 
 	@Override
 	public String toString() {
-		return "CustomerInventory [id=" + id + ", custId=" + customerId + ", customer=" + customer + ", vehicle="
+		return "CustomerInventory [id=" + id + ", custId=" + customerId + ", vehicle="
 				+ vehicle + ", totalCost=" + totalCost + ", quantity=" + quantity + ", version=" + version + "]";
 	}
 }

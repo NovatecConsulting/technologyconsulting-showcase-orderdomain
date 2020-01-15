@@ -7,7 +7,7 @@ import java.util.Objects;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Schema(name="Item", description="POJO that represents an item. An Item is an assembly in the manufacture domain. "
-		+ "So the id of an item in the order domain and the id of an assembkly in the manufacture domain are always equal to each other.")
+		+ "So the id of an item in the order domain and the id of an assembly in the manufacture domain are always equal to each other.")
 public class Item implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -30,14 +30,13 @@ public class Item implements Serializable {
 		super();
 	}
 
-	public Item(String name, String desc, BigDecimal price, BigDecimal discount, int category, int version) {
+	public Item(String name, String desc, BigDecimal price, BigDecimal discount, int category) {
 		super();
 		this.name = name;
 		this.desc = desc;
 		this.price = price;
 		this.discount = discount;
 		this.category = category;
-		this.version = version;
 	}
 
 	public String getId() {
@@ -92,10 +91,16 @@ public class Item implements Serializable {
 		return version;
 	}
 
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
+	@Override
 	public int hashCode() {
 		return Objects.hash(category, desc, discount, id, name, price, version);
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -109,6 +114,7 @@ public class Item implements Serializable {
 				&& Objects.equals(name, other.name) && Objects.equals(price, other.price) && version == other.version;
 	}
 
+	@Override
 	public String toString() {
 		return "Item [id=" + id + ", name=" + name + ", desc=" + desc + ", price=" + price + ", discount=" + discount
 				+ ", category=" + category + ", version=" + version + "]";

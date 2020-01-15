@@ -2,6 +2,7 @@ package de.novatec.showcase.order.ejb.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
@@ -30,9 +31,7 @@ import javax.persistence.Version;
 @NamedQueries(value = { @NamedQuery(name = Customer.ALL_CUSTOMERS, query = Customer.ALL_CUSTOMERS_QUERY),
 		@NamedQuery(name = Customer.COUNT_CUSTOMERS, query = Customer.COUNT_CUSTOMERS_QUERY),
 		@NamedQuery(name = Customer.CUSTOMERS_BY_CREDIT, query = Customer.CUSOMERS_BY_CREDIT_QUERY),
-		@NamedQuery(name = Customer.BAD_CREDIT_CUSTOMERS, query = Customer.BAD_CREDIT_CUSTOMERS_QUERY)
-
-})
+		@NamedQuery(name = Customer.BAD_CREDIT_CUSTOMERS, query = Customer.BAD_CREDIT_CUSTOMERS_QUERY) })
 public class Customer implements Serializable {
 	private static final long serialVersionUID = 3961431086357095469L;
 	
@@ -77,7 +76,7 @@ public class Customer implements Serializable {
 	@Column(name = "C_YTD_PAYMENT", precision = 12, scale = 2)
 	private BigDecimal ytdPayment;
 
-	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
 	private List<CustomerInventory> customerInventories;
 
 	@Embedded
@@ -99,7 +98,7 @@ public class Customer implements Serializable {
 	}
 
 	public Customer(String firstName, String lastName, String contact, String credit, BigDecimal creditLimit,
-			Calendar since, BigDecimal balance, BigDecimal ytdPayment, List<CustomerInventory> customerInventories,
+			Calendar since, BigDecimal balance, BigDecimal ytdPayment, 
 			Address address) {
 		super();
 		this.firstName = firstName;
@@ -110,7 +109,7 @@ public class Customer implements Serializable {
 		this.since = since;
 		this.balance = balance;
 		this.ytdPayment = ytdPayment;
-		this.customerInventories = customerInventories;
+		this.customerInventories = new ArrayList<CustomerInventory>();
 		this.address = address;
 	}
 
@@ -213,6 +212,10 @@ public class Customer implements Serializable {
 
 	public void addInventory(CustomerInventory inventory) {
 		this.customerInventories.add(inventory);
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 	public Integer getVersion() {

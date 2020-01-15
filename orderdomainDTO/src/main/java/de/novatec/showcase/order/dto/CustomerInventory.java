@@ -2,15 +2,16 @@ package de.novatec.showcase.order.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.Objects;
 
 import javax.json.bind.annotation.JsonbTransient;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Schema(name="CustomerInventory", description="POJO that represents a customer inventory.")
-public class CustomerInventory implements Comparator<CustomerInventory>, Serializable {
+public class CustomerInventory implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -19,6 +20,7 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 	private Integer customerId;
 
 	@JsonbTransient
+	@JsonIgnore
 	private Customer customer;
 
 	private Item vehicle;
@@ -51,8 +53,28 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 		return customerId;
 	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
+
+	public void setVehicle(Item vehicle) {
+		this.vehicle = vehicle;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 	public Customer getCustomer() {
 		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 	public Item getVehicle() {
@@ -81,21 +103,8 @@ public class CustomerInventory implements Comparator<CustomerInventory>, Seriali
 		return version;
 	}
 
-	@Override
-	public int compare(CustomerInventory o1, CustomerInventory o2) {
-		if (o1.equals(o2)) {
-			return 0;
-		} else if (o1.getCustomerId() < o2.getCustomerId()) {
-			return -1;
-		} else if (o1.getCustomerId() > o2.getCustomerId()) {
-			return 1;
-		} else {
-			if (o1.getId() < o2.getId()) {
-				return -1;
-			} else {
-				return 1;
-			}
-		}
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 	@Override

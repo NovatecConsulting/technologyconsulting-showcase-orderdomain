@@ -9,6 +9,8 @@ import javax.json.bind.annotation.JsonbTransient;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Schema(name="OrderLine", description="POJO that represents a order line.")
 public class OrderLine implements Serializable {
 
@@ -29,6 +31,7 @@ public class OrderLine implements Serializable {
 	private BigDecimal msrpAtPurchase;
 
 	@JsonbTransient
+	@JsonIgnore
 	private Order order;
 
 	private Item item;
@@ -39,10 +42,10 @@ public class OrderLine implements Serializable {
 		super();
 	}
 
-	public OrderLine(Integer orderId, int quantity, BigDecimal totalValue, BigDecimal msrpAtPurchase,
+	public OrderLine( int quantity, BigDecimal totalValue, BigDecimal msrpAtPurchase,
 			Order order, Item item) {
 		super();
-		this.orderId = orderId;
+		this.orderId = order.getId();
 		this.quantity = quantity;
 		this.status = OrderStatus.DEFERRED;
 		this.totalValue = totalValue;
@@ -63,14 +66,14 @@ public class OrderLine implements Serializable {
 		return orderId;
 	}
 
-	public void setOrderId(Integer orderId) {
-		this.orderId = orderId;
-	}
-
 	public Order getOrder() {
 		return order;
 	}
 	
+	public void setOrder(Order order) {
+		this.order = order;
+	}
+
 	public Item getItem() {
 		return item;
 	}
@@ -117,6 +120,10 @@ public class OrderLine implements Serializable {
 
 	public Integer getVersion() {
 		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 	@Override

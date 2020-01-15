@@ -2,6 +2,7 @@ package de.novatec.showcase.order.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
@@ -46,7 +47,8 @@ public class Customer implements Serializable {
 	}
 
 	public Customer(String firstName, String lastName, String contact, String credit, BigDecimal creditLimit,
-			Calendar since, BigDecimal balance, BigDecimal ytdPayment, List<CustomerInventory> customerInventories,
+			Calendar since, BigDecimal balance, BigDecimal ytdPayment,
+//			List<CustomerInventory> customerInventories,
 			Address address) {
 		super();
 		this.firstName = firstName;
@@ -57,7 +59,7 @@ public class Customer implements Serializable {
 		this.since = since;
 		this.balance = balance;
 		this.ytdPayment = ytdPayment;
-		this.customerInventories = customerInventories;
+		this.customerInventories = new ArrayList<CustomerInventory>();
 		this.address = address;
 	}
 
@@ -145,12 +147,20 @@ public class Customer implements Serializable {
 		return customerInventories;
 	}
 
+	public void setCustomerInventories(List<CustomerInventory> customerInventories) {
+		this.customerInventories = customerInventories;
+	}
+
 	public void addInventory(CustomerInventory inventory) {
 		this.customerInventories.add(inventory);
 	}
 
 	public Integer getVersion() {
 		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 	@Override

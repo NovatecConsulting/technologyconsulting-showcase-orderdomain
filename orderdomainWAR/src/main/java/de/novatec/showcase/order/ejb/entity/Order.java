@@ -29,7 +29,8 @@ import javax.persistence.Version;
 
 @Entity
 @Table(name = "O_ORDERS")
-@NamedQueries(value = { @NamedQuery(name = Order.COUNT_BY_CUSTOMER, query = Order.COUNT_BY_CUSTOMER_QUERY),
+@NamedQueries(value = { 
+		@NamedQuery(name = Order.COUNT_BY_CUSTOMER, query = Order.COUNT_BY_CUSTOMER_QUERY),
 		@NamedQuery(name = Order.BY_CUSTOMER_AND_ORDER_STATUS, query = Order.BY_CUSTOMER_AND_ORDER_STATUS_QUERY),
 		@NamedQuery(name = Order.BY_OUTSTANDING, query = Order.BY_OUTSTANDING_QUERY),
 		@NamedQuery(name = Order.COUNT_BY_PERIOD, query = Order.COUNT_BY_PERIOD_QUERY) })
@@ -45,8 +46,8 @@ public class Order implements Serializable {
 	public static final String COUNT_BY_CUSTOMER_QUERY = "SELECT COUNT(o) FROM Order o JOIN o.customer AS c WHERE c.id = :id";
 	public static final String BY_CUSTOMER_AND_ORDER_STATUS_QUERY = "SELECT o FROM Order o JOIN o.customer AS c WHERE c.id = :id and o.status = :status";
 	public static final String BY_OUTSTANDING_QUERY = "SELECT o FROM Order o WHERE o.status = de.novatec.showcase.order.ejb.entity.OrderStatus.DEFERRED OR "
-			+ "o.status =de.novatec.showcase.order.ejb.entity.OrderStatus.PENDING_MANUFACTUR OR "
-			+ "o.status =de.novatec.showcase.order.ejb.entity.OrderStatus.UNKNOWN";
+			+ "o.status = de.novatec.showcase.order.ejb.entity.OrderStatus.PENDING_MANUFACTUR OR "
+			+ "o.status = de.novatec.showcase.order.ejb.entity.OrderStatus.UNKNOWN";
 	public static final String COUNT_BY_PERIOD_QUERY = "SELECT COUNT(o) FROM Order o WHERE o.entryDate > :startDate AND o.entryDate < :endDate";
 
 	@Id
@@ -85,9 +86,9 @@ public class Order implements Serializable {
 
 	@Version
 	@Column(name = "O_VERSION")
-	private int version;
+	private Integer version;
 
-	protected Order() {
+	public Order() {
 		super();
 	}
 
@@ -97,7 +98,6 @@ public class Order implements Serializable {
 		this.entryDate = Calendar.getInstance();
 		this.total = total;
 		this.discount = discount;
-		this.version = 0;
 		this.orderLines = new ArrayList<OrderLine>();
 		this.orderLineCount = 0;
 		this.customer = customer;
@@ -111,10 +111,10 @@ public class Order implements Serializable {
 		return this.orderLines;
 	}
 
-	public OrderLine getOrderLine(int ol_id) {
-		return this.orderLines.get(ol_id - 1);
-	}
-
+//	public OrderLine getOrderLine(int ol_id) {
+//		return this.orderLines.get(ol_id - 1);
+//	}
+//
 	public void addOrderLine(OrderLine ol) {
 		this.orderLines.add(ol);
 		this.orderLineCount++;
@@ -156,12 +156,24 @@ public class Order implements Serializable {
 		return this.entryDate;
 	}
 
-	public int getVersion() {
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
+	public Integer getVersion() {
 		return version;
 	}
 
 	public Customer getCustomer() {
 		return this.customer;
+	}
+
+	public int getOrderLineCount() {
+		return orderLineCount;
+	}
+
+	public void setOrderLineCount(int orderLineCount) {
+		this.orderLineCount = orderLineCount;
 	}
 
 	public boolean isPriceMinusDiscountEqualPriceWithDiscount() {

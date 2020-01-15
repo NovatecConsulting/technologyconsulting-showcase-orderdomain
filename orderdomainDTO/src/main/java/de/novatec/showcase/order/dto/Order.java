@@ -10,10 +10,13 @@ import java.util.Objects;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import de.novatec.showcase.order.GlobalConstants;
 
 @Schema(name="Order", description="POJO that represents a order.")
+// ignore the orderLineCount property which is serialized to JSON but it's not needed because it's equal to OrderLines List size which is returned
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Order implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -31,14 +34,14 @@ public class Order implements Serializable {
 	private BigDecimal total;
 
 	private BigDecimal discount;
-
+	
 	private List<OrderLine> orderLines;
 
 	private Customer customer;
 
 	private Integer version;
 
-	protected Order() {
+	public Order() {
 		super();
 	}
 
@@ -48,7 +51,6 @@ public class Order implements Serializable {
 		this.entryDate = Calendar.getInstance();
 		this.total = total;
 		this.discount = discount;
-		this.version = 0;
 		this.orderLines = new ArrayList<OrderLine>();
 		this.customer = customer;
 	}
@@ -59,10 +61,6 @@ public class Order implements Serializable {
 
 	public List<OrderLine> getOrderLines() {
 		return this.orderLines;
-	}
-
-	public void addOrderLine(OrderLine ol) {
-		this.orderLines.add(ol);
 	}
 
 	public OrderStatus getStatus() {
@@ -123,6 +121,10 @@ public class Order implements Serializable {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+	}
+
+	public int getOrderLineCount() {
+		return orderLines.size();
 	}
 
 	public void setVersion(Integer version) {

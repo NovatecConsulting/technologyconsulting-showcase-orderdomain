@@ -65,14 +65,13 @@ public class OrderLine implements Serializable {
 	@Column(name = "OL_VERSION")
 	private Integer version;
 
-	protected OrderLine() {
+	public OrderLine() {
 		super();
 	}
 
-	public OrderLine(Integer orderId, int quantity, BigDecimal totalValue, BigDecimal msrpAtPurchase, Order order,
-			Item item) {
+	public OrderLine(int quantity, BigDecimal totalValue, BigDecimal msrpAtPurchase, Order order, Item item) {
 		super();
-		this.orderId = orderId;
+		this.orderId = order.getId();
 		this.quantity = quantity;
 		this.status = OrderStatus.DEFERRED;
 		this.totalValue = totalValue;
@@ -143,6 +142,10 @@ public class OrderLine implements Serializable {
 
 	public void setMsrpAtPurchase(BigDecimal msrpAtPurchase) {
 		this.msrpAtPurchase = msrpAtPurchase;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 	public Integer getVersion() {
