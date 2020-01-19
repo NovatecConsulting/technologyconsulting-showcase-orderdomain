@@ -1,6 +1,5 @@
 package de.novatec.showcase.order.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,9 +12,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import de.novatec.showcase.order.GlobalConstants;
 @Schema(name="Customer", description="POJO that represents a customer.")
-public class Customer implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class Customer {
 
 	private Integer id;
 

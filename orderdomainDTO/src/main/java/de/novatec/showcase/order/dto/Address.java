@@ -1,14 +1,11 @@
 package de.novatec.showcase.order.dto;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Schema(name="de.novatec.showcase.order.dto.Address", description="POJO that represents a customer address.")
-public class Address implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class Address {
 	
 	private String street1;
 	private String street2;

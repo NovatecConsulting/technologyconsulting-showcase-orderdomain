@@ -1,6 +1,5 @@
 package de.novatec.showcase.order.ejb.entity;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -21,9 +20,7 @@ import javax.persistence.Version;
 		@NamedQuery(name = Item.BY_CATEGORY, query = Item.BY_CATEGORY_QUERY),
 		@NamedQuery(name = Item.BY_ITEM_IDS, query = Item.BY_ITEM_IDS_QUERY),
 		@NamedQuery(name = Item.COUNT_ITEMS, query = Item.COUNT_ITEMS_QUERY) })
-public class Item implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class Item {
 
 	public static final String BY_CATEGORY = "QUERY_BY_CATEGORY";
 	public static final String BY_ITEM_IDS = "QUERY_BY_ITEM_IDS";

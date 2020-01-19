@@ -1,6 +1,5 @@
 package de.novatec.showcase.order.ejb.entity;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,8 +31,7 @@ import javax.persistence.Version;
 		@NamedQuery(name = Customer.COUNT_CUSTOMERS, query = Customer.COUNT_CUSTOMERS_QUERY),
 		@NamedQuery(name = Customer.CUSTOMERS_BY_CREDIT, query = Customer.CUSOMERS_BY_CREDIT_QUERY),
 		@NamedQuery(name = Customer.BAD_CREDIT_CUSTOMERS, query = Customer.BAD_CREDIT_CUSTOMERS_QUERY) })
-public class Customer implements Serializable {
-	private static final long serialVersionUID = 3961431086357095469L;
+public class Customer {
 	
 	public static final String ALL_CUSTOMERS = "QUERY_ALL";
 	public static final String COUNT_CUSTOMERS = "QUERY_COUNT";

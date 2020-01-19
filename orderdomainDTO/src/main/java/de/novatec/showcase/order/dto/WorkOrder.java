@@ -1,6 +1,5 @@
 package de.novatec.showcase.order.dto;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -8,9 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import de.novatec.showcase.order.GlobalConstants;
 
-public class WorkOrder implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class WorkOrder {
 
 	private Integer id;
 	private int location;

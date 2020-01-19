@@ -1,14 +1,11 @@
 package de.novatec.showcase.order.ejb.entity;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class Address implements Serializable {
-
-	private static final long serialVersionUID = 6182193575430209435L;
+public class Address{ 
 
 	private String street1;
 	private String street2;

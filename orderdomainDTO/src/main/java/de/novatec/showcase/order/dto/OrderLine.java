@@ -1,6 +1,5 @@
 package de.novatec.showcase.order.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Objects;
@@ -12,9 +11,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Schema(name="OrderLine", description="POJO that represents a order line.")
-public class OrderLine implements Serializable {
-
-	private static final long serialVersionUID = -3556060565328926516L;
+public class OrderLine {
 	
 	private Integer id;
 	

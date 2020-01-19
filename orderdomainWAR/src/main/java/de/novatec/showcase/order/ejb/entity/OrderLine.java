@@ -1,6 +1,5 @@
 package de.novatec.showcase.order.ejb.entity;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Objects;
@@ -23,9 +22,7 @@ import javax.persistence.Version;
 @Table(name = "O_ORDERLINE")
 @Entity
 @IdClass(OrderLinePK.class)
-public class OrderLine implements Serializable {
-
-	private static final long serialVersionUID = -3556060565328926516L;
+public class OrderLine {
 
 	@Id
 	@Column(name = "OL_ID", nullable = false)

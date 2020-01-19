@@ -1,11 +1,8 @@
 package de.novatec.showcase.order.ejb.entity;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public class CustomerInventoryPK implements Serializable {
-
-	private static final long serialVersionUID = -8821786271744862267L;
+public class CustomerInventoryPK {
 
 	private Integer id;
 	private Integer customerId;

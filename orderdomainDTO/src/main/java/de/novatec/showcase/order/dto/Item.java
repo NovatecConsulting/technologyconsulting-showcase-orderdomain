@@ -1,6 +1,5 @@
 package de.novatec.showcase.order.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -8,9 +7,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Schema(name="Item", description="POJO that represents an item. An Item is an assembly in the manufacture domain. "
 		+ "So the id of an item in the order domain and the id of an assembly in the manufacture domain are always equal to each other.")
-public class Item implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class Item {
 
 	private String id;
 

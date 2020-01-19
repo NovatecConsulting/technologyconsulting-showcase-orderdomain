@@ -1,6 +1,5 @@
 package de.novatec.showcase.order.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,9 +16,7 @@ import de.novatec.showcase.order.GlobalConstants;
 @Schema(name="Order", description="POJO that represents a order.")
 // ignore the orderLineCount property which is serialized to JSON but it's not needed because it's equal to OrderLines List size which is returned
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Order implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class Order {
 
 	private Integer id;
 

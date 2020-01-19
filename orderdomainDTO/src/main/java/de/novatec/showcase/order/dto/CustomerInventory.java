@@ -1,6 +1,5 @@
 package de.novatec.showcase.order.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -11,9 +10,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Schema(name="CustomerInventory", description="POJO that represents a customer inventory.")
-public class CustomerInventory implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class CustomerInventory{
 
 	private Integer id;
 
