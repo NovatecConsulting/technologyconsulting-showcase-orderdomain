@@ -29,6 +29,7 @@ import de.novatec.showcase.order.ejb.entity.OrderStatus;
 import de.novatec.showcase.order.ejb.session.exception.CustomerNotFoundException;
 import de.novatec.showcase.order.ejb.session.exception.InsufficientCreditException;
 import de.novatec.showcase.order.ejb.session.exception.ItemNotFoundException;
+import de.novatec.showcase.order.ejb.session.exception.OrderNotFoundException;
 import de.novatec.showcase.order.ejb.session.exception.PriceException;
 import de.novatec.showcase.order.ejb.session.exception.SpecificationException;
 import de.novatec.showcase.order.mapper.DtoMapper;
@@ -80,8 +81,9 @@ public class OrderSession implements OrderSessionLocal {
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public Integer newOrder(Integer customerId, ShoppingCart shoppingCart) throws InsufficientCreditException,
-			PriceException, SpecificationException, RestcallException, CustomerNotFoundException, ItemNotFoundException {
+	public Integer newOrder(Integer customerId, ShoppingCart shoppingCart)
+			throws InsufficientCreditException, PriceException, SpecificationException, RestcallException,
+			CustomerNotFoundException, ItemNotFoundException {
 		Customer customer = this.customerService.getCustomer(customerId);
 		if (customer == null) {
 			throw new CustomerNotFoundException("Customer with id " + customerId + " does not exist!");
@@ -134,8 +136,10 @@ public class OrderSession implements OrderSessionLocal {
 		int shoppingCartSize = shoppingCart.getItemCount();
 		if (shoppingCartSize > MIN_SHOPPING_CART_SIZE && shoppingCartSize <= MAX_SHOPPING_CART_SIZE) {
 			// make a call for each Orderline of the Order
-			// manufaturedomain.scheduleWorkOrder(WorkOrder) for each OrderLine -> WorkOrder(wo.location=1, wo.salesId = pk.orderid, wo.orderLineId=pk.number,
-			// wo.originalQantity=quantity, wo.assemblyId=getItem.getId, wo.dueDate=Calendar.getInstance())
+			// manufaturedomain.scheduleWorkOrder(WorkOrder) for each OrderLine ->
+			// WorkOrder(wo.location=1, wo.salesId = pk.orderid, wo.orderLineId=pk.number,
+			// wo.originalQantity=quantity, wo.assemblyId=getItem.getId,
+			// wo.dueDate=Calendar.getInstance())
 			// call advanceWorkOrderStatus 3 times
 			// call completeWorkOrder
 			// call CustomerSerssion.addInventory(OrderLIne) (read Orderline first by id
@@ -153,10 +157,10 @@ public class OrderSession implements OrderSessionLocal {
 					log.error(e.getMessage());
 					throw e;
 				}
-				log.info("<END> Scheduling large order " + order.getId() + " for:");
 				// do more with the workorder? or trigger actions via REST like described above?
 				// What about setting OrderStatus.PENDING_MANUFACTURE?
 			}
+			log.info("<END> Scheduling large order " + order.getId() + " for:");
 		} else if (shoppingCartSize <= MIN_SHOPPING_CART_SIZE) {
 			// this should be done by a the corresponding REST call
 //			customerService.addInventory(order);
@@ -170,11 +174,13 @@ public class OrderSession implements OrderSessionLocal {
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void cancelOrder(Integer orderId) {
+	public Order cancelOrder(Integer orderId) throws OrderNotFoundException {
 		Order order = this.getOrder(orderId);
-		if (order != null) {
-			order.setStatus(OrderStatus.DELETED);
+		if (order == null) {
+			throw new OrderNotFoundException("The order with id " + orderId + " was not found!");
 		}
+		order.setStatus(OrderStatus.DELETED);
+		return order;
 	}
 
 }

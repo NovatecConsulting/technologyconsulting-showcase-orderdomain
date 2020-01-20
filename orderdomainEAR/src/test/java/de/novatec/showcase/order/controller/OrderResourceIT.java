@@ -85,13 +85,9 @@ public class OrderResourceIT extends ResourceITBase {
 	@Test
 	public void testDeleteOrder() {
 		// create an order for an other customer which has to be deleted
-		Order orderIdToBeDeleted = createOrder(createCustomer().getId(), testItem);
-		WebTarget target = client.target(ORDER_URL).path(orderIdToBeDeleted.getId().toString());
+		Order orderIdBeDeleted = createOrder(createCustomer().getId(), testItem);
+		WebTarget target = client.target(ORDER_URL).path(orderIdBeDeleted.getId().toString());
 		Response response = asAdmin(target.request(MediaType.APPLICATION_JSON)).delete();
-		assertResponse200(ORDER_URL, response);
-
-		target = client.target(ORDER_URL).path(orderIdToBeDeleted.getId().toString());
-		response = asTestUser(target.request()).get();
 		assertResponse200(ORDER_URL, response);
 		Order deletedOrder = response.readEntity(Order.class);
 		assertEquals("Order status has to be DELETED!", OrderStatus.DELETED, deletedOrder.getStatus());

@@ -40,6 +40,7 @@ import de.novatec.showcase.order.ejb.session.OrderSessionLocal;
 import de.novatec.showcase.order.ejb.session.exception.CustomerNotFoundException;
 import de.novatec.showcase.order.ejb.session.exception.InsufficientCreditException;
 import de.novatec.showcase.order.ejb.session.exception.ItemNotFoundException;
+import de.novatec.showcase.order.ejb.session.exception.OrderNotFoundException;
 import de.novatec.showcase.order.ejb.session.exception.PriceException;
 import de.novatec.showcase.order.ejb.session.exception.SpecificationException;
 import de.novatec.showcase.order.mapper.DtoMapper;
@@ -244,6 +245,10 @@ public class OrderResource {
 	@APIResponses(
 	        value = {
 	            @APIResponse(
+		                responseCode = "404",
+		                description = "Order with the given id not found",
+		                content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+	            @APIResponse(
 	                responseCode = "200",
 	                description = "The order with the given id was deleted if found.",
 	                content = @Content(mediaType = MediaType.APPLICATION_JSON,
@@ -258,10 +263,11 @@ public class OrderResource {
 		            example = "1",
 		            schema = @Schema(type = SchemaType.INTEGER)) 
 			@PathParam("id") Integer orderId) {
-		// TODO cancel method should return the deleted (or marked as deleted) order id
-		// and if the id is not found an exception should be thrown, so that the
-		// Response with Response.Status.NOT_FOUND could returned
-		bean.cancelOrder(orderId);
-		return Response.ok().build();
+		try {
+			return Response.ok().entity(DtoMapper.mapToOrderDto(bean.cancelOrder(orderId))).type(MediaType.APPLICATION_JSON_TYPE).build();
+		} catch (OrderNotFoundException e) {
+			return Response.status(Response.Status.NOT_FOUND)
+					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
+		}
 	}
 }
