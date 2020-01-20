@@ -25,6 +25,7 @@ import de.novatec.showcase.order.ejb.entity.Customer;
 import de.novatec.showcase.order.ejb.entity.Order;
 import de.novatec.showcase.order.ejb.entity.OrderLine;
 import de.novatec.showcase.order.ejb.entity.OrderStatus;
+import de.novatec.showcase.order.ejb.session.exception.CustomerNotFoundException;
 import de.novatec.showcase.order.ejb.session.exception.InsufficientCreditException;
 import de.novatec.showcase.order.ejb.session.exception.PriceException;
 import de.novatec.showcase.order.ejb.session.exception.SpecificationException;
@@ -75,11 +76,12 @@ public class OrderSession implements OrderSessionLocal {
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public Integer newOrder(Integer customerId, ShoppingCart shoppingCart) throws InsufficientCreditException, PriceException, SpecificationException, RestcallException {
+	public Integer newOrder(Integer customerId, ShoppingCart shoppingCart) throws InsufficientCreditException, PriceException, SpecificationException, RestcallException, CustomerNotFoundException {
 		Customer customer = this.customerService.getCustomer(customerId);
 		if (customer == null) {
-			throw new RuntimeException("Customer with id " + customerId + " does not exist!");
+			throw new CustomerNotFoundException("Customer with id " + customerId + " does not exist!");
 		}
+		//TODO check id items do exist
 
 		BigDecimal costs = shoppingCart.getTotalPrice();
 		
@@ -122,10 +124,6 @@ public class OrderSession implements OrderSessionLocal {
 
 		int shoppingCartSize = shoppingCart.getItemCount();
 		if (shoppingCartSize > MIN_SHOPPING_CART_SIZE && shoppingCartSize <= MAX_SHOPPING_CART_SIZE) {
-				
-			
-			// TODO place a large order
-			// this will be a wrapper client for (multiple) rest calls
 			// make a call for each Orderline of the Order
 			// manufaturedomain.scheduleWorkOrder(WorkOrder) for each OrderLine -> 
 			// WorkOrder(wo.location=1, wo.salesId = pk.orderid, wo.orderLineId=pk.number, wo.originalQantity=quantity, wo.assemblyId=getItem.getId, wo.dueDate=Calendar.getInstance()) 
@@ -134,7 +132,7 @@ public class OrderSession implements OrderSessionLocal {
 			// call CustomerSerssion.addInventory(OrderLIne) (read Orderline first by id from WorkOrder.salesId)
 			// build RestCalls with Object analog to the one in the Domain which could bes serialized to json which will be used by the corresponding domain
 			
-				log.info("Scheduling large order for:");
+				log.info("<START> Scheduling large order "+order.getId()+" for:");
 				for (OrderLine orderLine : order.getOrderLines()) {
 
 					try {
@@ -144,6 +142,7 @@ public class OrderSession implements OrderSessionLocal {
 						log.error(e.getMessage());
 						throw e;
 					}
+					log.info("<END> Scheduling large order "+order.getId()+" for:");
 					// do more with the workorder? or trigger actions via REST like described above? What about setting OrderStatus.PENDING_MANUFACTURE?
 				}
 		} else if (shoppingCartSize <= MIN_SHOPPING_CART_SIZE) {

@@ -36,9 +36,8 @@ public class WorkOrderScheduler {
 	}
 
 	public WorkOrder schedule(OrderLine orderLine) throws RestcallException {
-		WorkOrder workOrder = new WorkOrder(DEFAULT_LOCATION, orderLine.getOrderId(),
-				orderLine.getId(), orderLine.getQuantity(), Calendar.getInstance(),
-				orderLine.getItem().getId());
+		WorkOrder workOrder = new WorkOrder(DEFAULT_LOCATION, orderLine.getOrderId(), orderLine.getId(),
+				orderLine.getQuantity(), Calendar.getInstance(), orderLine.getItem().getId());
 		WebTarget target = client.target(WORKORDER_URL);
 		Builder builder = target.request(MediaType.APPLICATION_JSON);
 		Response response = asAdmin(builder.accept(MediaType.APPLICATION_JSON_TYPE)).post(Entity.json(workOrder));
@@ -46,9 +45,10 @@ public class WorkOrderScheduler {
 			workOrder = response.readEntity(WorkOrder.class);
 			return workOrder;
 		}
-		String message = "Error " + Response.Status.fromStatusCode(response.getStatus()) + " while calling " + WORKORDER_URL + " with " + workOrder;
-		if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-		{
+		String message = "Error " + Response.Status.fromStatusCode(response.getStatus()) + " while calling "
+				+ WORKORDER_URL + " with " + workOrder;
+		if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()
+				|| response.getStatus() == Response.Status.PRECONDITION_FAILED.getStatusCode()) {
 			message = response.readEntity(String.class);
 		}
 		throw new RestcallException(message);

@@ -37,6 +37,7 @@ import de.novatec.showcase.order.dto.ItemQuantityPairs;
 import de.novatec.showcase.order.dto.Order;
 import de.novatec.showcase.order.dto.ShoppingCart;
 import de.novatec.showcase.order.ejb.session.OrderSessionLocal;
+import de.novatec.showcase.order.ejb.session.exception.CustomerNotFoundException;
 import de.novatec.showcase.order.ejb.session.exception.InsufficientCreditException;
 import de.novatec.showcase.order.ejb.session.exception.PriceException;
 import de.novatec.showcase.order.ejb.session.exception.SpecificationException;
@@ -174,9 +175,13 @@ public class OrderResource {
 	 			    description = "The REST call to manufature schedule workorder failed for a large order",
 	 			    content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 	            @APIResponse(
-	                responseCode = "412",
-	                description = "One of the preconditions failed",
+	                responseCode = "404",
+	                description = "Customer with the given id not found",
 	                content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+	            @APIResponse(
+	            		responseCode = "412",
+	            		description = "One of the preconditions failed",
+	            		content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 	            @APIResponse(
 	                responseCode = "201",
 	                description = "The new order for the given customer id.",
@@ -202,7 +207,6 @@ public class OrderResource {
 			@PathParam("customerId") Integer customerId, 
 			ItemQuantityPairs itemQuantityPairs,
 			@Context UriInfo uriInfo) {
-		// TODO validate parameters customerId and itemQuantityPairs
 		ShoppingCart shoppingCart = new ShoppingCart();
 		for (ItemQuantityPair itemQuantityPair : itemQuantityPairs.getItemQuantityPairs()) {
 			shoppingCart.addItem(itemQuantityPair.getItem(), itemQuantityPair.getQuantity());
@@ -210,6 +214,9 @@ public class OrderResource {
 		Integer id;
 		try {
 			id = bean.newOrder(customerId, shoppingCart);
+		} catch (CustomerNotFoundException e) {
+			return Response.status(Response.Status.NOT_FOUND)
+					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
 		} catch (InsufficientCreditException e) {
 			return Response.status(Response.Status.PRECONDITION_FAILED)
 					.entity("The customer with id '" + customerId + "' has insufficient credit!").type(MediaType.TEXT_PLAIN_TYPE).build();
