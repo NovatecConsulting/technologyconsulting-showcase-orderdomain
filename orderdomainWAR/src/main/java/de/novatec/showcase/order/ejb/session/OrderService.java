@@ -7,6 +7,7 @@ import de.novatec.showcase.order.dto.ShoppingCart;
 import de.novatec.showcase.order.ejb.entity.Order;
 import de.novatec.showcase.order.ejb.session.exception.CustomerNotFoundException;
 import de.novatec.showcase.order.ejb.session.exception.InsufficientCreditException;
+import de.novatec.showcase.order.ejb.session.exception.ItemNotFoundException;
 import de.novatec.showcase.order.ejb.session.exception.PriceException;
 import de.novatec.showcase.order.ejb.session.exception.SpecificationException;
 
@@ -17,7 +18,7 @@ public interface OrderService {
 
 	public List<Order> getOpenOrders(Integer customerId);
 
-	public Integer newOrder(Integer customerId, ShoppingCart cart) throws InsufficientCreditException, PriceException, SpecificationException, RestcallException, CustomerNotFoundException;
+	public Integer newOrder(Integer customerId, ShoppingCart cart) throws InsufficientCreditException, PriceException, SpecificationException, RestcallException, CustomerNotFoundException, ItemNotFoundException;
 
 	public void cancelOrder(Integer orderId);
 }

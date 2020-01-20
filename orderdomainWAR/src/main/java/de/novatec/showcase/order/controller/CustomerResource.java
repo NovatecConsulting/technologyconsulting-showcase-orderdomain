@@ -250,7 +250,7 @@ public class CustomerResource {
 	                description = "The inventory has been added.") })
 	@Operation(
 			summary = "Add inventory",
-			description = "Add inventory to customer from the given oder id.")
+			description = "Add inventory to customer of the given oder id.")
 	public Response addInventory(
 			@Parameter(
 		            description = "The order id where to add the inventory for.",

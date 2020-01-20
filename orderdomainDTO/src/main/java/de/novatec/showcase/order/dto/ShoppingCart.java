@@ -40,6 +40,11 @@ public class ShoppingCart {
 		return new ArrayList<>(shoppingCartItems.values());
 	}
 	
+	public String getItemsIdsAsQueryParameter()
+	{
+		return String.join(",", shoppingCartItems.keySet());
+	}
+	
 	public Item getItem(String itemId) {
 		return shoppingCartItems.get(itemId).getItem();
 	}

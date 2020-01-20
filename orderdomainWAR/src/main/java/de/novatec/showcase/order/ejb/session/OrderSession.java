@@ -1,6 +1,7 @@
 package de.novatec.showcase.order.ejb.session;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -27,6 +28,7 @@ import de.novatec.showcase.order.ejb.entity.OrderLine;
 import de.novatec.showcase.order.ejb.entity.OrderStatus;
 import de.novatec.showcase.order.ejb.session.exception.CustomerNotFoundException;
 import de.novatec.showcase.order.ejb.session.exception.InsufficientCreditException;
+import de.novatec.showcase.order.ejb.session.exception.ItemNotFoundException;
 import de.novatec.showcase.order.ejb.session.exception.PriceException;
 import de.novatec.showcase.order.ejb.session.exception.SpecificationException;
 import de.novatec.showcase.order.mapper.DtoMapper;
@@ -34,9 +36,8 @@ import de.novatec.showcase.order.mapper.DtoMapper;
 @Stateless
 @TransactionAttribute(TransactionAttributeType.NEVER)
 public class OrderSession implements OrderSessionLocal {
-	
-	private static Logger log = LoggerFactory.getLogger(OrderSession.class);
 
+	private static Logger log = LoggerFactory.getLogger(OrderSession.class);
 
 	private static final int MAX_SHOPPING_CART_SIZE = 200;
 
@@ -50,7 +51,10 @@ public class OrderSession implements OrderSessionLocal {
 
 	@EJB
 	private CustomerSessionLocal customerService;
-	
+
+	@EJB
+	private ItemSessionLocal itemService;
+
 	private WorkOrderScheduler workOrderScheduler = new WorkOrderScheduler();
 
 	@Override
@@ -76,15 +80,21 @@ public class OrderSession implements OrderSessionLocal {
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public Integer newOrder(Integer customerId, ShoppingCart shoppingCart) throws InsufficientCreditException, PriceException, SpecificationException, RestcallException, CustomerNotFoundException {
+	public Integer newOrder(Integer customerId, ShoppingCart shoppingCart) throws InsufficientCreditException,
+			PriceException, SpecificationException, RestcallException, CustomerNotFoundException, ItemNotFoundException {
 		Customer customer = this.customerService.getCustomer(customerId);
 		if (customer == null) {
 			throw new CustomerNotFoundException("Customer with id " + customerId + " does not exist!");
 		}
-		//TODO check id items do exist
+
+		if (shoppingCart.getItemCount() != this.itemService.getItems(shoppingCart.getItemsIdsAsQueryParameter())
+				.size()) {
+			throw new ItemNotFoundException(
+					"One of the Items with id " + shoppingCart.getItemsIdsAsQueryParameter() + " was not found!");
+		}
 
 		BigDecimal costs = shoppingCart.getTotalPrice();
-		
+
 		// Add price of open (known) Orders to the price of cart.
 		// This is needed because the balance of the Customer wont be adjusted
 		// until the ordered parts arrive in the inventory (see addInventory(..)
@@ -106,47 +116,49 @@ public class OrderSession implements OrderSessionLocal {
 		em.persist(order);
 
 		for (ShoppingCartItem shoppingCartItem : shoppingCart.getItems()) {
-			OrderLine orderLine = new OrderLine(shoppingCartItem.getQuantity(), shoppingCart.getPrice(shoppingCartItem.getItem().getId()), shoppingCartItem.getItem().getPrice(),
+			OrderLine orderLine = new OrderLine(shoppingCartItem.getQuantity(),
+					shoppingCart.getPrice(shoppingCartItem.getItem().getId()), shoppingCartItem.getItem().getPrice(),
 					order, DtoMapper.mapToItemEntity(shoppingCartItem.getItem()));
 			em.persist(orderLine);
 			order.addOrderLine(orderLine);
 			order = em.merge(order);
 		}
 
-		if(!order.isPriceWithDiscountEqualTotal())
-		{
+		if (!order.isPriceWithDiscountEqualTotal()) {
 			throw new PriceException("Calculated price with discount is NOT equal total price!");
 		}
-		if(!order.isPriceMinusDiscountEqualPriceWithDiscount())
-		{
+		if (!order.isPriceMinusDiscountEqualPriceWithDiscount()) {
 			throw new PriceException("Calculated price minus discount is NOT equal calculated price with discount!");
 		}
 
 		int shoppingCartSize = shoppingCart.getItemCount();
 		if (shoppingCartSize > MIN_SHOPPING_CART_SIZE && shoppingCartSize <= MAX_SHOPPING_CART_SIZE) {
 			// make a call for each Orderline of the Order
-			// manufaturedomain.scheduleWorkOrder(WorkOrder) for each OrderLine -> 
-			// WorkOrder(wo.location=1, wo.salesId = pk.orderid, wo.orderLineId=pk.number, wo.originalQantity=quantity, wo.assemblyId=getItem.getId, wo.dueDate=Calendar.getInstance()) 
+			// manufaturedomain.scheduleWorkOrder(WorkOrder) for each OrderLine -> WorkOrder(wo.location=1, wo.salesId = pk.orderid, wo.orderLineId=pk.number,
+			// wo.originalQantity=quantity, wo.assemblyId=getItem.getId, wo.dueDate=Calendar.getInstance())
 			// call advanceWorkOrderStatus 3 times
 			// call completeWorkOrder
-			// call CustomerSerssion.addInventory(OrderLIne) (read Orderline first by id from WorkOrder.salesId)
-			// build RestCalls with Object analog to the one in the Domain which could bes serialized to json which will be used by the corresponding domain
-			
-				log.info("<START> Scheduling large order "+order.getId()+" for:");
-				for (OrderLine orderLine : order.getOrderLines()) {
+			// call CustomerSerssion.addInventory(OrderLIne) (read Orderline first by id
+			// from WorkOrder.salesId)
+			// build RestCalls with Object analog to the one in the Domain which could bes
+			// serialized to json which will be used by the corresponding domain
 
-					try {
-						log.info(orderLine.toString());
-						WorkOrder workOrder = workOrderScheduler.schedule(orderLine);
-					} catch (RestcallException e) {
-						log.error(e.getMessage());
-						throw e;
-					}
-					log.info("<END> Scheduling large order "+order.getId()+" for:");
-					// do more with the workorder? or trigger actions via REST like described above? What about setting OrderStatus.PENDING_MANUFACTURE?
+			log.info("<START> Scheduling large order " + order.getId() + " for:");
+			for (OrderLine orderLine : order.getOrderLines()) {
+
+				try {
+					log.info(orderLine.toString());
+					WorkOrder workOrder = workOrderScheduler.schedule(orderLine);
+				} catch (RestcallException e) {
+					log.error(e.getMessage());
+					throw e;
 				}
+				log.info("<END> Scheduling large order " + order.getId() + " for:");
+				// do more with the workorder? or trigger actions via REST like described above?
+				// What about setting OrderStatus.PENDING_MANUFACTURE?
+			}
 		} else if (shoppingCartSize <= MIN_SHOPPING_CART_SIZE) {
-			// this should be done by a the corresponding REST call 
+			// this should be done by a the corresponding REST call
 //			customerService.addInventory(order);
 		} else {
 			String message = "Size of the ShoppingCart violates the specification. Cart size: " + shoppingCartSize;
@@ -164,5 +176,5 @@ public class OrderSession implements OrderSessionLocal {
 			order.setStatus(OrderStatus.DELETED);
 		}
 	}
-	
+
 }

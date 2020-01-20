@@ -39,6 +39,7 @@ import de.novatec.showcase.order.dto.ShoppingCart;
 import de.novatec.showcase.order.ejb.session.OrderSessionLocal;
 import de.novatec.showcase.order.ejb.session.exception.CustomerNotFoundException;
 import de.novatec.showcase.order.ejb.session.exception.InsufficientCreditException;
+import de.novatec.showcase.order.ejb.session.exception.ItemNotFoundException;
 import de.novatec.showcase.order.ejb.session.exception.PriceException;
 import de.novatec.showcase.order.ejb.session.exception.SpecificationException;
 import de.novatec.showcase.order.mapper.DtoMapper;
@@ -215,6 +216,9 @@ public class OrderResource {
 		try {
 			id = bean.newOrder(customerId, shoppingCart);
 		} catch (CustomerNotFoundException e) {
+			return Response.status(Response.Status.NOT_FOUND)
+					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
+		} catch (ItemNotFoundException e) {
 			return Response.status(Response.Status.NOT_FOUND)
 					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
 		} catch (InsufficientCreditException e) {

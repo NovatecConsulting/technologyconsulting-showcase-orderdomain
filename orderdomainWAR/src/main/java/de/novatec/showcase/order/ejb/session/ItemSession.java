@@ -57,7 +57,7 @@ public class ItemSession implements ItemSessionLocal {
 	public List<Item> getItems(String itemIds) {
 
 		TypedQuery<Item> itemsQuery = em.createNamedQuery(Item.BY_ITEM_IDS, Item.class);
-		itemsQuery.setParameter("ids", idsAsLong(Arrays.asList(StringUtils.stripEnd(itemIds, ",").split(",", 10))));
+		itemsQuery.setParameter("ids", idsAsLong(Arrays.asList(StringUtils.stripEnd(itemIds, ",").split(","))));
 		return itemsQuery.getResultList();
 	}
 
