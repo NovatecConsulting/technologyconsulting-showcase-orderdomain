@@ -1,0 +1,257 @@
+{
+	"itemQuantityPairs": [
+		{
+			"item": {
+				"id": "4",
+				"name": "Assembly 1",
+				"description": "Assembly 1 which is build from 3 parts",
+				"price": "100.00",
+				"discount": "0.0",
+				"category": 1
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "5",
+				"name": "Assembly 2",
+				"description": "Assembly 2 which is build from 2 parts",
+				"price": "100.00",
+				"discount": "0.0",
+				"category": 1
+			},
+			"quantity": 2
+		},
+		{
+			"item": {
+				"id": "5",
+				"name": "Assembly 2",
+				"description": "Assembly 2 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 3
+		},
+		{
+			"item": {
+				"id": "6",
+				"name": "Assembly 3",
+				"description": "Assembly 3 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "7",
+				"name": "Assembly 7",
+				"description": "Assembly 7 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "8",
+				"name": "Assembly 8",
+				"description": "Assembly 8 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "9",
+				"name": "Assembly 9",
+				"description": "Assembly 9 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "10",
+				"name": "Assembly 10",
+				"description": "Assembly 10 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "11",
+				"name": "Assembly 11",
+				"description": "Assembly 11 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "12",
+				"name": "Assembly 12",
+				"description": "Assembly 12 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "13",
+				"name": "Assembly 13",
+				"description": "Assembly 13 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "14",
+				"name": "Assembly 14",
+				"description": "Assembly 14 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "15",
+				"name": "Assembly 15",
+				"description": "Assembly 14 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "15",
+				"name": "Assembly 15",
+				"description": "Assembly 15 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "16",
+				"name": "Assembly 16",
+				"description": "Assembly 16 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "17",
+				"name": "Assembly 17",
+				"description": "Assembly 17 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "18",
+				"name": "Assembly 18",
+				"description": "Assembly 18 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "19",
+				"name": "Assembly 19",
+				"description": "Assembly 19 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "20",
+				"name": "Assembly 20",
+				"description": "Assembly 20 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "21",
+				"name": "Assembly 21",
+				"description": "Assembly 21 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "22",
+				"name": "Assembly 22",
+				"description": "Assembly 22 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "23",
+				"name": "Assembly 23",
+				"description": "Assembly 23 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		},
+		{
+			"item": {
+				"id": "24",
+				"name": "Assembly 24",
+				"description": "Assembly 24 which is build from 2 parts",
+				"price": "200.00",
+				"discount": "10.0",
+				"category": 2
+			},
+			"quantity": 1
+		}
+	]
+}
