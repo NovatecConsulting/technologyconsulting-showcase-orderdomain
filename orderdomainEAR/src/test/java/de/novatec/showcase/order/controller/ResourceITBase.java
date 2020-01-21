@@ -116,6 +116,10 @@ abstract public class ResourceITBase {
 		assertResponse(url, response, Response.Status.NOT_FOUND);
 	}
 
+	public static void assertResponse400(String url, Response response) {
+		assertResponse(url, response, Response.Status.BAD_REQUEST);
+	}
+	
 	public static void assertResponse500(String url, Response response) {
 		assertResponse(url, response, Response.Status.INTERNAL_SERVER_ERROR);
 	}

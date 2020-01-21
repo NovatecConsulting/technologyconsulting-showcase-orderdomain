@@ -1,7 +1,6 @@
 package de.novatec.showcase.order.ejb.session;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -59,8 +58,12 @@ public class OrderSession implements OrderSessionLocal {
 	private WorkOrderScheduler workOrderScheduler = new WorkOrderScheduler();
 
 	@Override
-	public Order getOrder(int id) {
-		return em.find(Order.class, id);
+	public Order getOrder(Integer orderId) throws OrderNotFoundException {
+		Order order = em.find(Order.class, orderId);
+		if (order == null) {
+			throw new OrderNotFoundException("The order with id " + orderId + " was not found!");
+		}
+		return order;
 	}
 
 	@Override
@@ -81,7 +84,7 @@ public class OrderSession implements OrderSessionLocal {
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public Integer newOrder(Integer customerId, ShoppingCart shoppingCart)
+	public Order newOrder(Integer customerId, ShoppingCart shoppingCart)
 			throws InsufficientCreditException, PriceException, SpecificationException, RestcallException,
 			CustomerNotFoundException, ItemNotFoundException {
 		Customer customer = this.customerService.getCustomer(customerId);
@@ -166,16 +169,13 @@ public class OrderSession implements OrderSessionLocal {
 			log.error(message);
 			throw new SpecificationException(message);
 		}
-		return order.getId();
+		return order;
 	}
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public Order cancelOrder(Integer orderId) throws OrderNotFoundException {
 		Order order = this.getOrder(orderId);
-		if (order == null) {
-			throw new OrderNotFoundException("The order with id " + orderId + " was not found!");
-		}
 		order.setStatus(OrderStatus.DELETED);
 		return order;
 	}

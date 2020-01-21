@@ -61,7 +61,7 @@ public class OrderResourceIT extends ResourceITBase {
 		Response response = asTestUser(target.request()).get();
 		assertResponse404(ORDER_URL, response);
 		String errorMessage = response.readEntity(String.class);
-		assertEquals("Wrong result from Response object!", "Order with id '" + NON_EXISTING_ID + "' not found!",
+		assertEquals("Wrong result from Response object!", "The order with id " + NON_EXISTING_ID + " was not found!",
 				errorMessage);
 	}
 
@@ -69,7 +69,7 @@ public class OrderResourceIT extends ResourceITBase {
 	public void testGetCustomerWithIdLowerThan1() {
 		WebTarget target = client.target(ORDER_URL).path("0");
 		Response response = asTestUser(target.request()).get();
-		assertResponse500(ORDER_URL, response);
+		assertResponse400(ORDER_URL, response);
 		String errorMessage = response.readEntity(String.class);
 		assertEquals("Wrong result from Response object!", "Id cannot be less than 1!", errorMessage);
 	}

@@ -13,13 +13,13 @@ import de.novatec.showcase.order.ejb.session.exception.PriceException;
 import de.novatec.showcase.order.ejb.session.exception.SpecificationException;
 
 public interface OrderService {
-	public Order getOrder(int id);
+	public Order getOrder(Integer id) throws OrderNotFoundException;
 
 	public Long getOrderCount(Integer customerId);
 
 	public List<Order> getOpenOrders(Integer customerId);
 
-	public Integer newOrder(Integer customerId, ShoppingCart cart) throws InsufficientCreditException, PriceException, SpecificationException, RestcallException, CustomerNotFoundException, ItemNotFoundException;
+	public Order newOrder(Integer customerId, ShoppingCart cart) throws InsufficientCreditException, PriceException, SpecificationException, RestcallException, CustomerNotFoundException, ItemNotFoundException;
 
 	public Order cancelOrder(Integer orderId) throws OrderNotFoundException;
 }

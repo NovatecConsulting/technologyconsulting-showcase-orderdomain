@@ -63,7 +63,7 @@ public class CustomerResource {
 	                description = "Customer not found",
 	                content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 	            @APIResponse(
-	            		responseCode = "500",
+	            		responseCode = "400",
 	            		description = "Customer id is less than 1",
 	            		content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 	            @APIResponse(
@@ -124,7 +124,7 @@ public class CustomerResource {
 			        description = "Customer not found",
 			        content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 			    @APIResponse(
-			        responseCode = "500",
+			        responseCode = "400",
 			        description = "Customer id is less than 1",
 			        content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 	            @APIResponse(
@@ -143,7 +143,7 @@ public class CustomerResource {
 		            schema = @Schema(type = SchemaType.INTEGER)) 
 			@PathParam("id") Integer customerId) {
 		if (customerId <= 0) {
-			return Response.serverError().entity("Id cannot be less than 1!").build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Customer id cannot be less than 1!").build();
 		}
 		List<CustomerInventory> inventories;
 		try {
@@ -190,7 +190,7 @@ public class CustomerResource {
 	@APIResponses(
 	        value = {
 				@APIResponse(
-					responseCode = "500",
+					responseCode = "400",
 					description = "Customer id is less than 1",
 					content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 	            @APIResponse(
@@ -215,7 +215,7 @@ public class CustomerResource {
 		            schema = @Schema(type = SchemaType.NUMBER)) 
 			@PathParam("costs") BigDecimal costs) {
 		if (customerId <= 0) {
-			return Response.serverError().entity("Id cannot be less than 1!").build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Id cannot be less than 1!").build();
 		}
 		boolean hasCredit = bean.checkCustomerCredit(customerId, costs);
         JsonObjectBuilder builder = Json.createObjectBuilder();

@@ -64,7 +64,7 @@ public class OrderResource {
 	                description = "Order not found",
 	                content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 	            @APIResponse(
-	            		responseCode = "500",
+	            		responseCode = "400",
 	            		description = "Order id is less than 1",
 	            		content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 	            @APIResponse(
@@ -83,12 +83,14 @@ public class OrderResource {
             schema = @Schema(type = SchemaType.INTEGER)) 
 			@PathParam("id") Integer orderId) {
 		if (orderId.intValue() <= 0) {
-			return Response.serverError().entity("Id cannot be less than 1!").type(MediaType.TEXT_PLAIN_TYPE).build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Id cannot be less than 1!").type(MediaType.TEXT_PLAIN_TYPE).build();
 		}
-		de.novatec.showcase.order.ejb.entity.Order order = bean.getOrder(orderId);
-		if (order == null) {
-			return Response.status(Response.Status.NOT_FOUND).entity("Order with id '" + orderId + "' not found!").type(MediaType.TEXT_PLAIN_TYPE)
-					.build();
+		de.novatec.showcase.order.ejb.entity.Order order;
+		try {
+			order = bean.getOrder(orderId);
+		} catch (OrderNotFoundException e) {
+			return Response.status(Response.Status.NOT_FOUND)
+					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
 		}
 		return Response.ok().entity(DtoMapper.mapToOrderDto(order)).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
@@ -99,7 +101,7 @@ public class OrderResource {
 	@APIResponses(
 	        value = {
 		       @APIResponse(
-		    		responseCode = "500",
+		    		responseCode = "400",
 		            description = "Customer id is less than 1",
 		            content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 	            @APIResponse(
@@ -118,7 +120,7 @@ public class OrderResource {
 		            schema = @Schema(type = SchemaType.INTEGER)) 
 			@PathParam("id") Integer customerId) {
 		if (customerId <= 0) {
-			return Response.serverError().entity("Id cannot be less than 1!").type(MediaType.TEXT_PLAIN_TYPE).build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Id cannot be less than 1!").type(MediaType.TEXT_PLAIN_TYPE).build();
 		}
 		long count = bean.getOrderCount(customerId);
 		JsonObjectBuilder builder = Json.createObjectBuilder();
@@ -132,7 +134,7 @@ public class OrderResource {
 	@APIResponses(
 	        value = {
 	 		       @APIResponse(
-	 			    		responseCode = "500",
+	 			    		responseCode = "400",
 	 			            description = "Customer id is less than 1",
 	 			            content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 	            @APIResponse(
@@ -155,7 +157,7 @@ public class OrderResource {
 		            schema = @Schema(type = SchemaType.INTEGER)) 
 			@PathParam("id") Integer customerId) {
 		if (customerId <= 0) {
-			return Response.serverError().entity("Id cannot be less than 1!").type(MediaType.TEXT_PLAIN_TYPE).build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Id cannot be less than 1!").type(MediaType.TEXT_PLAIN_TYPE).build();
 		}
 		List<Order> orders = DtoMapper.mapToOrderDto(bean.getOpenOrders(customerId));
 		if (orders == null || orders.isEmpty()) {
@@ -174,12 +176,16 @@ public class OrderResource {
 	        value = {
 	 		   @APIResponse(
 	 				responseCode = "500",
-	 			    description = "The REST call to manufature schedule workorder failed for a large order",
+	 			    description = "The REST call to manufature schedule workorder failed for a large order,",
 	 			    content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 	            @APIResponse(
 	                responseCode = "404",
 	                description = "Customer with the given id not found",
 	                content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+	            @APIResponse(
+	            		responseCode = "400",
+	            		description = "Customer id is less than 1",
+	            		content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 	            @APIResponse(
 	            		responseCode = "412",
 	            		description = "One of the preconditions failed",
@@ -209,13 +215,16 @@ public class OrderResource {
 			@PathParam("customerId") Integer customerId, 
 			ItemQuantityPairs itemQuantityPairs,
 			@Context UriInfo uriInfo) {
+		if (customerId.intValue() <= 0) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Customer id cannot be less than 1!").type(MediaType.TEXT_PLAIN_TYPE).build();
+		}
 		ShoppingCart shoppingCart = new ShoppingCart();
 		for (ItemQuantityPair itemQuantityPair : itemQuantityPairs.getItemQuantityPairs()) {
 			shoppingCart.addItem(itemQuantityPair.getItem(), itemQuantityPair.getQuantity());
 		}
-		Integer id;
+		de.novatec.showcase.order.ejb.entity.Order order;
 		try {
-			id = bean.newOrder(customerId, shoppingCart);
+			order = bean.newOrder(customerId, shoppingCart);
 		} catch (CustomerNotFoundException e) {
 			return Response.status(Response.Status.NOT_FOUND)
 					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
@@ -235,7 +244,7 @@ public class OrderResource {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
 					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
 		}
-		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToOrderDto(bean.getOrder(id))).type(MediaType.APPLICATION_JSON_TYPE).build();
+		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToOrderDto(order)).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@DELETE
@@ -244,6 +253,10 @@ public class OrderResource {
 	@RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME})
 	@APIResponses(
 	        value = {
+ 		       @APIResponse(
+ 			    		responseCode = "400",
+ 			            description = "Order id is less than 1",
+ 			            content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 	            @APIResponse(
 		                responseCode = "404",
 		                description = "Order with the given id not found",
@@ -263,6 +276,9 @@ public class OrderResource {
 		            example = "1",
 		            schema = @Schema(type = SchemaType.INTEGER)) 
 			@PathParam("id") Integer orderId) {
+		if (orderId.intValue() <= 0) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Order id cannot be less than 1!").type(MediaType.TEXT_PLAIN_TYPE).build();
+		}
 		try {
 			return Response.ok().entity(DtoMapper.mapToOrderDto(bean.cancelOrder(orderId))).type(MediaType.APPLICATION_JSON_TYPE).build();
 		} catch (OrderNotFoundException e) {
