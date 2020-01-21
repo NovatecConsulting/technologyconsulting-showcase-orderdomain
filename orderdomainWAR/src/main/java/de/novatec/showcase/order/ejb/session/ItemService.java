@@ -21,6 +21,6 @@ public interface ItemService {
 
 	public String getCurrentMin();
 
-	String createItem(Item item);
+	Item createItem(Item item);
 
 }

@@ -3,20 +3,28 @@ package de.novatec.showcase.order.dto;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Size;
+
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Schema(name="Item", description="POJO that represents an item. An Item is an assembly in the manufacture domain. "
 		+ "So the id of an item in the order domain and the id of an assembly in the manufacture domain are always equal to each other.")
 public class Item {
 
+	@Size(max = 20)
 	private String id;
 
+	@Size(max = 35)
 	private String name;
 
+	@Size(max = 100)
 	private String desc;
 
+	@Digits(integer = 12, fraction = 2)
 	private BigDecimal price;
 
+	@Digits(integer = 6, fraction = 4)
 	private BigDecimal discount;
 
 	private int category;

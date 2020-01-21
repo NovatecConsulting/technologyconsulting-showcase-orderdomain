@@ -7,6 +7,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -107,8 +108,7 @@ public class OrderResource {
 	            @APIResponse(
 	                responseCode = "200",
 	                description = "The order with the given id.",
-	                content = @Content(mediaType = MediaType.APPLICATION_JSON,
-	                schema = @Schema(implementation = Order.class))) })
+	                content = @Content(mediaType = MediaType.APPLICATION_JSON)) })
 	    @Operation(
 	        summary = "Count the orders by the customer id",
 	        description = "Count the order by customer id where the id has to be higher than 0.")
@@ -213,7 +213,7 @@ public class OrderResource {
 		            example = "1",
 		            schema = @Schema(type = SchemaType.INTEGER)) 
 			@PathParam("customerId") Integer customerId, 
-			ItemQuantityPairs itemQuantityPairs,
+		@Valid ItemQuantityPairs itemQuantityPairs,
 			@Context UriInfo uriInfo) {
 		if (customerId.intValue() <= 0) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Customer id cannot be less than 1!").type(MediaType.TEXT_PLAIN_TYPE).build();

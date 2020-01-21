@@ -115,9 +115,9 @@ public class ItemSession implements ItemSessionLocal {
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public String createItem(Item item) {
+	public Item createItem(Item item) {
 		em.persist(item);
-		return item.getId();
+		return item;
 	}
 
 }

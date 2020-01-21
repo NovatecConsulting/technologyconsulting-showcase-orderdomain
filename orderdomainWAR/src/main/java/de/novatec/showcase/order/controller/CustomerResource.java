@@ -70,7 +70,7 @@ public class CustomerResource {
 	                responseCode = "200",
 	                description = "The customer with the given id.",
 	                content = @Content(mediaType = MediaType.APPLICATION_JSON,
-	                schema = @Schema(implementation = Order.class))) })
+	                schema = @Schema(implementation = Customer.class))) })
 	    @Operation(
 	        summary = "Get the customer by id",
 	        description = "Get the customer by id where the id has to be higher than 0.")

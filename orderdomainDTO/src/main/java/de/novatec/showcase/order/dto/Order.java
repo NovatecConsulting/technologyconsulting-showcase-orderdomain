@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
+import javax.validation.constraints.Digits;
+
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -28,8 +30,10 @@ public class Order {
 	@JsonFormat(pattern = GlobalConstants.DATE_FORMAT, locale = "de_DE")
 	private Calendar entryDate;
 
+	@Digits(integer = 12, fraction = 2)
 	private BigDecimal total;
 
+	@Digits(integer = 4, fraction = 2)
 	private BigDecimal discount;
 	
 	private List<OrderLine> orderLines;

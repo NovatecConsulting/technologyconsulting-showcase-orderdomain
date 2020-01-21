@@ -45,6 +45,10 @@ abstract public class DtoMapper {
 		return mapper.map(order, Order.class);
 	}
 
+	public static Item mapToItemDto(de.novatec.showcase.order.ejb.entity.Item item) {
+		return mapper.map(item, Item.class);
+	}
+	
 	public static List<CustomerInventory> mapToCustomerInventoryDto(
 			List<de.novatec.showcase.order.ejb.entity.CustomerInventory> customerinventories) {
 		return mapper.mapAsList(customerinventories, CustomerInventory.class);

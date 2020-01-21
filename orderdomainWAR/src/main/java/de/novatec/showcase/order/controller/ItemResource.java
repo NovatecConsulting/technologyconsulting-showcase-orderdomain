@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -67,9 +68,9 @@ public class ItemResource {
 	@Operation(
 			summary = "Create an new item",
 			description = "Create an new item with the given item.")
-	public Response createItem(Item item, @Context UriInfo uriInfo) {
-		String id = itemBean.createItem(DtoMapper.mapToItemEntity(item));
-		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToItemDto(itemBean.getItems(id)).get(0)).type(MediaType.APPLICATION_JSON_TYPE).build();
+	public Response createItem(@Valid Item item, @Context UriInfo uriInfo) {
+		de.novatec.showcase.order.ejb.entity.Item createdItem = itemBean.createItem(DtoMapper.mapToItemEntity(item));
+		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToItemDto(createdItem)).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
 	@GET
