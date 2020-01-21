@@ -196,7 +196,7 @@
 							<goal>copy</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>../..resources/smoketest/lib</outputDirectory>
+							<outputDirectory>../../resources/smoketest/lib</outputDirectory>
 							<artifactItems>
 								<artifactItem>
 									<groupId>org.mock-server</groupId>
