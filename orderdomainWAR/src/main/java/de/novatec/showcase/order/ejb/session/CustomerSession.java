@@ -20,6 +20,8 @@ import de.novatec.showcase.order.ejb.entity.Item;
 import de.novatec.showcase.order.ejb.entity.Order;
 import de.novatec.showcase.order.ejb.entity.OrderLine;
 import de.novatec.showcase.order.ejb.entity.OrderStatus;
+import de.novatec.showcase.order.ejb.session.exception.CustomerNotFoundException;
+import de.novatec.showcase.order.ejb.session.exception.ItemNotFoundException;
 import de.novatec.showcase.order.ejb.session.exception.OrderNotFoundException;
 
 @Stateless
@@ -33,8 +35,12 @@ public class CustomerSession implements CustomerSessionLocal {
 	EntityManager em;
 
 	@Override
-	public Customer getCustomer(Integer customerId) {
-		return em.find(Customer.class, customerId);
+	public Customer getCustomer(Integer customerId) throws CustomerNotFoundException {
+		Customer customer = em.find(Customer.class, customerId);
+		if (customer == null) {
+			throw new CustomerNotFoundException("Customer with id " + customerId + " does not exist!");
+		}
+		return customer;
 	}
 
 	@Override
@@ -44,13 +50,8 @@ public class CustomerSession implements CustomerSessionLocal {
 	}
 
 	@Override
-	public boolean validateCustomer(Integer customerId) {
-		return this.getCustomer(customerId) != null;
-	}
-
-	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<CustomerInventory> getInventories(Integer customerId) {
+	public List<CustomerInventory> getInventories(Integer customerId) throws CustomerNotFoundException {
 		Customer customer = this.getCustomer(customerId);
 		if (customer == null) {
 			return new ArrayList<CustomerInventory>();
@@ -68,7 +69,12 @@ public class CustomerSession implements CustomerSessionLocal {
 
 	@Override
 	public boolean checkCustomerCredit(Integer customerId, BigDecimal costs) {
-		Customer customer = this.getCustomer(customerId);
+		Customer customer;
+		try {
+			customer = this.getCustomer(customerId);
+		} catch (CustomerNotFoundException e) {
+			return false;
+		}
 		if (customer == null) {
 			return false;
 		}
@@ -77,8 +83,11 @@ public class CustomerSession implements CustomerSessionLocal {
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public boolean sellInventory(Integer customerId, String itemId, int quantity) {
+	public boolean sellInventory(Integer customerId, String itemId, int quantity) throws ItemNotFoundException, CustomerNotFoundException {
 		Item item = em.find(Item.class, itemId);
+		if (item == null) {
+			throw new ItemNotFoundException("The Items with id " + itemId + " was not found!");
+		}
 
 		// get CustomerInventory for the Item with the Id 'itemId'
 		CustomerInventory customerInventory = this.getInventoryItem(this.getCustomer(customerId), item);

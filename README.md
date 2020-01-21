@@ -35,7 +35,5 @@ check [openAPI](http://localhost:9080/api/explorer/) if the server is running fo
 
 ## TODOs:
 
-- Better REST Responses including status codes
-- some validations to avoid NPE's
 - check functionality of ItemSession.getSubList -> refactor this "PARTS"-thing...
 - OrderStatus model is not clean, i.e. DELETED order are also counted with order/count_by_customer/{id}

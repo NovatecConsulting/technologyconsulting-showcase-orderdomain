@@ -85,9 +85,6 @@ public class OrderSession implements OrderSessionLocal {
 			throws InsufficientCreditException, PriceException, SpecificationException, RestcallException,
 			CustomerNotFoundException, ItemNotFoundException {
 		Customer customer = this.customerService.getCustomer(customerId);
-		if (customer == null) {
-			throw new CustomerNotFoundException("Customer with id " + customerId + " does not exist!");
-		}
 
 		if (shoppingCart.getItemCount() != this.itemService.getItems(shoppingCart.getItemsIdsAsQueryParameter())
 				.size()) {

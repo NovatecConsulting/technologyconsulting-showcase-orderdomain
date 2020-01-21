@@ -57,15 +57,6 @@ public class CustomerResourceIT extends ResourceITBase {
 	}
 
 	@Test
-	public void testCustomerExist() {
-		WebTarget target = client.target(CUSTOMER_URL).path("exist/" + testCustomer.getId().toString());
-		Response response = asTestUser(target.request()).get();
-		assertResponse200(CUSTOMER_URL, response);
-		assertTrue("Customer with id " + testCustomer.getId() + " should exist!",
-		response.readEntity(JsonObject.class).getBoolean("exist"));
-	}
-
-	@Test
 	public void testAddInventories() {
 		// create a new customer
 		Customer customer = createCustomer();

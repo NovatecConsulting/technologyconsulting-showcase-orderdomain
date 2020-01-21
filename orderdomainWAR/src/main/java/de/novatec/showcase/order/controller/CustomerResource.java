@@ -39,6 +39,8 @@ import de.novatec.showcase.order.dto.Customer;
 import de.novatec.showcase.order.dto.CustomerInventory;
 import de.novatec.showcase.order.dto.Order;
 import de.novatec.showcase.order.ejb.session.CustomerSessionLocal;
+import de.novatec.showcase.order.ejb.session.exception.CustomerNotFoundException;
+import de.novatec.showcase.order.ejb.session.exception.ItemNotFoundException;
 import de.novatec.showcase.order.ejb.session.exception.OrderNotFoundException;
 import de.novatec.showcase.order.mapper.DtoMapper;
 
@@ -82,8 +84,10 @@ public class CustomerResource {
 		if (customerId <= 0) {
 			return Response.serverError().entity("Id cannot be less than 1!").build();
 		}
-		de.novatec.showcase.order.ejb.entity.Customer customer = bean.getCustomer(customerId);
-		if (customer == null) {
+		de.novatec.showcase.order.ejb.entity.Customer customer;
+		try {
+			customer = bean.getCustomer(customerId);
+		} catch (CustomerNotFoundException e) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Customer with id '" + customerId + "' not found!")
 					.build();
 		}
@@ -107,35 +111,6 @@ public class CustomerResource {
 		long count = bean.countCustomer();
         JsonObjectBuilder builder = Json.createObjectBuilder();
 		builder.add("count", count);
-		return Response.ok().entity(builder.build()).type(MediaType.APPLICATION_JSON_TYPE).build();
-	}
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path(value = "exist/{id}")
-	@APIResponses(
-	        value = {
-	            @APIResponse(
-	                responseCode = "200",
-	                description = "Boolean value if a customers exist.",
-	                content = @Content(mediaType = MediaType.APPLICATION_JSON,
-	                schema = @Schema(implementation = JsonObject.class ))) })
-	@Operation(
-			summary = "Check if a customers exists",
-			description = "Check if a customer with the given id exists in the database.")
-	public Response customerIdExist(
-			@Parameter(
-		            description = "The id of the customer where to check existence.",
-		            required = true,
-		            example = "1",
-		            schema = @Schema(type = SchemaType.INTEGER)) 
-			@PathParam("id") Integer customerId) {
-		if (customerId <= 0) {
-			return Response.serverError().entity("Id cannot be less than 1!").build();
-		}
-		boolean exist = bean.validateCustomer(customerId);
-        JsonObjectBuilder builder = Json.createObjectBuilder();
-		builder.add("exist", exist);
 		return Response.ok().entity(builder.build()).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
@@ -170,7 +145,13 @@ public class CustomerResource {
 		if (customerId <= 0) {
 			return Response.serverError().entity("Id cannot be less than 1!").build();
 		}
-		List<CustomerInventory> inventories = DtoMapper.mapToCustomerInventoryDto(bean.getInventories(customerId));
+		List<CustomerInventory> inventories;
+		try {
+			inventories = DtoMapper.mapToCustomerInventoryDto(bean.getInventories(customerId));
+		} catch (CustomerNotFoundException e) {
+			return Response.status(Response.Status.NOT_FOUND)
+					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
+		}
 		if (inventories == null || inventories.isEmpty()) {
 			return Response.status(Response.Status.NOT_FOUND)
 					.entity("Customer with id '" + customerId + "' has no inventory!").build();
@@ -278,6 +259,10 @@ public class CustomerResource {
 	@Path(value = "sell_inventory/{customerId}/{itemId}/{quantity}")
 	@APIResponses(
 	        value = {
+	            @APIResponse(
+		            responseCode = "404",
+		            description = "The Customer/Item with the given id is notfound.",
+		            content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 				@APIResponse(
 	                responseCode = "200",
 	                description = "The quantity of items has been sold for a customer inventory.") })
@@ -303,9 +288,13 @@ public class CustomerResource {
 		            example = "1",
 		            schema = @Schema(type = SchemaType.INTEGER)) 
 			@PathParam("quantity") int quantity) {
-		// TODO if the one of the ids is not found an exception should be thrown, so
-		// that the Response with Response.Status.NOT_FOUND could returned
-		boolean sold = bean.sellInventory(customerId, itemId, quantity);
+		boolean sold = false;
+		try {
+			sold = bean.sellInventory(customerId, itemId, quantity);
+		} catch (ItemNotFoundException | CustomerNotFoundException e) {
+			return Response.status(Response.Status.NOT_FOUND)
+					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
+		}
         JsonObjectBuilder builder = Json.createObjectBuilder();
 		builder.add("sold", sold);
 		return Response.ok().entity(builder.build()).type(MediaType.APPLICATION_JSON_TYPE).build();
