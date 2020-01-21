@@ -39,6 +39,7 @@ import de.novatec.showcase.order.dto.Customer;
 import de.novatec.showcase.order.dto.CustomerInventory;
 import de.novatec.showcase.order.dto.Order;
 import de.novatec.showcase.order.ejb.session.CustomerSessionLocal;
+import de.novatec.showcase.order.ejb.session.exception.OrderNotFoundException;
 import de.novatec.showcase.order.mapper.DtoMapper;
 
 @ManagedBean
@@ -246,6 +247,10 @@ public class CustomerResource {
 	@Path(value = "add_inventory/{id}")
 	@APIResponses(
 	        value = {
+		        @APIResponse(
+			        responseCode = "404",
+			        description = "No order with the id is not found",
+					content = @Content(mediaType = MediaType.TEXT_PLAIN)),
 				@APIResponse(
 	                responseCode = "200",
 	                description = "The inventory has been added.") })
@@ -259,10 +264,12 @@ public class CustomerResource {
 		            example = "1",
 		            schema = @Schema(type = SchemaType.INTEGER)) 
 			@PathParam("id") Integer orderId) {
-		// TODO addInventory method should return the changed customer id
-		// and if the id is not found an exception should be thrown, so that the
-		// Response with Response.Status.NOT_FOUND could returned
-		bean.addInventory(orderId);
+		try {
+			bean.addInventory(orderId);
+		} catch (OrderNotFoundException e) {
+			return Response.status(Response.Status.NOT_FOUND)
+					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
+		}
 		return Response.ok().build();
 	}
 

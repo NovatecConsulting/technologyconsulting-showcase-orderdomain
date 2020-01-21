@@ -20,6 +20,7 @@ import de.novatec.showcase.order.ejb.entity.Item;
 import de.novatec.showcase.order.ejb.entity.Order;
 import de.novatec.showcase.order.ejb.entity.OrderLine;
 import de.novatec.showcase.order.ejb.entity.OrderStatus;
+import de.novatec.showcase.order.ejb.session.exception.OrderNotFoundException;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
@@ -122,8 +123,11 @@ public class CustomerSession implements CustomerSessionLocal {
 	// (PATCH) call
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void addInventory(Integer orderId) {
+	public void addInventory(Integer orderId) throws OrderNotFoundException {
 		Order order = em.find(Order.class, orderId);
+		if (order == null) {
+			throw new OrderNotFoundException("The order with id " + orderId + " was not found!");
+		}
 		this.addInventory(order);
 	}
 

@@ -7,6 +7,7 @@ import de.novatec.showcase.order.ejb.entity.Customer;
 import de.novatec.showcase.order.ejb.entity.CustomerInventory;
 import de.novatec.showcase.order.ejb.entity.Order;
 import de.novatec.showcase.order.ejb.entity.OrderLine;
+import de.novatec.showcase.order.ejb.session.exception.OrderNotFoundException;
 
 public interface CustomerService {
 	public Customer getCustomer(Integer customerId);
@@ -27,7 +28,7 @@ public interface CustomerService {
 
 	public void addInventory(OrderLine orderLine);
 
-	public void addInventory(Integer orderId);
+	public void addInventory(Integer orderId) throws OrderNotFoundException;
 
 	public Customer createCustomer(Customer customer);
 
