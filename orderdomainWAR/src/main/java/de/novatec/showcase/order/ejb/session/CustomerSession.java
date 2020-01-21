@@ -188,9 +188,9 @@ public class CustomerSession implements CustomerSessionLocal {
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Integer createCustomer(Customer customer) {
+	public Customer createCustomer(Customer customer) {
 		em.persist(customer);
-		return customer.getId();
+		return customer;
 	}
 
 }

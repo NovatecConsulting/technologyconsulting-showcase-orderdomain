@@ -44,7 +44,7 @@ public class Customer {
 	public static final String BAD_CREDIT_CUSTOMERS_QUERY = "SELECT c FROM Customer c WHERE c.credit = 'BC'";
 
 	@Id
-	@Column(name = "C_ID")
+	@Column(name = "C_ID", nullable = false)
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "C_ID_GEN")
 	@TableGenerator(name = "C_ID_GEN", table = "U_SEQUENCES", pkColumnName = "S_ID", valueColumnName = "S_NEXTNUM", pkColumnValue = "C_SEQ", allocationSize = 1)
 	private Integer id;

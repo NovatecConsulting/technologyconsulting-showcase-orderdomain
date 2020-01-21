@@ -10,6 +10,7 @@ import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -310,10 +311,14 @@ public class CustomerResource {
 	@APIResponses(
 	        value = {
 	            @APIResponse(
-	                responseCode = "201",
-	                description = "The new item.",
-	                content = @Content(mediaType = MediaType.APPLICATION_JSON,
-	                schema = @Schema(implementation = Customer.class))) })
+	                responseCode = "400",
+	                description = "If the given Customer is not valid.",
+	                content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+	            @APIResponse(
+	            	responseCode = "201",
+	            	description = "The new item.",
+	            	content = @Content(mediaType = MediaType.APPLICATION_JSON,
+	            	schema = @Schema(implementation = Customer.class))) })
 	@RequestBody(
             name="customer",
             content = @Content(
@@ -325,10 +330,10 @@ public class CustomerResource {
 	@Operation(
 			summary = "Create an new customer",
 			description = "Create an new customer with the given customer.")
-	public Response createCustomer(Customer customer, @Context UriInfo uriInfo) {
-		// TODO validate customer
+	public Response createCustomer(@Valid Customer customer, @Context UriInfo uriInfo) {
 		customer.setSince(Calendar.getInstance());
-		Integer id = bean.createCustomer(DtoMapper.mapToCustomerEntity(customer));
-		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToCustomerDto(bean.getCustomer(id))).build();
+		return Response.created(uriInfo.getAbsolutePathBuilder().build())
+				.entity(DtoMapper.mapToCustomerDto(bean.createCustomer(DtoMapper.mapToCustomerEntity(customer))))
+				.build();
 	}
 }

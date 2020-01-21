@@ -6,6 +6,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Size;
+
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -15,26 +19,34 @@ import de.novatec.showcase.order.GlobalConstants;
 public class Customer {
 
 	private Integer id;
-
+	
+	@Size(max = 16)
 	private String firstName;
 
+	@Size(max = 16)
 	private String lastName;
 
+	@Size(max = 25)
 	private String contact;
 
+	@Size(max = 2)
 	private String credit;
 
+	@Digits(integer = 12, fraction = 2)
 	private BigDecimal creditLimit;
 
 	@JsonFormat(pattern = GlobalConstants.DATE_FORMAT, locale = "de_DE")
 	private Calendar since;
 
+	@Digits(integer = 12, fraction = 2)
 	private BigDecimal balance;
 
+	@Digits(integer = 12, fraction = 2)
 	private BigDecimal ytdPayment;
 
 	private List<CustomerInventory> customerInventories;
 
+	@Valid
 	private Address address;
 
 	private Integer version;
@@ -45,7 +57,6 @@ public class Customer {
 
 	public Customer(String firstName, String lastName, String contact, String credit, BigDecimal creditLimit,
 			Calendar since, BigDecimal balance, BigDecimal ytdPayment,
-//			List<CustomerInventory> customerInventories,
 			Address address) {
 		super();
 		this.firstName = firstName;

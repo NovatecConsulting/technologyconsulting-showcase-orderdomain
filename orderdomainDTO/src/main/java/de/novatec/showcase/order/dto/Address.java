@@ -2,17 +2,26 @@ package de.novatec.showcase.order.dto;
 
 import java.util.Objects;
 
+import javax.validation.constraints.Size;
+
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Schema(name="de.novatec.showcase.order.dto.Address", description="POJO that represents a customer address.")
 public class Address {
 	
+	@Size(max = 20)
 	private String street1;
+	@Size(max = 20)
 	private String street2;
+	@Size(max = 20)
 	private String city;
+	@Size(max = 2)
 	private String state;
+	@Size(max = 10)
 	private String country;
+	@Size(max = 9)
 	private String zip;
+	@Size(max = 16)
 	private String phone;
 
 	public Address() {

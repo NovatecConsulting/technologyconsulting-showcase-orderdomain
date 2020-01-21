@@ -29,6 +29,6 @@ public interface CustomerService {
 
 	public void addInventory(Integer orderId);
 
-	public Integer createCustomer(Customer customer);
+	public Customer createCustomer(Customer customer);
 
 }
