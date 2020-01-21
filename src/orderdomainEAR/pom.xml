@@ -140,7 +140,7 @@
 					</assemblyArtifact>
 					<serverName>${project.artifactId}Server</serverName>
 					<stripVersion>true</stripVersion>
-					<configDirectory>../resources/liberty/config</configDirectory>
+					<configDirectory>../../resources/liberty/config</configDirectory>
 					<bootstrapProperties>
 						<default.http.port>${liberty.var.default.http.port}</default.http.port>
 						<default.https.port>${liberty.var.default.https.port}</default.https.port>
@@ -196,7 +196,7 @@
 							<goal>copy</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>../resources/smoketest/lib</outputDirectory>
+							<outputDirectory>../..resources/smoketest/lib</outputDirectory>
 							<artifactItems>
 								<artifactItem>
 									<groupId>org.mock-server</groupId>
