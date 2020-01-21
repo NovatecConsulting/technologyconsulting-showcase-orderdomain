@@ -160,7 +160,7 @@ public class OrderSession implements OrderSessionLocal {
 				// do more with the workorder? or trigger actions via REST like described above?
 				// What about setting OrderStatus.PENDING_MANUFACTURE?
 			}
-			log.info("<END> Scheduling large order " + order.getId() + " for:");
+			log.info("<END> Scheduling large order " + order.getId());
 		} else if (shoppingCartSize <= MIN_SHOPPING_CART_SIZE) {
 			// this should be done by a the corresponding REST call
 //			customerService.addInventory(order);
