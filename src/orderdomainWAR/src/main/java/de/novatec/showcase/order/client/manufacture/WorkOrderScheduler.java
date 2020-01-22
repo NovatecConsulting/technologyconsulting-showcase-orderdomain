@@ -46,9 +46,9 @@ public class WorkOrderScheduler {
 		client.register(feature);
 		
 		try {
-			workorderUrl = (String)new InitialContext().lookup("manufacturedomain.workorder.url");
-			username = (String)new InitialContext().lookup("manufacturedomain.username");
-			password = (String)new InitialContext().lookup("manufacturedomain.password");
+			workorderUrl = (String)new InitialContext().lookup(JNDI_PROPERTY_MANUFACTUREDOMAIN_WORKORDER_URL);
+			username = (String)new InitialContext().lookup(JNDI_PROPERTY_MANUFACTUREDOMAIN_USERNAME);
+			password = (String)new InitialContext().lookup(JNDI_PROPERTY_MANUFACTUREDOMAIN_PASSWORD);
 		} catch (NamingException e) {
 			log.warn("JNDI properties " + JNDI_PROPERTY_MANUFACTUREDOMAIN_WORKORDER_URL + " or " +
 					JNDI_PROPERTY_MANUFACTUREDOMAIN_USERNAME + " or " +
@@ -67,7 +67,7 @@ public class WorkOrderScheduler {
 			return workOrder;
 		}
 		String message = "Error " + Response.Status.fromStatusCode(response.getStatus()) + " while calling "
-				+ WORKORDER_URL + " with " + workOrder;
+				+ workorderUrl + " with " + workOrder;
 		if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()
 				|| response.getStatus() == Response.Status.PRECONDITION_FAILED.getStatusCode()) {
 			message = response.readEntity(String.class);
