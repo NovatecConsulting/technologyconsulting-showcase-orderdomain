@@ -7,8 +7,7 @@
 	<logging
 		traceSpecification="com.ibm.ws.microprofile.health.*=all" />
 
-<!-- 	<httpEndpoint host="localhost" httpPort="-1" -->
-	<httpEndpoint host="localhost" httpPort="${env.HTTP_PORT}" httpsPort="${env.HTTPS_PORT}" id="defaultHttpEndpoint" />
+	<httpEndpoint host="*" httpPort="${env.HTTP_PORT}" httpsPort="${env.HTTPS_PORT}" id="defaultHttpEndpoint" />
 
 	<keyStore id="defaultKeyStore"
 		type="PKCS12"
