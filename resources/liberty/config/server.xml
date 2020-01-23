@@ -8,8 +8,7 @@
 		traceSpecification="com.ibm.ws.microprofile.health.*=all" />
 
 <!-- 	<httpEndpoint host="localhost" httpPort="-1" -->
-	<httpEndpoint host="localhost" httpPort="${default.http.port}"
-		httpsPort="${default.https.port}" id="defaultHttpEndpoint" />
+	<httpEndpoint host="localhost" httpPort="${env.HTTP_PORT}" httpsPort="${env.HTTPS_PORT}" id="defaultHttpEndpoint" />
 
 	<keyStore id="defaultKeyStore"
 		type="PKCS12"
@@ -27,9 +26,9 @@
 		<properties	url="jdbc:h2:mem:order_db;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;TRACE_LEVEL_FILE=4" />
 	</dataSource>
 	
-	<jndiEntry jndiName="manufacturedomain.workorder.url" value="http://localhost:9090/manufacturedomain/workorder/"/>
-	<jndiEntry jndiName="manufacturedomain.username" value="admin"/>
-	<jndiEntry jndiName="manufacturedomain.password" value="adminpwd"/>
+	<jndiEntry jndiName="manufacturedomain.workorder.url" value="${env.MANUFACTURE_WORKORDER_URL}"/>
+	<jndiEntry jndiName="manufacturedomain.username" value="${env.MANUFACTURE_USER}"/>
+	<jndiEntry jndiName="manufacturedomain.password" value="${env.MANUFACTURE_PASSWORD}"/>
 
 	<basicRegistry id="basic" realm="defaultRealm">
 		<user name="admin" password="adminpwd" />
