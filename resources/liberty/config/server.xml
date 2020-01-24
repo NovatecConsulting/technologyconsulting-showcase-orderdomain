@@ -9,7 +9,7 @@
 
         <httpAccessLogging id="accessLogging"/>
 <!--    <httpEndpoint host="localhost" httpPort="-1" -->
-        <httpEndpoint accessLoggingRef="accessLogging" host="localhost" httpPort="${env.HTTP_PORT}" httpsPort="${env.HTTPS_PORT}" id="defaultHttpEndpoint" />
+        <httpEndpoint accessLoggingRef="accessLogging" host="*" httpPort="${env.HTTP_PORT}" httpsPort="${env.HTTPS_PORT}" id="defaultHttpEndpoint" />
 
 
 	<keyStore id="defaultKeyStore"
