@@ -57,7 +57,7 @@ public class OrderSession implements OrderSessionLocal {
 	private ItemSessionLocal itemService;
 
 	@Inject
-	private WorkOrderScheduler workOrderScheduler;// = new WorkOrderScheduler();
+	private WorkOrderScheduler workOrderScheduler;
 
 	@Override
 	public Order getOrder(Integer orderId) throws OrderNotFoundException {
@@ -155,6 +155,7 @@ public class OrderSession implements OrderSessionLocal {
 				try {
 					log.info(orderLine.toString());
 					WorkOrder workOrder = workOrderScheduler.schedule(orderLine);
+					log.info("Received WorkOrder with id:" + workOrder.getId());
 				} catch (RestcallException e) {
 					log.error(e.getMessage());
 					throw e;

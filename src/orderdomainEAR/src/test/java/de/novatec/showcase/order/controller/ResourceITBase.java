@@ -28,7 +28,11 @@ import org.mockserver.client.MockServerClient;
 import org.mockserver.junit.MockServerRule;
 import org.mockserver.model.HttpRequest;
 import org.mockserver.model.HttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
 import de.novatec.showcase.order.GlobalConstants;
@@ -38,10 +42,12 @@ import de.novatec.showcase.order.dto.Item;
 import de.novatec.showcase.order.dto.ItemQuantityPair;
 import de.novatec.showcase.order.dto.ItemQuantityPairs;
 import de.novatec.showcase.order.dto.Order;
+import de.novatec.showcase.order.dto.WorkOrder;
 import io.netty.handler.codec.http.HttpMethod;
 
 abstract public class ResourceITBase {
 
+	private static final Logger LOG = LoggerFactory.getLogger(ResourceITBase.class);
 	protected static final String PORT = System.getProperty("http.port");
 	protected static final String BASE_URL = "http://localhost:" + PORT + "/orderdomain/";
 	protected static final String NON_EXISTING_ID = "1000";
@@ -58,20 +64,6 @@ abstract public class ResourceITBase {
 
 	protected MockServerClient mockServerClient;
 	
-	private static final String WORKORDER_JSON_RESPONSE = "{"+
-			"\"id\": 1," + 
-			"\"location\": 1," + 
-			"\"salesId\": 1," + 
-			"\"orderLineId\": 1," + 
-			"\"originalQuantity\": 10," + 
-			"\"completedQuantity\": -1," + 
-			"\"status\": \"OPEN\"," + 
-			"\"dueDate\": \"2020-12-16\"," + 
-			"\"startDate\": \"2020-01-10\"," + 
-			"\"assemblyId\": \"4\"," + 
-			"\"version\": 0"
-			+ "}";
-
 	@BeforeClass
 	public static void beforeClass() {
 		client = ClientBuilder.newClient();
@@ -92,16 +84,24 @@ abstract public class ResourceITBase {
 	@Before
 	public void before()
 	{
-		mockServerClient.when(
-				new HttpRequest()
-	            .withMethod(HttpMethod.POST.toString())
-	            .withPath("/manufacturedomain/workorder/")
-	    )
-	    .respond(
-	        new HttpResponse()
-	        	.withStatusCode(Response.Status.CREATED.getStatusCode())
-	            .withBody(WORKORDER_JSON_RESPONSE, org.mockserver.model.MediaType.APPLICATION_JSON)
-	    );
+		WorkOrder workOrder = new WorkOrder(1,1,1,10,constantDate(), "4");
+		workOrder.setId(Integer.valueOf(1));
+		workOrder.setStartDate(constantDate());
+		
+		try {
+			mockServerClient.when(
+					new HttpRequest()
+			        .withMethod(HttpMethod.POST.toString())
+			        .withPath("/manufacturedomain/workorder/")
+			)
+			.respond(
+			    new HttpResponse()
+			    	.withStatusCode(Response.Status.CREATED.getStatusCode())
+			        .withBody(new ObjectMapper().writeValueAsString(Entity.json(workOrder).getEntity()), org.mockserver.model.MediaType.APPLICATION_JSON)
+			);
+		} catch (JsonProcessingException e) {
+			LOG.error("Could not process Json from object " + workOrder + "!", e);
+		}
 	}
 
 	public static void assertResponse200(String url, Response response) {
