@@ -28,7 +28,7 @@ public class WorkOrderScheduler {
 	private static final String JNDI_PROPERTY_MANUFACTUREDOMAIN_WORKORDER_URL = "manufacturedomain.workorder.url";
 	private static final String JNDI_PROPERTY_MANUFACTUREDOMAIN_USERNAME = "manufacturedomain.username";
 	private static final String JNDI_PROPERTY_MANUFACTUREDOMAIN_PASSWORD = "manufacturedomain.password";
-	private static final Logger log = LoggerFactory.getLogger(WorkOrderScheduler.class);
+	private static final Logger LOG = LoggerFactory.getLogger(WorkOrderScheduler.class);
 	private static final int DEFAULT_LOCATION = 1;
 	private String workorderUrl;
 	private String username;
@@ -40,18 +40,22 @@ public class WorkOrderScheduler {
 		client.register(JacksonJsonProvider.class);
 		HttpAuthenticationFeature feature = HttpAuthenticationFeature.basicBuilder().build();
 		client.register(feature);
-		
+
 		try {
-			workorderUrl = (String)new InitialContext().lookup(JNDI_PROPERTY_MANUFACTUREDOMAIN_WORKORDER_URL);
-			username = (String)new InitialContext().lookup(JNDI_PROPERTY_MANUFACTUREDOMAIN_USERNAME);
-			password = (String)new InitialContext().lookup(JNDI_PROPERTY_MANUFACTUREDOMAIN_PASSWORD);
+			workorderUrl = (String) new InitialContext().lookup(JNDI_PROPERTY_MANUFACTUREDOMAIN_WORKORDER_URL);
+			username = (String) new InitialContext().lookup(JNDI_PROPERTY_MANUFACTUREDOMAIN_USERNAME);
+			password = (String) new InitialContext().lookup(JNDI_PROPERTY_MANUFACTUREDOMAIN_PASSWORD);
 		} catch (NamingException e) {
-			log.error("JNDI properties " + JNDI_PROPERTY_MANUFACTUREDOMAIN_WORKORDER_URL + " or " +
-					JNDI_PROPERTY_MANUFACTUREDOMAIN_USERNAME + " or " +
-					JNDI_PROPERTY_MANUFACTUREDOMAIN_PASSWORD + " not found!", e);
-			throw new ManufactureDomainNotConfiguredException("One or more JNDI properties for the manufacture domain is/are missing!");
+			LOG.error("JNDI properties " + JNDI_PROPERTY_MANUFACTUREDOMAIN_WORKORDER_URL + " or "
+					+ JNDI_PROPERTY_MANUFACTUREDOMAIN_USERNAME + " or " + JNDI_PROPERTY_MANUFACTUREDOMAIN_PASSWORD
+					+ " not found!", e);
+			throw new ManufactureDomainNotConfiguredException(
+					"One or more JNDI properties for the manufacture domain is/are missing!");
 		}
-		//TODO add check if variables values start with ${env. so that there is no replacement in the server.xml done
+		if (validateJNDIProperty(workorderUrl) || validateJNDIProperty(username) || validateJNDIProperty(password)) {
+			throw new ManufactureDomainNotConfiguredException(
+					"One or more JNDI properties for the manufacture domain are missing in the server.env file of open liberty!");
+		}
 	}
 
 	public WorkOrder schedule(OrderLine orderLine) throws RestcallException {
@@ -80,5 +84,9 @@ public class WorkOrderScheduler {
 	private static Builder asUser(Builder builder, String userName, String password) {
 		return builder.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, userName)
 				.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, password);
+	}
+
+	private boolean validateJNDIProperty(String value) {
+		return value.startsWith("${env.");
 	}
 }
