@@ -2,6 +2,7 @@ package de.novatec.showcase.order.client.manufacture;
 
 import java.util.Calendar;
 
+import javax.annotation.ManagedBean;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.ws.rs.client.Client;
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import de.novatec.showcase.order.dto.WorkOrder;
 import de.novatec.showcase.order.ejb.entity.OrderLine;
 
+@ManagedBean
 public class WorkOrderScheduler {
 
 	private static final String JNDI_PROPERTY_MANUFACTUREDOMAIN_WORKORDER_URL = "manufacturedomain.workorder.url";
@@ -28,18 +30,12 @@ public class WorkOrderScheduler {
 	private static final String JNDI_PROPERTY_MANUFACTUREDOMAIN_PASSWORD = "manufacturedomain.password";
 	private static final Logger log = LoggerFactory.getLogger(WorkOrderScheduler.class);
 	private static final int DEFAULT_LOCATION = 1;
-	private static final String USERNAME = System.getProperty("username.manufacture");
-	private static final String PASSWORD = System.getProperty("password.manufacture");
-	private static final String PORT = System.getProperty("http.port.manufacture");
-	private static final String BASE_URL = "http://localhost:" + PORT + "/manufacturedomain/";
-
-	private static final String WORKORDER_URL = BASE_URL + "workorder/";
-	private String workorderUrl = WORKORDER_URL;
-	private String username = USERNAME;
-	private String password = PASSWORD;
+	private String workorderUrl;
+	private String username;
+	private String password;
 	private Client client;
 
-	public WorkOrderScheduler() {
+	public WorkOrderScheduler() throws ManufactureDomainNotConfiguredException {
 		client = ClientBuilder.newClient();
 		client.register(JacksonJsonProvider.class);
 		HttpAuthenticationFeature feature = HttpAuthenticationFeature.basicBuilder().build();
@@ -50,13 +46,20 @@ public class WorkOrderScheduler {
 			username = (String)new InitialContext().lookup(JNDI_PROPERTY_MANUFACTUREDOMAIN_USERNAME);
 			password = (String)new InitialContext().lookup(JNDI_PROPERTY_MANUFACTUREDOMAIN_PASSWORD);
 		} catch (NamingException e) {
-			log.warn("JNDI properties " + JNDI_PROPERTY_MANUFACTUREDOMAIN_WORKORDER_URL + " or " +
+			log.error("JNDI properties " + JNDI_PROPERTY_MANUFACTUREDOMAIN_WORKORDER_URL + " or " +
 					JNDI_PROPERTY_MANUFACTUREDOMAIN_USERNAME + " or " +
-					JNDI_PROPERTY_MANUFACTUREDOMAIN_PASSWORD + " not found! Using system properties where possible!", e);
+					JNDI_PROPERTY_MANUFACTUREDOMAIN_PASSWORD + " not found!", e);
+			throw new ManufactureDomainNotConfiguredException("One or more JNDI properties for the manufacture domain is/are missing!");
 		}
+		//TODO add check if variables values start with ${env. so that there is no replacement in the server.xml done
 	}
 
 	public WorkOrder schedule(OrderLine orderLine) throws RestcallException {
+		System.out.println(workorderUrl +" " + username +" "+ password);
+		
+		
+		
+		
 		WorkOrder workOrder = new WorkOrder(DEFAULT_LOCATION, orderLine.getOrderId(), orderLine.getId(),
 				orderLine.getQuantity(), Calendar.getInstance(), orderLine.getItem().getId());
 		WebTarget target = client.target(workorderUrl);

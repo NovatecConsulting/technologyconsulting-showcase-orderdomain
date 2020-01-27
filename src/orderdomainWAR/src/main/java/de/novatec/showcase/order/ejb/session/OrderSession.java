@@ -9,6 +9,7 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -55,7 +56,8 @@ public class OrderSession implements OrderSessionLocal {
 	@EJB
 	private ItemSessionLocal itemService;
 
-	private WorkOrderScheduler workOrderScheduler = new WorkOrderScheduler();
+	@Inject
+	private WorkOrderScheduler workOrderScheduler;// = new WorkOrderScheduler();
 
 	@Override
 	public Order getOrder(Integer orderId) throws OrderNotFoundException {

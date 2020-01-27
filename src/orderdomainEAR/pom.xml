@@ -20,18 +20,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- Liberty configuration -->
-		<liberty.var.default.http.port>9080</liberty.var.default.http.port>
-		<liberty.var.default.https.port>9443</liberty.var.default.https.port>
-		<liberty.env.HTTP_PORT>${liberty.var.default.http.port}</liberty.env.HTTP_PORT>
-		<liberty.env.HTTPS_PORT>${liberty.var.default.https.port}</liberty.env.HTTPS_PORT>
-		<liberty.env.MANUFACTURE_WORKORDER_URL>http://localhost:9090/manufacturedomain/workorder/</liberty.env.MANUFACTURE_WORKORDER_URL>
+		<liberty.env.HTTP_PORT>9080</liberty.env.HTTP_PORT>
+		<liberty.env.HTTPS_PORT>9443</liberty.env.HTTPS_PORT>
+		<http.port.manufacture>9090</http.port.manufacture>
+		<liberty.env.MANUFACTURE_WORKORDER_URL>http://localhost:${http.port.manufacture}/manufacturedomain/workorder/</liberty.env.MANUFACTURE_WORKORDER_URL>
 		<liberty.env.MANUFACTURE_USER>admin</liberty.env.MANUFACTURE_USER>
 		<liberty.env.MANUFACTURE_PASSWORD>adminpwd</liberty.env.MANUFACTURE_PASSWORD>
-		<http.port.manufacture>9090</http.port.manufacture>
-		<username.manufacture>admin</username.manufacture>
-		<password.manufacture>adminpwd</password.manufacture>
-		
-
 	</properties>
 
 	<dependencies>
@@ -147,14 +141,6 @@
 					<serverName>${project.artifactId}Server</serverName>
 					<stripVersion>true</stripVersion>
 					<configDirectory>../../resources/liberty/config</configDirectory>
-					<bootstrapProperties>
-						<default.http.port>${liberty.var.default.http.port}</default.http.port>
-						<default.https.port>${liberty.var.default.https.port}</default.https.port>
-						<!-- needed to access via System.getProperty call in WorkOrderScheduler -->
-						<http.port.manufacture>${http.port.manufacture}</http.port.manufacture>
-						<username.manufacture>${username.manufacture}</username.manufacture>
-						<password.manufacture>${password.manufacture}</password.manufacture>
-					</bootstrapProperties>
 				</configuration>
 				<executions>
 					<execution>
@@ -237,11 +223,9 @@
 				<version>3.0.0-M4</version>
 				<configuration>
 					<systemPropertyVariables>
-						<https.port>${liberty.var.default.https.port}</https.port>
-						<http.port>${liberty.var.default.http.port}</http.port>
+						<https.port>${liberty.env.HTTPS_PORT}</https.port>
+						<http.port>${liberty.env.HTTP_PORT}</http.port>
 						<http.port.manufacture>${http.port.manufacture}</http.port.manufacture>
-						<username.manufacture>${username.manufacture}</username.manufacture>
-						<password.manufacture>${password.manufacture}</password.manufacture>
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>
