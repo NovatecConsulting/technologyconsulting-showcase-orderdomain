@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.ManagedBean;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 import javax.validation.Valid;
@@ -20,6 +21,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.novatec.showcase.order.kafka.KafkaConfiguration;
+import de.novatec.showcase.order.kafka.KafkaProducerCreator;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -54,6 +61,10 @@ public class OrderResource {
 
 	@EJB
 	private OrderSessionLocal bean;
+
+	@Inject
+	private Producer<Integer, JsonNode> producer;
+
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -195,17 +206,17 @@ public class OrderResource {
 	                description = "The new order for the given customer id.",
 	                content = @Content(mediaType = MediaType.APPLICATION_JSON,
 	                schema = @Schema(implementation = Order.class))) })
-		@RequestBody(
-            name="itemQuantityPairs",
-            content = @Content(
-                mediaType = MediaType.APPLICATION_JSON,
-                schema = @Schema(implementation = ItemQuantityPairs.class)),
-            required = true,
-            description = "example of a list with items and quantity"
-        )
+	@RequestBody(
+        name="itemQuantityPairs",
+        content = @Content(
+            mediaType = MediaType.APPLICATION_JSON,
+            schema = @Schema(implementation = ItemQuantityPairs.class)),
+        required = true,
+        description = "example of a list with items and quantity"
+    )
 	@Operation(
 			summary = "Create an new order",
-			description = "Create an new order for a given customer id and a List of items/qantities.")
+			description = "Create an new order for a given customer id and a List of items/quantities.")
 	public Response createOrder(
 			@Parameter(
 		            description = "The id of the customer where to create a new order for.",
@@ -213,11 +224,12 @@ public class OrderResource {
 		            example = "1",
 		            schema = @Schema(type = SchemaType.INTEGER)) 
 			@PathParam("customerId") Integer customerId, 
-		@Valid ItemQuantityPairs itemQuantityPairs,
+			@Valid ItemQuantityPairs itemQuantityPairs,
 			@Context UriInfo uriInfo) {
 		if (customerId.intValue() <= 0) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Customer id cannot be less than 1!").type(MediaType.TEXT_PLAIN_TYPE).build();
 		}
+
 		ShoppingCart shoppingCart = new ShoppingCart();
 		for (ItemQuantityPair itemQuantityPair : itemQuantityPairs.getItemQuantityPairs()) {
 			shoppingCart.addItem(itemQuantityPair.getItem(), itemQuantityPair.getQuantity());
@@ -244,6 +256,11 @@ public class OrderResource {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
 					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
 		}
+
+		ObjectMapper mapper = new ObjectMapper();
+		ProducerRecord<Integer, JsonNode> record = new ProducerRecord<Integer, JsonNode>(KafkaConfiguration.TOPIC_NAME, customerId.intValue(), mapper.valueToTree(itemQuantityPairs));
+
+		producer.send(record);
 		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToOrderDto(order)).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
