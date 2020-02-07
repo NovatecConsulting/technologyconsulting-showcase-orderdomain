@@ -1,0 +1,47 @@
+{
+	"namespace": "de.novatec.showcase.order",
+	"type": "record",
+	"name": "ItemQuantityPairs",
+	"doc": "A list with items and their corresponding quantity.",
+	"fields":[
+		{
+			"name":"itemQuantityPairs",
+			"type":{
+				"type": "array",
+				"items":{
+					"name": "ItemQuantityPair",
+					"namespace": "de.novatec.showcase.order",
+					"doc": "An item and its corresponding quantity.",
+					"type": "record",
+					"fields":[
+						{"name": "quantity", "type": "int"},
+						{
+							"name":"Item",
+							"namespace": "de.novatec.showcase.order",
+							"doc": "An Item which is an assembly in the manufacture domain. So the id of an item in the order domain and the id of an assembly in the manufacture domain are always equal to each other.",
+							"type":{
+                                "type":"record",
+                                "name":"Item",
+                                "fields":[
+                                	{"name": "id", "type": "string"},
+                                	{"name": "name", "type": "string"},
+                                	{"name": "desc", "type": "string"},
+                                	{"name": "price",  "type": "bytes",
+                                                        "logicalType": "decimal",
+                                                        "precision": 12,
+                                                        "scale": 2},
+                                	{"name": "discount",  "type": "bytes",
+                                                           "logicalType": "decimal",
+                                                           "precision": 6,
+                                                           "scale": 4},
+                                	{"name": "category", "type": "int"},
+                                	{"name": "version", "type": "int"}
+                                ]
+                            }
+						}
+					]
+				}
+			}
+		}
+	]
+}
