@@ -6,17 +6,19 @@ CWD_COMPOSE=$(pwd)
 source ./up-monitoring.sh
 source ./up-kafka.sh
 source ./up-schemaregistry.sh
+source ./up-app.sh
 source ./ips.sh
 popd > /dev/null
 
 MONITORING=false
 KAFKA=false
 SCHEMAREGISTRY=false
+APP=false
 
 function usage () {
     echo "$0: $1" >&2
     echo
-    echo "Usage: $0 [--with-monitoring] all kafka schemaregistry"
+    echo "Usage: $0 [--with-monitoring] all infra app kafka schemaregistry"
     echo
     return 1
 }
@@ -33,6 +35,13 @@ function parseCmd () {
                 any_selected=true
                 KAFKA=true
                 SCHEMAREGISTRY=true
+                APP=true
+                shift
+                ;;
+            infra)
+                any_selected=true
+                KAFKA=true
+                SCHEMAREGISTRY=true
                 shift
                 ;;
             kafka)
@@ -43,6 +52,11 @@ function parseCmd () {
             schemaregistry)
                 any_selected=true
                 SCHEMAREGISTRY=true
+                shift
+                ;;
+            app)
+                any_selected=true
+                APP=true
                 shift
                 ;;
             *)
@@ -82,6 +96,10 @@ function main () {
 
     if [ "$SCHEMAREGISTRY" = true ]; then
         start_schemaregistry
+    fi
+
+    if [ "$APP" = true ]; then
+        start_app
     fi
 
     echo -e "\n"

@@ -1,0 +1,23 @@
+---
+version: '2.2'
+services:
+  order:
+    build:
+      context: ../
+    image: novatec/technologyconsulting-showcase-orderdomain:latestlocal
+    restart: unless-stopped
+    depends_on:
+        - kafka1
+        - kafka2
+        - kafka3
+        - schemaregistry1
+        - schemaregistry2
+    ports:
+        - "9080:9080"
+        - "9443:9443"
+    environment:
+      HTTP_PORT: 9080
+      HTTPS_PORT: 9443
+      MANUFACTURE_WORKORDER_URL: http://manufacture:9090/manufacturedomain/workorder/
+      MANUFACTURE_USER: admin
+      MANUFACTURE_PASSWORD: adminpwd
