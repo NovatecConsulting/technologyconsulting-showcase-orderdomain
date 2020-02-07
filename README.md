@@ -15,7 +15,7 @@ In order to run the example, infrastructure components like Kafka are required. 
 Start the Docker environment:
 
 ```
-./up.sh --with-monitoring all
+./environment/up.sh --with-monitoring all
 ```
 
 For more details about the environment read the [Readme file](environment/README.adoc).

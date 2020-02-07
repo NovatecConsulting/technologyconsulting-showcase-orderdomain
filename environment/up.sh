@@ -61,7 +61,7 @@ function parseCmd () {
 function resolveCommit () {
     pushd . > /dev/null
     cd $CWD_COMPOSE
-    git rev-list --abbrev-commit --abbrev=7 -1 master || echo master
+    git rev-list --abbrev-commit --abbrev=7 -1 --all || echo master
     popd > /dev/null
 } 
 
