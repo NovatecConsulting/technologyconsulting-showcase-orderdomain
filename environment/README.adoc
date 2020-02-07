@@ -1,0 +1,179 @@
+:toc:
+:toc-title:
+:toclevels: 3
+
+:sectanchors:
+:sectlinks:
+
+= Order Domain Docker Environment
+
+This folder contains a Docker-Compose environment with all components, that are required to run the order domain:
+
+- Kafka (confluentinc/cp-kafka) in cluster mode
+- Schema Registry (confluentinc/cp-schema-registry) in cluster mode
+
+Additionally it encompases Prometheus and Grafana as monitoring tools.
+
+== Requirments
+
+To start this environment, the following is required:
+
+- Bash (for Windows use https://docs.microsoft.com/de-de/windows/wsl/install-win10[WSL] or https://cygwin.com/install.html[Cygwin])
+- https://docs.docker.com/install/#server[Docker] (https://docs.microsoft.com/de-de/archive/blogs/stevelasker/configuring-docker-for-windows-volumes[in Windows volume mounts must be enabled])
+- https://docs.docker.com/compose/install/[Docker-Compose]
+
+== Quick Start
+
+.Start complete environment
+[source,bash]
+----
+./up.sh --with-monitoring all
+----
+
+.Start environment with specific services
+[source,bash]
+----
+./up.sh --with-monitoring kafka schemaregistry
+----
+
+.Check if services within environment are running
+[source,bash]
+----
+./test.sh all
+----
+
+.Stop complete environment
+[source,bash]
+----
+./down.sh
+----
+
+== Examples
+
+Hint: _link:run-clitools.sh[]_ is just a convenient script, which runs a command in the Docker-Compose network. You may also execute _docker run --rm -it --net host confluentinc/cp-kafka:5.4.0 --bootstrap-server localhost:9192 ..._
+
+=== Kafka commands
+
+.Create and delete topics
+[source,bash,subs="attributes"]
+----
+./run-clitools.sh kafka kafka-topics --bootstrap-server kafka:9092 --create --topic test --partitions 6 --replication-factor 3
+./run-clitools.sh kafka kafka-topics --bootstrap-server kafka:9092 --describe
+./run-clitools.sh kafka kafka-topics --bootstrap-server kafka:9092 --delete --topic test
+----
+
+.Produce records
+[source,bash,subs="attributes"]
+----
+./run-clitools.sh kafka kafka-console-producer --broker-list kafka:9092 --property "parse.key=true" --property "key.separator=:" --topic test
+----
+
+.Once started, you can insert records
+----
+mykey:myvalue
+anotherkey:somevalue
+----
+
+.Consume records
+[source,bash,subs="attributes"]
+----
+./run-clitools.sh kafka kafka-console-consumer --bootstrap-server kafka:9092 --property "print.key=true" --property "print.timestamp=true" --from-beginning --topic test
+----
+
+=== Schema Registry commands
+
+With the Confluent Schema Registry it is possible to produce and consume records with a Avro schema.
+To find out how it works visit https://docs.confluent.io/{cp-version}/schema-registry/index.html.
+
+.Produce records
+[source,bash,subs="attributes"]
+----
+./run-clitools.sh schemaregistry kafka-avro-console-producer --broker-list kafka:9092 --property schema.registry.url=http://schemaregistry:8081 --topic testavro --property value.schema='{"type":"record","name":"myrecord","fields":[{"name":"f1","type":"string"}]}'
+----
+
+.Once started, you can insert records
+----
+{"f1": "value1"}
+{"f1": "value2"}
+{"f1": "value3"}
+----
+
+.Consume records
+[source,bash,subs="attributes"]
+----
+./run-clitools.sh schemaregistry kafka-avro-console-consumer --bootstrap-server kafka:9092 --property schema.registry.url=http://schemaregistry:8081 --from-beginning --topic testavro
+----
+
+It is also possible to directly interact with the Confluent Schema Registry via the Rest API.
+The API is described at https://docs.confluent.io/{cp-version}/schema-registry/develop/api.html.
+
+.Show subjects
+[source,bash]
+----
+./run-clitools.sh net curl -s -H "Accept: application/vnd.schemaregistry.v1+json" http://schemaregistry:8081/subjects
+----
+
+.Show versions of registered subject
+[source,bash]
+----
+subject=testavro-value
+./run-clitools.sh net curl -s -H "Accept: application/vnd.schemaregistry.v1+json" http://schemaregistry:8081/subjects/${subject}/versions/
+----
+
+.Show specific version of a schema within a subject
+[source,bash]
+----
+subject=testavro-value
+schemaversion=1
+./run-clitools.sh net curl -s -H "Accept: application/vnd.schemaregistry.v1+json" http://schemaregistry:8081/subjects/${subject}/versions/${schemaversion}
+----
+
+.Register a new schema for a subject
+[source,bash]
+----
+subject=mysubject
+schema={"schema":"{\"type\":\"record\",\"name\":\"myschema\",\"namespace\":\"this.is.a.test\",\"fields\":[{\"name\":\"field\",\"type\":\"string\"}]}"}
+./run-clitools.sh net curl -s -XPOST -H "Content-Type: application/vnd.schemaregistry.v1+json" -H "Accept: application/vnd.schemaregistry.v1+json" --data "${schema}" http://schemaregistry:8081/subjects/${subject}/versions
+----
+
+.The registration command returns the id of the schema
+[source,bash]
+----
+[2]
+----
+
+.Get the schema by its id
+[source,bash]
+----
+schemaid=2
+./run-clitools.sh net curl -s -H "Accept: application/vnd.schemaregistry.v1+json" http://schemaregistry:8081/schemas/ids/${schemaid}
+----
+
+In order to use the Confluent Schema Registry in your application use the serializer and deserializer from the artifacts _io.confluent:kafka-avro-serializer_ and _io.confluent:kafka-streams-avro-serde_.
+
+== Network and Credentials
+
+[options="header"]
+.Credentials
+|===
+| Service | Username | Password
+| Grafana | admin | admin
+|===
+
+[cols="h,1"]
+.Access to services within Docker network
+|===
+| Kafka Bootstrap Servers |  kafka:9092
+| Schema Registry Urls | http://schemaregistry:8081
+| Grafana Url | http://grafana:3000
+| Prometheus Url | http://prometheus:9090
+|===
+
+[cols="h,1"]
+.Access to services from host
+|===
+| Kafka Bootstrap Servers |  localhost:9192,localhost:9292,localhost:9392
+| Schema Registry Urls | http://localhost:8081,http://localhost:8082
+| Grafana Url | http://localhost:13000
+| Prometheus Url | http://localhost:19090
+|===

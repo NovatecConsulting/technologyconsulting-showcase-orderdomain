@@ -8,6 +8,18 @@ orderdomain is a part of a showcase implementation which is running on a open li
 
 and could be found under the src folder
 
+## Quickstart
+
+In order to run the example, infrastructure components like Kafka are required. As a quick start, you may use the provides Docker environment. 
+
+Start the Docker environment:
+
+```
+./up.sh --with-monitoring all
+```
+
+For more details about the environment read the [Readme file](environment/README.adoc).
+
 ## The projects consists of the following packages
 
 - **de.novatec.showcase.order.dto** - with all related order domain dto's

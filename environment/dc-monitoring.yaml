@@ -1,0 +1,25 @@
+---
+version: '2.2'
+services:
+  prometheus:
+    image: prom/prometheus:v2.15.2
+    restart: unless-stopped
+    hostname: prometheus
+    ports:
+      - "19090:9090"
+    volumes:
+      - ./configs/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
+    command:
+      - --config.file=/etc/prometheus/prometheus.yaml
+  grafana:
+    image: grafana/grafana:6.5.2
+    restart: unless-stopped
+    hostname: grafana
+    ports:
+      - "13000:3000"
+    volumes:
+      - ./configs/grafana/provisioning/:/etc/grafana/provisioning
+      - ./configs/grafana/files/dashboards/:/var/lib/grafana/dashboards
+    environment:
+      GF_SERVER_ROOT_URL: http://grafana
+      GF_SECURITY_ADMIN_PASSWORD: admin    

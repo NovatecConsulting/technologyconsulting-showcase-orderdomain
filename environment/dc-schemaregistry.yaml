@@ -1,0 +1,45 @@
+---
+version: '2.2'
+services:
+  #see https://docs.confluent.io/current/schema-registry/installation/config.html
+  schemaregistry1:
+    image: confluentinc/cp-schema-registry:${VERSION_CONFLUENT}
+    restart: unless-stopped
+    hostname: schemaregistry1
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3  
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schemaregistry1 # The advertised host name. 
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081 # (default: http://0.0.0.0:8081) Comma-separated list of listeners that listen for API requests
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092 # A list of Kafka brokers to connect. If kafkastore.connection.url is not specified, the Kafka cluster containing these bootstrap servers is used both to coordinate Schema Registry instances (primary election) and to store schema data.
+      SCHEMA_REGISTRY_MASTER_ELIGIBILITY: "true" # (default: true) If true, this node can participate in primary election.
+      SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL: full_transitive # (default: backward) The Avro compatibility type
+    networks:
+      default:
+        aliases:
+          - schemaregistry
+
+  schemaregistry2:
+    image: confluentinc/cp-schema-registry:${VERSION_CONFLUENT}
+    restart: unless-stopped
+    hostname: schemaregistry2
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3  
+    ports:
+      - "8082:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schemaregistry2 # The advertised host name. 
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081 # (default: http://0.0.0.0:8081) Comma-separated list of listeners that listen for API requests
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092 # A list of Kafka brokers to connect. If kafkastore.connection.url is not specified, the Kafka cluster containing these bootstrap servers is used both to coordinate Schema Registry instances (primary election) and to store schema data.
+      SCHEMA_REGISTRY_MASTER_ELIGIBILITY: "true" # (default: true) If true, this node can participate in primary election.
+      SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL: full_transitive # (default: backward) The Avro compatibility type
+    networks:
+      default:
+        aliases:
+          - schemaregistry

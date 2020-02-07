@@ -1,0 +1,10 @@
+---
+{% if HOST_PORT is defined and HOST_PORT %}
+hostPort: {{HOST_PORT}}
+{% elif JMX_URL is defined and JMX_URL %}
+jmxUrl: {{JMX_URL}}
+{% endif %}
+{% if RULE_FILE is defined and RULE_FILE %}
+{% include RULE_FILE %}
+{% endif %}
+...

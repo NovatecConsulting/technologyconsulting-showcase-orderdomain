@@ -1,0 +1,17 @@
+---
+version: '2.2'
+services:
+  net-cli:
+    image: dwdraju/alpine-curl-jq
+    command: /bin/bash
+    tty: true
+
+  kafka-cli:
+    image: confluentinc/cp-kafka:${VERSION_CONFLUENT}
+    command: /bin/bash
+    tty: true
+
+  schemaregistry-cli:
+    image: confluentinc/cp-schema-registry:${VERSION_CONFLUENT}
+    command: /bin/bash
+    tty: true

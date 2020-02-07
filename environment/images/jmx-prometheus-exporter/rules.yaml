@@ -1,0 +1,5 @@
+rules:
+  - pattern: "^java.lang<type=Memory><HeapMemoryUsage>(used|max)"
+  - pattern: "^java.lang<type=MemoryPool, name=(G1 Eden Space|G1 Old Gen|G1 Survivor Space)><Usage>used"
+  - pattern: "^java.lang<type=GarbageCollector, name=(G1 Young Generation|G1 Old Generation)><>(CollectionCount|CollectionTime)"
+  - pattern: "^java.lang<type=OperatingSystem><>(OpenFileDescriptorCount|MaxFileDescriptorCount)"

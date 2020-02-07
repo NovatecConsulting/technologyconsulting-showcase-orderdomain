@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 5s
+scrape_configs:
+  - job_name: kafka-jmx
+    scrape_timeout: 3s
+    static_configs:
+      - targets:
+          - "kafka1-prometheus:9404"
+          - "kafka2-prometheus:9404"
+          - "kafka3-prometheus:9404"
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: (kafka\d)-prometheus:\d+
+        target_label: node_target
+      - source_labels: [__address__]
+        regex: (kafka\d-prometheus):\d+
+        target_label: node_monitor

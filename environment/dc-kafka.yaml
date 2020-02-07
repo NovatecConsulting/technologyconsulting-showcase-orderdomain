@@ -1,0 +1,177 @@
+---
+version: '2.2'
+services:
+  zookeeper1:
+    image: confluentinc/cp-zookeeper:${VERSION_CONFLUENT}
+    restart: unless-stopped
+    hostname: zookeeper1
+    ports:
+        - "2181:2181"
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: zookeeper1:2888:3888;zookeeper2:2888:3888;zookeeper3:2888:3888
+
+  zookeeper2:
+    image: confluentinc/cp-zookeeper:${VERSION_CONFLUENT}
+    restart: unless-stopped
+    hostname: zookeeper2
+    ports:
+        - "2182:2181"
+    environment:
+      ZOOKEEPER_SERVER_ID: 2
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: zookeeper1:2888:3888;zookeeper2:2888:3888;zookeeper3:2888:3888
+
+  zookeeper3:
+    image: confluentinc/cp-zookeeper:${VERSION_CONFLUENT}
+    restart: unless-stopped
+    hostname: zookeeper3
+    ports:
+        - "2183:2181"
+    environment:
+      ZOOKEEPER_SERVER_ID: 3
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: zookeeper1:2888:3888;zookeeper2:2888:3888;zookeeper3:2888:3888
+
+  kafka1:
+    image: confluentinc/cp-kafka:${VERSION_CONFLUENT}
+    restart: unless-stopped
+    hostname: kafka1
+    depends_on:
+      - zookeeper1
+      - zookeeper2
+      - zookeeper3
+    ports:
+      - "9192:9192"
+    environment:
+      # The broker id uniquely identifies a Kafka broker instance
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092,PLAINTEXT_HOST://localhost:9192
+      KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: "false"
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: kafka1
+    networks:
+      default:
+        aliases:
+          - kafka
+  kafka1-prometheus:
+    build:
+      context: ./images/jmx-prometheus-exporter/
+      args:
+        VERSION: ${VERSION_JMX_PROMETHEUS_EXPORTER}
+        CHECKSUM_SHA256: ${SHA256_JMX_PROMETHEUS_EXPORTER}
+    image: jmx-prometheus-exporter:${VERSION_JMX_PROMETHEUS_EXPORTER}
+    restart: unless-stopped
+    depends_on:
+      - kafka1
+    ports:
+      - "9414:9404"
+    environment:
+      EXPORTER_PORT: 9404
+      HOST_PORT: kafka1:9999
+    volumes:
+      - ./configs/kafka-prometheus/rules.yaml:/etc/jmx-prometheus-exporter/rules.yaml
+
+  kafka2:
+    image: confluentinc/cp-kafka:${VERSION_CONFLUENT}
+    restart: unless-stopped
+    hostname: kafka2
+    depends_on:
+      - zookeeper1
+      - zookeeper2
+      - zookeeper3
+    ports:
+      - "9292:9292"
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9092,PLAINTEXT_HOST://localhost:9292
+      KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: "false"
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: kafka2
+    networks:
+      default:
+        aliases:
+          - kafka
+  kafka2-prometheus:
+    build:
+      context: ./images/jmx-prometheus-exporter/
+      args:
+        VERSION: ${VERSION_JMX_PROMETHEUS_EXPORTER}
+        CHECKSUM_SHA256: ${SHA256_JMX_PROMETHEUS_EXPORTER}
+    image: jmx-prometheus-exporter:${VERSION_JMX_PROMETHEUS_EXPORTER}
+    restart: unless-stopped
+    depends_on:
+        - kafka2
+    ports:
+        - "9424:9404"
+    environment:
+        EXPORTER_PORT: 9404
+        HOST_PORT: kafka2:9999
+    volumes:
+        - ./configs/kafka-prometheus/rules.yaml:/etc/jmx-prometheus-exporter/rules.yaml
+
+  kafka3:
+    image: confluentinc/cp-kafka:${VERSION_CONFLUENT}
+    restart: unless-stopped
+    hostname: kafka3
+    depends_on:
+      - zookeeper1
+      - zookeeper2
+      - zookeeper3
+    ports:
+      - "9392:9392"
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9092,PLAINTEXT_HOST://localhost:9392
+      KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: "false"
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: kafka3
+    networks:
+      default:
+        aliases:
+          - kafka
+  kafka3-prometheus:
+    build:
+      context: ./images/jmx-prometheus-exporter/
+      args:
+        VERSION: ${VERSION_JMX_PROMETHEUS_EXPORTER}
+        CHECKSUM_SHA256: ${SHA256_JMX_PROMETHEUS_EXPORTER}
+    image: jmx-prometheus-exporter:${VERSION_JMX_PROMETHEUS_EXPORTER}
+    restart: unless-stopped
+    depends_on:
+        - kafka3
+    ports:
+        - "9434:9404"
+    environment:
+        EXPORTER_PORT: 9404
+        HOST_PORT: kafka3:9999
+    volumes:
+        - ./configs/kafka-prometheus/rules.yaml:/etc/jmx-prometheus-exporter/rules.yaml
