@@ -18,6 +18,8 @@ Start the Docker environment:
 ./environment/up.sh --with-monitoring all
 ```
 
+This command also builds and starts the application itself within the Docker environment.
+
 For more details about the environment read the [Readme file](environment/README.adoc).
 
 ## The projects consists of the following packages

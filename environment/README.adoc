@@ -14,6 +14,10 @@ This folder contains a Docker-Compose environment with all components, that are 
 
 Additionally it encompases Prometheus and Grafana as monitoring tools.
 
+The environment also contains the order domain apps:
+
+- Order
+
 == Requirments
 
 To start this environment, the following is required:
@@ -33,7 +37,7 @@ To start this environment, the following is required:
 .Start environment with specific services
 [source,bash]
 ----
-./up.sh --with-monitoring kafka schemaregistry
+./up.sh --with-monitoring kafka schemaregistry app
 ----
 
 .Check if services within environment are running
