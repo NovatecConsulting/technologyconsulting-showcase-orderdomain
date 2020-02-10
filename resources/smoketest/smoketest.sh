@@ -4,9 +4,7 @@ declare PORT=9080
 
 . `dirname $0`/options.sh
 . `dirname $0`/mockserver.sh
-. `dirname $0`/setup-db.sh
-. `dirname $0`/business-calls.sh
-
+. `dirname $0`/orderdomain.sh
 
 function main
 {
