@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 declare HOST=localhost
 declare PORT=9080
 
