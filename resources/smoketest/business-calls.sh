@@ -3,7 +3,6 @@ declare HOST=localhost
 declare PORT=9080
 
 . `dirname $0`/options.sh
-. `dirname $0`/mockserver.sh
 
 
 function main_business_calls
