@@ -33,7 +33,7 @@ There is a little script smoketest.sh in the ./resources/smoketest folder which 
 - call addInventory for created customer
 - call sellInventory for created customer 
 
-The smoketest.sh script consist of two sub scripts - the setup-db.sh and business-calls.sh script. The first one setup the database of the orderdomain via some REST calls. The data for the calls could be found in the folder ./resources/smoketest/data. The second script starts/stops a mockserver which is used for emulating the manufature domain in the business calls. The exceptations for the calls could also be found in data folder.
+The smoketest.sh script consist of two sub scripts - the setup-db.sh and business-calls.sh script. The first one setup the database of the orderdomain via some REST calls. The data for the calls could be found in the folder ./resources/smoketest/data. The smoketest script additionally starts/stops a mockserver which is used for emulating the manufature domain in the business calls. The exceptations for the calls could also be found in data folder. All three scripts have the optional parameters -h for setting the host and -p for setting the port of the domain which is called. The host defaults to localhost and port to 9080.
 
 ## openAPI
 check [openAPI](http://localhost:9080/api/explorer/) if the server is running for the  API of the domain
