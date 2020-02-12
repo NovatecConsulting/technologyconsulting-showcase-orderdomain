@@ -24,7 +24,6 @@ import javax.ws.rs.core.UriInfo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.novatec.showcase.order.kafka.KafkaConfiguration;
-import de.novatec.showcase.order.kafka.KafkaProducerCreator;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -64,6 +63,8 @@ public class OrderResource {
 
 	@Inject
 	private Producer<Integer, JsonNode> producer;
+
+	private static final ObjectMapper mapper = new ObjectMapper();
 
 
 	@GET
@@ -257,10 +258,10 @@ public class OrderResource {
 					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
 		}
 
-		ObjectMapper mapper = new ObjectMapper();
-		ProducerRecord<Integer, JsonNode> record = new ProducerRecord<Integer, JsonNode>(KafkaConfiguration.TOPIC_NAME, customerId.intValue(), mapper.valueToTree(itemQuantityPairs));
-
+		ProducerRecord<Integer,JsonNode> record = new ProducerRecord<Integer, JsonNode>(KafkaConfiguration.TOPIC_NAME, customerId.intValue(), mapper.valueToTree(itemQuantityPairs));
 		producer.send(record);
+
+
 		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToOrderDto(order)).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
