@@ -1,9 +1,12 @@
 package de.novatec.showcase.order.controller;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import javax.annotation.ManagedBean;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -16,6 +19,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -26,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.novatec.showcase.order.kafka.KafkaConfiguration;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -183,6 +189,7 @@ public class OrderResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path(value = "{customerId}")
+	@Asynchronous
 	@RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME})
 	@APIResponses(
 	        value = {
@@ -218,17 +225,18 @@ public class OrderResource {
 	@Operation(
 			summary = "Create an new order",
 			description = "Create an new order for a given customer id and a List of items/quantities.")
-	public Response createOrder(
+	public void createOrder(
 			@Parameter(
 		            description = "The id of the customer where to create a new order for.",
 		            required = true,
 		            example = "1",
 		            schema = @Schema(type = SchemaType.INTEGER)) 
-			@PathParam("customerId") Integer customerId, 
+			@PathParam("customerId") Integer customerId,
 			@Valid ItemQuantityPairs itemQuantityPairs,
-			@Context UriInfo uriInfo) {
+			@Context UriInfo uriInfo,
+			@Suspended final AsyncResponse asyncResponse) {
 		if (customerId.intValue() <= 0) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Customer id cannot be less than 1!").type(MediaType.TEXT_PLAIN_TYPE).build();
+			asyncResponse.resume(Response.status(Response.Status.BAD_REQUEST).entity("Customer id cannot be less than 1!").type(MediaType.TEXT_PLAIN_TYPE).build());
 		}
 
 		ShoppingCart shoppingCart = new ShoppingCart();
@@ -238,31 +246,42 @@ public class OrderResource {
 		de.novatec.showcase.order.ejb.entity.Order order;
 		try {
 			order = bean.newOrder(customerId, shoppingCart);
+			ProducerRecord<Integer,JsonNode> record = new ProducerRecord<Integer, JsonNode>(KafkaConfiguration.TOPIC_NAME, customerId.intValue(), mapper.valueToTree(itemQuantityPairs));
+			Future<RecordMetadata> kafkaStatus = producer.send(record);
+			kafkaStatus.get();
+			asyncResponse.resume(Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToOrderDto(order)).type(MediaType.APPLICATION_JSON_TYPE).build());
 		} catch (CustomerNotFoundException e) {
-			return Response.status(Response.Status.NOT_FOUND)
-					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
+			asyncResponse.resume(Response.status(Response.Status.NOT_FOUND)
+					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
 		} catch (ItemNotFoundException e) {
-			return Response.status(Response.Status.NOT_FOUND)
-					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
+			asyncResponse.resume(Response.status(Response.Status.NOT_FOUND)
+					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
 		} catch (InsufficientCreditException e) {
-			return Response.status(Response.Status.PRECONDITION_FAILED)
-					.entity("The customer with id '" + customerId + "' has insufficient credit!").type(MediaType.TEXT_PLAIN_TYPE).build();
+			asyncResponse.resume(Response.status(Response.Status.PRECONDITION_FAILED)
+					.entity("The customer with id '" + customerId + "' has insufficient credit!").type(MediaType.TEXT_PLAIN_TYPE).build());
 		} catch (PriceException e) {
-			return Response.status(Response.Status.PRECONDITION_FAILED)
-					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
+			asyncResponse.resume(Response.status(Response.Status.PRECONDITION_FAILED)
+					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
 		} catch (SpecificationException e) {
-			return Response.status(Response.Status.PRECONDITION_FAILED)
-					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
+			asyncResponse.resume(Response.status(Response.Status.PRECONDITION_FAILED)
+					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
 		} catch (RestcallException e) {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
-		}
+			asyncResponse.resume(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
+		} catch (Exception e) {
+		asyncResponse.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
+				.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
+	}
 
-		ProducerRecord<Integer,JsonNode> record = new ProducerRecord<Integer, JsonNode>(KafkaConfiguration.TOPIC_NAME, customerId.intValue(), mapper.valueToTree(itemQuantityPairs));
-		producer.send(record);
-
-
-		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToOrderDto(order)).type(MediaType.APPLICATION_JSON_TYPE).build();
+//		ProducerRecord<Integer,JsonNode> record = new ProducerRecord<Integer, JsonNode>(KafkaConfiguration.TOPIC_NAME, customerId.intValue(), mapper.valueToTree(itemQuantityPairs));
+//		Future<RecordMetadata> kafkaStatus = producer.send(record);
+//		try {
+//			kafkaStatus.get();
+//			asyncResponse.resume(Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToOrderDto(order)).type(MediaType.APPLICATION_JSON_TYPE).build());
+//		} catch (Exception e) {
+//			asyncResponse.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
+//					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
+//		}
 	}
 
 	@DELETE
