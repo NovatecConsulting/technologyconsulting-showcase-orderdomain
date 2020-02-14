@@ -14,12 +14,19 @@
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<properties>
+		<springboot.version>2.2.4.RELEASE</springboot.version>
+		<springframework.version>2.4.2.RELEASE</springframework.version>
+		<kafka.version>2.4.0</kafka.version>
+	</properties>
+
 	<name>orderdomainParent</name>
 
     <modules>
         <module>orderdomainDTO</module>
         <module>orderdomainWAR</module>
         <module>orderdomainEAR</module>
-    </modules>
+		<module>inventoryService</module>
+	</modules>
 
 </project>

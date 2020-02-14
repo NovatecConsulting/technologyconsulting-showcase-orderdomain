@@ -1,7 +1,6 @@
 package de.novatec.showcase.order.controller;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import javax.annotation.ManagedBean;
@@ -271,17 +270,8 @@ public class OrderResource {
 		} catch (Exception e) {
 		asyncResponse.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
 				.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
-	}
+		}
 
-//		ProducerRecord<Integer,JsonNode> record = new ProducerRecord<Integer, JsonNode>(KafkaConfiguration.TOPIC_NAME, customerId.intValue(), mapper.valueToTree(itemQuantityPairs));
-//		Future<RecordMetadata> kafkaStatus = producer.send(record);
-//		try {
-//			kafkaStatus.get();
-//			asyncResponse.resume(Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToOrderDto(order)).type(MediaType.APPLICATION_JSON_TYPE).build());
-//		} catch (Exception e) {
-//			asyncResponse.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
-//					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
-//		}
 	}
 
 	@DELETE

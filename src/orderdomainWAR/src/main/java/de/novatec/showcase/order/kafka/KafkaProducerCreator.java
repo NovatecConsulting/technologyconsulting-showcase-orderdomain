@@ -1,7 +1,6 @@
 package de.novatec.showcase.order.kafka;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.connect.json.JsonSerializer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
@@ -25,7 +24,7 @@ public class KafkaProducerCreator {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,broker!=null?broker:KafkaConfiguration.KAFKA_BROKERS);
         props.put(ProducerConfig.CLIENT_ID_CONFIG, KafkaConfiguration.PRODUCER_CLIENT_ID);
         props.put(ProducerConfig.ACKS_CONFIG,KafkaConfiguration.ACKS_CONFIG);
-        //Timeout configuration of Kafka producer
+        //Timeout configuration of Kafka producer. Default configuration: send() method timeout after 2 minutes
 //        props.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG,10000);
 //        props.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG,5000);
 //        props.put(ProducerConfig.MAX_BLOCK_MS_CONFIG,8000);
