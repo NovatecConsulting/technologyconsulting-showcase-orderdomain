@@ -24,7 +24,8 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
     and publish it back to the 'order' topic.
 */
 
-@Service
+@Deprecated
+//@Service
 public class InventoryService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 

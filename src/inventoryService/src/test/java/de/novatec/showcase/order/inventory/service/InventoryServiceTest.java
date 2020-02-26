@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -12,13 +12,13 @@ import static org.junit.Assert.assertEquals;
 
 
 
-class InventoryServiceTest {
+public class InventoryServiceTest {
 
     InventoryService inventoryService = new InventoryService();
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    void testUpdateStatus() throws Exception {
+    public void testUpdateStatus() throws Exception {
         String jsonString = "{ \"k1\" : \"v1\", \"k2\" : \"v2\" }";
         JsonNode order = objectMapper.readTree(jsonString);
         Boolean updated = inventoryService.updateStatus((ObjectNode)order);
