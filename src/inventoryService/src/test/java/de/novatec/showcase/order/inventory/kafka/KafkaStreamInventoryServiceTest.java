@@ -23,7 +23,6 @@ import org.junit.Test;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 
 public class KafkaStreamInventoryServiceTest {
@@ -54,15 +53,14 @@ public class KafkaStreamInventoryServiceTest {
     @Test
     public void kafkaStreamTopology() throws JsonProcessingException {
         TestInputTopic<Integer, JsonNode> inputTopic = testDriver.createInputTopic(topic, new IntegerSerializer(), new JsonSerializer());
-        String jsonString = "{ \"k1\" : \"v1\", \"k2\" : \"v2\" }";
+        String jsonString = "{ \"status\" : \"DEFERRED\", \"k2\" : \"v2\" }";
         JsonNode order = objectMapper.readTree(jsonString);
         inputTopic.pipeInput(1,order);
 
         TestOutputTopic<Integer, JsonNode> outputTopic = testDriver.createOutputTopic(topic, new IntegerDeserializer(), new JsonDeserializer());
         ObjectNode output = (ObjectNode)outputTopic.readValue();
 
-        assertTrue(output.has("status"));
         String status = output.get("status").asText();
-        assertEquals("fulfilled",status);
+        assertEquals("FULFILLED",status);
     }
 }

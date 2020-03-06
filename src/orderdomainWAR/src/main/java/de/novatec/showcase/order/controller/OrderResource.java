@@ -245,7 +245,8 @@ public class OrderResource {
 		de.novatec.showcase.order.ejb.entity.Order order;
 		try {
 			order = bean.newOrder(customerId, shoppingCart);
-			ProducerRecord<Integer,JsonNode> record = new ProducerRecord<Integer, JsonNode>(KafkaConfiguration.TOPIC_NAME, customerId.intValue(), mapper.valueToTree(itemQuantityPairs));
+			Order order_dto=DtoMapper.mapToOrderDto(order);
+			ProducerRecord<Integer,JsonNode> record = new ProducerRecord<Integer, JsonNode>(KafkaConfiguration.TOPIC_NAME, order_dto.getId(), mapper.valueToTree(order_dto));
 			Future<RecordMetadata> kafkaStatus = producer.send(record);
 			kafkaStatus.get();
 			asyncResponse.resume(Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToOrderDto(order)).type(MediaType.APPLICATION_JSON_TYPE).build());

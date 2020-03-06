@@ -19,13 +19,13 @@ public class InventoryServiceTest {
 
     @Test
     public void testUpdateStatus() throws Exception {
-        String jsonString = "{ \"k1\" : \"v1\", \"k2\" : \"v2\" }";
+        String jsonString = "{ \"status\" : \"DEFERRED\", \"k2\" : \"v2\" }";
         JsonNode order = objectMapper.readTree(jsonString);
         Boolean updated = inventoryService.updateStatus((ObjectNode)order);
-        assertTrue(order.has("status"));
+        assertTrue(updated);
         String status = order.get("status").asText();
-        assertEquals("fulfilled",status);
-        jsonString = "{ \"status\" : \"v1\", \"k2\" : \"v2\" }";
+        assertEquals("FULFILLED",status);
+        jsonString = "{ \"status\" : \"FULFILLED\", \"k2\" : \"v2\" }";
         order = objectMapper.readTree(jsonString);
         updated = inventoryService.updateStatus((ObjectNode)order);
         assertFalse(updated);

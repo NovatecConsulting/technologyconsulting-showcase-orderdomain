@@ -59,8 +59,8 @@ public class InventoryService {
     }
 
     public boolean updateStatus(ObjectNode order){
-        if(!order.has("status")) {
-            order.put("status", "fulfilled");
+        if(!order.get("status").asText().equals("FULFILLED")) {
+            order.put("status", "FULFILLED");
             return true;
         }
         return false;

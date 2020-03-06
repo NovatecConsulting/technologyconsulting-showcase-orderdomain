@@ -54,7 +54,7 @@
     </dependencies>
 
     <build>
-        <finalName>inventoryService</finalName>
+        <finalName>inventoryservice</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -52,7 +52,7 @@ public class KafkaStreamInventoryService {
         final StreamsBuilder streamsBuilder = new StreamsBuilder();
 
         KStream<Integer, JsonNode> order = streamsBuilder.stream(topic, Consumed.with(Serdes.Integer(), jsonSerde));
-        KStream<Integer, JsonNode> updatedOrder = order.filter((key, value) -> notUpdated(value))
+        KStream<Integer, JsonNode> updatedOrder = order.filter((key, value) -> notFulfilled(value))
                                                        .mapValues(value -> updateStatus(value));
 
         updatedOrder.to(topic, Produced.with(Serdes.Integer(),jsonSerde));
@@ -64,9 +64,9 @@ public class KafkaStreamInventoryService {
         this.topic = topic;
     }
 
-    private boolean notUpdated(JsonNode value){
+    private boolean notFulfilled(JsonNode value){
         ObjectNode order = (ObjectNode)value;
-        if(!order.has("status")) {
+        if(!order.get("status").asText().equals("FULFILLED")) {
             return true;
         }
         return false;
@@ -74,7 +74,7 @@ public class KafkaStreamInventoryService {
 
     private JsonNode updateStatus(JsonNode value){
         ObjectNode order = (ObjectNode)value;
-        order.put("status", "fulfilled");
+        order.put("status", "FULFILLED");
         return order;
     }
 
