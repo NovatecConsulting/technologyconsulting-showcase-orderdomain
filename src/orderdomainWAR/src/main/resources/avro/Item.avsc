@@ -1,0 +1,23 @@
+{"name": "Item",
+ "namespace":"de.novatec.showcase.order.dto",
+ "type": "record",
+ "fields": [
+    {"name": "id","type": "string"},
+    {"name": "name","type": "string"},
+    {"name": "price","type": {"type": "bytes",
+                              "logicalType": "decimal",
+                              "precision": 12,
+                              "scale": 2
+                             }
+    },
+    {"name": "discount","type": {"type": "bytes",
+                                 "logicalType": "decimal",
+                                 "precision": 6,
+                                 "scale": 1
+                                },"doc": "scale is temporarily set to 1 because of test data"
+    },
+    {"name": "category","type": "double"},
+    {"name": "version","type": "int"},
+    {"name": "description","type": "string"}
+    ]
+}

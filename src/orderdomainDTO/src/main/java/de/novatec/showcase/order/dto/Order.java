@@ -35,7 +35,7 @@ public class Order {
 
 	@Digits(integer = 4, fraction = 2)
 	private BigDecimal discount;
-	
+
 	private List<OrderLine> orderLines;
 
 	private Customer customer;

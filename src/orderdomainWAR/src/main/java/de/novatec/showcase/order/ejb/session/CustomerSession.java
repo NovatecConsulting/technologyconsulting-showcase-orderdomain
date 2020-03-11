@@ -1,6 +1,8 @@
 package de.novatec.showcase.order.ejb.session;
 
 import java.math.BigDecimal;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -122,7 +124,8 @@ public class CustomerSession implements CustomerSessionLocal {
 			this.addInventory(orderLine);
 		}
 		order.setStatus(OrderStatus.SHIPPED);
-		order.setShipDate(Calendar.getInstance());
+		ZoneId zoneId = ZoneId.of("Europe/Paris");
+		order.setShipDate(ZonedDateTime.ofInstant(Calendar.getInstance().toInstant(),zoneId).toLocalDate());
 	}
 
 	// should this query really select orders in all states??? DEFERRED,

@@ -1,6 +1,7 @@
 package de.novatec.showcase.order.ejb.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -38,8 +39,8 @@ public class OrderLine {
 	private int quantity;
 
 	@Column(name = "OL_SHIP_DATE")
-	@Temporal(value = TemporalType.DATE)
-	private Calendar shipDate;
+//	@Temporal(value = TemporalType.DATE)
+	private LocalDate shipDate;
 
 	@Column(name = "OL_STATUS")
 	private OrderStatus status;
@@ -109,11 +110,11 @@ public class OrderLine {
 		this.quantity = quantity;
 	}
 
-	public Calendar getShipDate() {
+	public LocalDate getShipDate() {
 		return shipDate;
 	}
 
-	public void setShipDate(Calendar shipDate) {
+	public void setShipDate(LocalDate shipDate) {
 		this.shipDate = shipDate;
 	}
 

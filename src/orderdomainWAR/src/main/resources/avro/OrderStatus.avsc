@@ -1,0 +1,5 @@
+{"namespace": "de.novatec.showcase.order.dto",
+ "type": "enum",
+ "name": "OrderStatus",
+ "symbols": ["DEFERRED", "PENDING_MANUFACTUR", "SHIPPED", "DELETED", "UNKNOWN", "FULFILLED"]
+}

@@ -1,6 +1,8 @@
 package de.novatec.showcase.order.controller;
 
 import java.math.BigDecimal;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.List;
 
@@ -37,7 +39,6 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tags;
 import de.novatec.showcase.order.GlobalConstants;
 import de.novatec.showcase.order.dto.Customer;
 import de.novatec.showcase.order.dto.CustomerInventory;
-import de.novatec.showcase.order.dto.Order;
 import de.novatec.showcase.order.ejb.session.CustomerSessionLocal;
 import de.novatec.showcase.order.ejb.session.exception.CustomerNotFoundException;
 import de.novatec.showcase.order.ejb.session.exception.ItemNotFoundException;
@@ -327,9 +328,11 @@ public class CustomerResource {
 			summary = "Create an new customer",
 			description = "Create an new customer with the given customer.")
 	public Response createCustomer(@Valid Customer customer, @Context UriInfo uriInfo) {
-		customer.setSince(Calendar.getInstance());
+		ZoneId zoneId = ZoneId.of("Europe/Paris");
+		customer.setSince(ZonedDateTime.ofInstant(Calendar.getInstance().toInstant(),zoneId).toLocalDate());
 		return Response.created(uriInfo.getAbsolutePathBuilder().build())
 				.entity(DtoMapper.mapToCustomerDto(bean.createCustomer(DtoMapper.mapToCustomerEntity(customer))))
 				.build();
 	}
 }
+

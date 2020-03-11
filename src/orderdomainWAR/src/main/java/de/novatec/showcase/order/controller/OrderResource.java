@@ -67,7 +67,7 @@ public class OrderResource {
 	private OrderSessionLocal bean;
 
 	@Inject
-	private Producer<Integer, JsonNode> producer;
+	private Producer<Integer, Order> producer;
 
 	private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -246,7 +246,7 @@ public class OrderResource {
 		try {
 			order = bean.newOrder(customerId, shoppingCart);
 			Order order_dto=DtoMapper.mapToOrderDto(order);
-			ProducerRecord<Integer,JsonNode> record = new ProducerRecord<Integer, JsonNode>(KafkaConfiguration.TOPIC_NAME, order_dto.getId(), mapper.valueToTree(order_dto));
+			ProducerRecord<Integer,Order> record = new ProducerRecord<Integer, Order>(KafkaConfiguration.TOPIC_NAME, order_dto.getId(), order_dto);
 			Future<RecordMetadata> kafkaStatus = producer.send(record);
 			kafkaStatus.get();
 			asyncResponse.resume(Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToOrderDto(order)).type(MediaType.APPLICATION_JSON_TYPE).build());

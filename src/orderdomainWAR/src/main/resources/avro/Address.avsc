@@ -1,0 +1,13 @@
+{"name":"Address",
+ "namespace":"de.novatec.showcase.order.dto",
+ "type": "record",
+ "fields": [
+    {"name": "street1","type": "string"},
+    {"name": "street2","type": "string"},
+    {"name": "city","type": "string"},
+    {"name": "state","type": "string"},
+    {"name": "country","type": "string"},
+    {"name": "zip","type": "string"},
+    {"name": "phone","type": "string"}
+ ]
+}

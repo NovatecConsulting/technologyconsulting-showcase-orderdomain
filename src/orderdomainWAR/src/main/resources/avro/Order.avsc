@@ -1,0 +1,109 @@
+{
+  "name": "Order",
+  "type": "record",
+  "namespace": "de.novatec.showcase.order.dto",
+  "doc": "An order",
+  "fields": [
+    {"name": "id","type": "int"},
+    {"name": "status","type":"OrderStatus"},
+    {"name": "shipDate","type": ["null",{"type": "int","logicalType": "date"}],"default":null},
+    {"name": "entryDate","type": {"type": "int","logicalType": "date"}},
+    {"name": "total","type": {"type": "bytes",
+                              "logicalType": "decimal",
+                              "precision": 12,
+                              "scale": 2
+                             }
+    },
+    {"name": "discount","type": {"type": "bytes",
+                                 "logicalType": "decimal",
+                                 "precision": 4,
+                                 "scale": 1
+                                },"doc": "scale is temporarily set to 1 because of test data"
+    },
+    {"name": "orderLines",
+      "type": {
+        "type": "array",
+        "items": {"name": "OrderLine",
+                  "namespace": "de.novatec.showcase.order.dto",
+                  "type": "record",
+                  "fields": [
+                     {"name": "id","type": "int"},
+                     {"name": "orderId","type": "int"},
+                     {"name": "quantity","type": "int"},
+                     {"name": "shipDate","type": ["null",{"type": "int","logicalType": "date"}],"default":null},
+                     {"name": "status","type":"OrderStatus"},
+                     {"name": "totalValue","type": {"type": "bytes",
+                                                    "logicalType": "decimal",
+                                                    "precision": 4,
+                                                    "scale": 2
+                                                   }
+                     },
+                     {"name": "msrpAtPurchase","type": {"type": "bytes",
+                                                        "logicalType": "decimal",
+                                                        "precision": 4,
+                                                        "scale": 2
+                                                       }
+                     },
+                     {"name": "item", "type":"Item"},
+                     {"name": "version","type": "int"}
+                     ]
+                 }
+      }
+    },
+    {"name": "customer","type": {"name": "Customer",
+                                 "namespace": "de.novatec.showcase.order.dto",
+                                 "type": "record",
+                                 "fields": [
+                                   {"name": "id","type": "int"},
+                                   {"name": "firstName","type": "string"},
+                                   {"name": "lastName","type": "string"},
+                                   {"name": "contact","type": "string"},
+                                   {"name": "credit","type": "string"},
+                                   {"name": "creditLimit","type": {"type": "bytes",
+                                                                   "logicalType": "decimal",
+                                                                   "precision": 12,
+                                                                   "scale": 2
+                                                                  }
+                                   },
+                                   {"name": "since","type": {"type": "int","logicalType": "date"}},
+                                   {"name": "balance","type": {"type": "bytes",
+                                                               "logicalType": "decimal",
+                                                               "precision": 12,
+                                                               "scale": 2
+                                                              }
+                                   },
+                                   {"name": "ytdPayment","type": {"type": "bytes",
+                                                                  "logicalType": "decimal",
+                                                                  "precision": 12,
+                                                                  "scale": 2
+                                                                 }
+                                   },
+                                   {"name": "customerInventories","type": {
+                                                                        "type": "array",
+                                                                        "items": {"name": "CustomerInventory",
+                                                                                  "namespace": "de.novatec.showcase.order.dto",
+                                                                                  "type": "record",
+                                                                                  "fields": [
+                                                                                     {"name": "id","type": "int"},
+                                                                                     {"name": "customerId","type": "int"},
+                                                                                     {"name": "vehicle","type": "Item"},
+                                                                                     {"name": "totalCost","type": {"type": "bytes",
+                                                                                                                   "logicalType": "decimal",
+                                                                                                                   "precision": 4,
+                                                                                                                   "scale": 2
+                                                                                                                  }
+                                                                                     },
+                                                                                     {"name": "quantity","type": "int"},
+                                                                                     {"name": "version","type": "int"}
+                                                                                     ]
+                                                                                 }
+                                                                        }
+                                   },
+                                   {"name": "address","type": "Address"},
+                                   {"name": "version","type": "int"}
+                                 ]
+                                }
+    },
+    {"name": "version","type": "int"}
+  ]
+}

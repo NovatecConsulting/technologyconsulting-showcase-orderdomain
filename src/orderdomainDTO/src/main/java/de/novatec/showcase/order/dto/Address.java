@@ -8,7 +8,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Schema(name="de.novatec.showcase.order.dto.Address", description="POJO that represents a customer address.")
 public class Address {
-	
+
 	@Size(max = 20)
 	private String street1;
 	@Size(max = 20)

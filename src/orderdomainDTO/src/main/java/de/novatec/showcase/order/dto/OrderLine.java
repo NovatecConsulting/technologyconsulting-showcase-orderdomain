@@ -12,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Schema(name="OrderLine", description="POJO that represents a order line.")
 public class OrderLine {
-	
+
 	private Integer id;
-	
+
 	private Integer orderId;
 
 	private int quantity;
@@ -66,7 +66,7 @@ public class OrderLine {
 	public Order getOrder() {
 		return order;
 	}
-	
+
 	public void setOrder(Order order) {
 		this.order = order;
 	}
@@ -132,15 +132,15 @@ public class OrderLine {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, 
-				item, 
-				msrpAtPurchase, 
-				// leave out order because of circular dependency! 
-				// order, 
-				orderId, 
-				quantity, 
-				shipDate, 
-				status, 
+		return Objects.hash(id,
+				item,
+				msrpAtPurchase,
+				// leave out order because of circular dependency!
+				// order,
+				orderId,
+				quantity,
+				shipDate,
+				status,
 				totalValue,
 				version);
 	}

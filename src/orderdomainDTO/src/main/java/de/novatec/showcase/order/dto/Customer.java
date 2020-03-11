@@ -19,7 +19,7 @@ import de.novatec.showcase.order.GlobalConstants;
 public class Customer {
 
 	private Integer id;
-	
+
 	@Size(max = 16)
 	private String firstName;
 

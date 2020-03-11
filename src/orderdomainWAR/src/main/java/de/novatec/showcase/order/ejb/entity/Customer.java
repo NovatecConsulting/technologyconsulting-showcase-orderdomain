@@ -1,6 +1,7 @@
 package de.novatec.showcase.order.ejb.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -65,8 +66,8 @@ public class Customer {
 	private BigDecimal creditLimit;
 
 	@Column(name = "C_SINCE")
-	@Temporal(value = TemporalType.DATE)
-	private Calendar since;
+//	@Temporal(value = TemporalType.DATE)
+	private LocalDate since;
 
 	@Column(name = "C_BALANCE", precision = 12, scale = 2)
 	private BigDecimal balance;
@@ -96,7 +97,7 @@ public class Customer {
 	}
 
 	public Customer(String firstName, String lastName, String contact, String credit, BigDecimal creditLimit,
-			Calendar since, BigDecimal balance, BigDecimal ytdPayment, 
+			LocalDate since, BigDecimal balance, BigDecimal ytdPayment,
 			Address address) {
 		super();
 		this.firstName = firstName;
@@ -159,11 +160,11 @@ public class Customer {
 		this.creditLimit = creditLimit;
 	}
 
-	public Calendar getSince() {
+	public LocalDate getSince() {
 		return since;
 	}
 
-	public void setSince(Calendar since) {
+	public void setSince(LocalDate since) {
 		this.since = since;
 	}
 

@@ -1,6 +1,9 @@
 package de.novatec.showcase.order.ejb.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -58,12 +61,12 @@ public class Order {
 	private OrderStatus status;
 
 	@Column(name = "O_SHIP_DATE")
-	@Temporal(value = TemporalType.DATE)
-	private Calendar shipDate;
+//	@Temporal(value = TemporalType.DATE)
+	private LocalDate shipDate;
 
 	@Column(name = "O_ENTRY_DATE")
-	@Temporal(value = TemporalType.TIMESTAMP)
-	private Calendar entryDate;
+//	@Temporal(value = TemporalType.TIMESTAMP)
+	private LocalDate entryDate;
 
 	@Column(name = "O_TOTAL", precision = 12, scale = 2)
 	private BigDecimal total;
@@ -91,8 +94,9 @@ public class Order {
 
 	public Order(BigDecimal total, BigDecimal discount, Customer customer) {
 		super();
+		ZoneId zoneId = ZoneId.of("Europe/Paris");
 		this.status = OrderStatus.DEFERRED;
-		this.entryDate = Calendar.getInstance();
+		this.entryDate = ZonedDateTime.ofInstant(Calendar.getInstance().toInstant(),zoneId).toLocalDate();
 		this.total = total;
 		this.discount = discount;
 		this.orderLines = new ArrayList<OrderLine>();
@@ -125,11 +129,11 @@ public class Order {
 		this.status = status;
 	}
 
-	public Calendar getShipDate() {
+	public LocalDate getShipDate() {
 		return this.shipDate;
 	}
 
-	public void setShipDate(Calendar shipDate) {
+	public void setShipDate(LocalDate shipDate) {
 		this.shipDate = shipDate;
 	}
 
@@ -149,7 +153,7 @@ public class Order {
 		this.discount = discount;
 	}
 
-	public Calendar getEntryDate() {
+	public LocalDate getEntryDate() {
 		return this.entryDate;
 	}
 

@@ -15,6 +15,31 @@
 
 	<name>orderdomainWAR</name>
 
+	<profiles>
+		<profile>
+			<id>Windows</id>
+			<activation>
+				<os>
+					<family>Windows</family>
+				</os>
+			</activation>
+			<properties>
+				<avro.template.dir>/orderdomainWAR/src/main/resources/avro/templates/</avro.template.dir>
+			</properties>
+		</profile>
+		<profile>
+			<id>unix</id>
+			<activation>
+				<os>
+					<family>unix</family>
+				</os>
+			</activation>
+			<properties>
+				<avro.template.dir>${project.basedir}/src/main/resources/avro/templates</avro.template.dir>
+			</properties>
+		</profile>
+	</profiles>
+
 	<dependencies>
 
 		<dependency>
@@ -28,12 +53,18 @@
 			<artifactId>kafka-clients</artifactId>
 			<version>${kafka.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>connect-json</artifactId>
 			<version>${kafka.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>io.confluent</groupId>
+			<artifactId>kafka-avro-serializer</artifactId>
+			<version>${confluent.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>javax</groupId>
@@ -121,11 +152,15 @@
 			<version>1.1.2</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro</artifactId>
+			<version>${avro.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -134,7 +169,37 @@
 					<packagingExcludes>pom.xml</packagingExcludes>
 				</configuration>
 			</plugin>
-
+			<plugin>
+				<groupId>org.apache.avro</groupId>
+				<artifactId>avro-maven-plugin</artifactId>
+				<version>${avro.version}</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>schema</goal>
+						</goals>
+						<configuration>
+							<stringType>String</stringType>
+							<enableDecimalLogicalType>true</enableDecimalLogicalType>
+							<templateDirectory>${avro.template.dir}</templateDirectory>
+							<sourceDirectory>${project.basedir}/src/main/resources/avro/</sourceDirectory>
+							<outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
+							<includes>
+								<include>OrderStatus.avsc</include>
+								<include>Address.avsc</include>
+								<include>Item.avsc</include>
+								<include>Order.avsc</include>
+							</includes>
+							<imports>
+								<import>${project.basedir}/src/main/resources/avro/OrderStatus.avsc</import>
+								<import>${project.basedir}/src/main/resources/avro/Address.avsc</import>
+								<import>${project.basedir}/src/main/resources/avro/Item.avsc</import>
+							</imports>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
 	</build>
