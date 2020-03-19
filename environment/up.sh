@@ -7,6 +7,7 @@ source ./up-monitoring.sh
 source ./up-kafka.sh
 source ./up-schemaregistry.sh
 source ./up-app.sh
+source ./up-inventory.sh
 source ./ips.sh
 popd > /dev/null
 
@@ -14,11 +15,12 @@ MONITORING=false
 KAFKA=false
 SCHEMAREGISTRY=false
 APP=false
+INVENTORY=false
 
 function usage () {
     echo "$0: $1" >&2
     echo
-    echo "Usage: $0 [--with-monitoring] all infra app kafka schemaregistry"
+    echo "Usage: $0 [--with-monitoring] all infra app kafka schemaregistry inventory"
     echo
     return 1
 }
@@ -36,6 +38,7 @@ function parseCmd () {
                 KAFKA=true
                 SCHEMAREGISTRY=true
                 APP=true
+                INVENTORY=true
                 shift
                 ;;
             infra)
@@ -57,6 +60,11 @@ function parseCmd () {
             app)
                 any_selected=true
                 APP=true
+                shift
+                ;;
+            inventory)
+                any_selected=true
+                INVENTORY=true
                 shift
                 ;;
             *)
@@ -100,6 +108,10 @@ function main () {
 
     if [ "$APP" = true ]; then
         start_app
+    fi
+
+    if [ "$INVENTORY" = true ]; then
+        start_inventory
     fi
 
     echo -e "\n"

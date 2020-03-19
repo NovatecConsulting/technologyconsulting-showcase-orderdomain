@@ -1,10 +1,8 @@
 package de.novatec.showcase.order.kafka;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import de.novatec.showcase.order.dto.Order;
 import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
-import org.apache.kafka.connect.json.JsonSerializer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
