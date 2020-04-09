@@ -36,6 +36,7 @@
         <module>orderdomainWAR</module>
         <module>orderdomainEAR</module>
 		<module>inventoryService</module>
-	</modules>
+        <module>kafkaOauth</module>
+    </modules>
 
 </project>
