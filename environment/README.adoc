@@ -37,7 +37,7 @@ To start this environment, the following is required:
 .Start environment with specific services
 [source,bash]
 ----
-./up.sh --with-monitoring kafka schemaregistry app
+./up.sh --with-monitoring kafka keycloak schemaregistry app inventory
 ----
 
 .Check if services within environment are running
@@ -162,6 +162,7 @@ In order to use the Confluent Schema Registry in your application use the serial
 |===
 | Service | Username | Password
 | Grafana | admin | admin
+| Keycloak| admin | admin
 |===
 
 [cols="h,1"]
@@ -169,6 +170,7 @@ In order to use the Confluent Schema Registry in your application use the serial
 |===
 | Kafka Bootstrap Servers |  kafka:9092
 | Schema Registry Urls | http://schemaregistry:8081
+| Keycloak Server Url | http://keycloak:8080
 | Grafana Url | http://grafana:3000
 | Prometheus Url | http://prometheus:9090
 |===
@@ -177,6 +179,7 @@ In order to use the Confluent Schema Registry in your application use the serial
 .Access to services from host
 |===
 | Kafka Bootstrap Servers |  localhost:9192,localhost:9292,localhost:9392
+| Keycloak Server Url | http://localhost:8080
 | Schema Registry Urls | http://localhost:8081,http://localhost:8082
 | Grafana Url | http://localhost:13000
 | Prometheus Url | http://localhost:19090

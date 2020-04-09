@@ -5,6 +5,7 @@ cd $(dirname ${BASH_SOURCE[0]})
 CWD_COMPOSE=$(pwd)
 source ./up-monitoring.sh
 source ./up-kafka.sh
+source ./up-keycloak.sh
 source ./up-schemaregistry.sh
 source ./up-app.sh
 source ./up-inventory.sh
@@ -16,11 +17,12 @@ KAFKA=false
 SCHEMAREGISTRY=false
 APP=false
 INVENTORY=false
+KEYCLOAK=false
 
 function usage () {
     echo "$0: $1" >&2
     echo
-    echo "Usage: $0 [--with-monitoring] all infra app kafka schemaregistry inventory"
+    echo "Usage: $0 [--with-monitoring] all infra app kafka keycloak schemaregistry inventory"
     echo
     return 1
 }
@@ -36,6 +38,7 @@ function parseCmd () {
             all)
                 any_selected=true
                 KAFKA=true
+                KEYCLOAK=true
                 SCHEMAREGISTRY=true
                 APP=true
                 INVENTORY=true
@@ -44,12 +47,19 @@ function parseCmd () {
             infra)
                 any_selected=true
                 KAFKA=true
+                KEYCLOAK=true
                 SCHEMAREGISTRY=true
                 shift
                 ;;
             kafka)
                 any_selected=true
                 KAFKA=true
+                KEYCLOAK=true
+                shift
+                ;;
+            keycloak)
+                any_selected=true
+                KEYCLOAK=true
                 shift
                 ;;
             schemaregistry)
@@ -96,6 +106,10 @@ function main () {
     
     if [ "$MONITORING" = true ]; then
         start_monitoring
+    fi
+
+    if [ "$KEYCLOAK" = true ]; then
+            start_keycloak
     fi
 
     if [ "$KAFKA" = true ]; then

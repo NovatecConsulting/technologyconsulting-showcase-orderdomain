@@ -1,0 +1,13 @@
+---
+version: '2.2'
+services:
+  keycloak:
+    command: ["-Dkeycloak.profile.feature.upload_scripts=enabled","-Dkeycloak.profile.feature.docker=enabled"]
+    build: ./configs/keycloak-server
+    ports:
+      - "8080:8080"
+    environment:
+      DB_VENDOR: "h2"
+      KEYCLOAK_IMPORT: /opt/jboss/keycloak/orderDomain.json
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
