@@ -3,7 +3,12 @@ version: '2.2'
 services:
   #see https://docs.confluent.io/current/schema-registry/installation/config.html
   schemaregistry1:
-    image: confluentinc/cp-schema-registry:${VERSION_CONFLUENT}
+#    image: confluentinc/cp-schema-registry:${VERSION_CONFLUENT}
+    build:
+      context: ./configs/schema-registry-oauth
+      args:
+        versionconfluent: ${VERSION_CONFLUENT}
+    image: novatec/technologyconsulting-showcase-orderdomain-schema-registry:latestlocal
     restart: unless-stopped
     hostname: schemaregistry1
     depends_on:
@@ -13,18 +18,33 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SCHEMA_REGISTRY_HOST_NAME: schemaregistry1 # The advertised host name. 
+      SCHEMA_REGISTRY_HOST_NAME: schemaregistry1 # The advertised host name.
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081 # (default: http://0.0.0.0:8081) Comma-separated list of listeners that listen for API requests
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092 # A list of Kafka brokers to connect. If kafkastore.connection.url is not specified, the Kafka cluster containing these bootstrap servers is used both to coordinate Schema Registry instances (primary election) and to store schema data.
       SCHEMA_REGISTRY_MASTER_ELIGIBILITY: "true" # (default: true) If true, this node can participate in primary election.
       SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL: full_transitive # (default: backward) The Avro compatibility type
+      SCHEMA_REGISTRY_KAFKASTORE_SECURITY_PROTOCOL: SASL_PLAINTEXT
+      SCHEMA_REGISTRY_KAFKASTORE_SASL_MECHANISM: OAUTHBEARER
+      SCHEMA_REGISTRY_KAFKASTORE_SASL_JAAS_CONFIG: "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required ;"
+      SCHEMA_REGISTRY_KAFKASTORE_SASL_LOGIN_CALLBACK_HANDLER_CLASS: "de.novatec.showcase.kafka.oauth.OauthAuthenticateLoginCallbackHandler"
+      OAUTH_WITH_SSL: "false"
+      OAUTH_LOGIN_SERVER: "keycloak:8080"
+      OAUTH_ACCEPT_UNSECURE_SERVER: "true"
+      OAUTH_LOGIN_ENDPOINT: "/auth/realms/orderDomain/protocol/openid-connect/token"
+      OAUTH_LOGIN_GRANT_TYPE: "client_credentials"
+      OAUTH_AUTHORIZATION: "Basic a2Fma2EtY2xpZW50OmU5NmFkOThmLTM1YmUtNDY3OS1iYjQ4LTE3NjQzMWRlNjYxYg=="
     networks:
       default:
         aliases:
           - schemaregistry
 
   schemaregistry2:
-    image: confluentinc/cp-schema-registry:${VERSION_CONFLUENT}
+#    image: confluentinc/cp-schema-registry:${VERSION_CONFLUENT}
+    build:
+      context: ./configs/schema-registry-oauth
+      args:
+        versionconfluent: ${VERSION_CONFLUENT}
+    image: novatec/technologyconsulting-showcase-orderdomain-schema-registry:latestlocal
     restart: unless-stopped
     hostname: schemaregistry2
     depends_on:
@@ -39,6 +59,16 @@ services:
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092 # A list of Kafka brokers to connect. If kafkastore.connection.url is not specified, the Kafka cluster containing these bootstrap servers is used both to coordinate Schema Registry instances (primary election) and to store schema data.
       SCHEMA_REGISTRY_MASTER_ELIGIBILITY: "true" # (default: true) If true, this node can participate in primary election.
       SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL: full_transitive # (default: backward) The Avro compatibility type
+      SCHEMA_REGISTRY_KAFKASTORE_SECURITY_PROTOCOL: SASL_PLAINTEXT
+      SCHEMA_REGISTRY_KAFKASTORE_SASL_MECHANISM: OAUTHBEARER
+      SCHEMA_REGISTRY_KAFKASTORE_SASL_JAAS_CONFIG: "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required ;"
+      SCHEMA_REGISTRY_KAFKASTORE_SASL_LOGIN_CALLBACK_HANDLER_CLASS: "de.novatec.showcase.kafka.oauth.OauthAuthenticateLoginCallbackHandler"
+      OAUTH_WITH_SSL: "false"
+      OAUTH_LOGIN_SERVER: "keycloak:8080"
+      OAUTH_ACCEPT_UNSECURE_SERVER: "true"
+      OAUTH_LOGIN_ENDPOINT: "/auth/realms/orderDomain/protocol/openid-connect/token"
+      OAUTH_LOGIN_GRANT_TYPE: "client_credentials"
+      OAUTH_AUTHORIZATION: "Basic a2Fma2EtY2xpZW50OmU5NmFkOThmLTM1YmUtNDY3OS1iYjQ4LTE3NjQzMWRlNjYxYg=="
     networks:
       default:
         aliases:

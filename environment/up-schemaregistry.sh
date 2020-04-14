@@ -6,7 +6,7 @@ source ./docker-compose.sh
 popd > /dev/null
 
 function start_service () {
-    docker_compose_in_environment up -d $1
+    docker_compose_in_environment up --build -d $1
 }
 
 function start_schemaregistry () {
