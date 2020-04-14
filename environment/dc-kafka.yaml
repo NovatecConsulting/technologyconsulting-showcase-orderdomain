@@ -44,7 +44,12 @@ services:
       ZOOKEEPER_SERVERS: zookeeper1:2888:3888;zookeeper2:2888:3888;zookeeper3:2888:3888
 
   kafka1:
-    image: confluentinc/cp-kafka:${VERSION_CONFLUENT}
+#    image: confluentinc/cp-kafka:${VERSION_CONFLUENT}
+    build:
+      context: ./configs/kafka-oauth
+      args:
+        versionconfluent: ${VERSION_CONFLUENT}
+    image: novatec/technologyconsulting-showcase-orderdomain-kafka-broker:latestlocal
     restart: unless-stopped
     hostname: kafka1
     depends_on:
@@ -54,11 +59,20 @@ services:
     ports:
       - "9192:9192"
     environment:
+      # Configure custom oauthbearer listener
+      ZOOKEEPER_SASL_ENABLED: "false"
+      KAFKA_LISTENER_NAME_SASLPLAINTEXT_OAUTHBEARER_SASL_LOGIN_CALLBACK_HANDLER_CLASS: "de.novatec.showcase.kafka.oauth.OauthAuthenticateLoginCallbackHandler"
+      KAFKA_LISTENER_NAME_SASLPLAINTEXT_OAUTHBEARER_SASL_SERVER_CALLBACK_HANDLER_CLASS: "de.novatec.showcase.kafka.oauth.OauthAuthenticateValidatorCallbackHandler"
       # The broker id uniquely identifies a Kafka broker instance
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092,PLAINTEXT_HOST://localhost:9192
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092,PLAINTEXT_HOST://localhost:9192
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: SASLPLAINTEXT:SASL_PLAINTEXT, PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_LISTENERS: SASLPLAINTEXT://:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: SASLPLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: SASLPLAINTEXT://kafka1:9092, PLAINTEXT_HOST://localhost:9192
       KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: "false"
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
@@ -67,6 +81,19 @@ services:
       KAFKA_MIN_INSYNC_REPLICAS: 2
       KAFKA_JMX_PORT: 9999
       KAFKA_JMX_HOSTNAME: kafka1
+      # Kafka security
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/opt/kafka/config/kafka_server_jaas.conf"
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: OAUTHBEARER
+      KAFKA_SASL_ENABLED_MECHANISMS: OAUTHBEARER
+      # Oauth configuration
+      OAUTH_WITH_SSL: "false"
+      OAUTH_LOGIN_SERVER: "keycloak:8080"
+      OAUTH_LOGIN_ENDPOINT: "/auth/realms/orderDomain/protocol/openid-connect/token"
+      OAUTH_LOGIN_GRANT_TYPE: "client_credentials"
+      OAUTH_AUTHORIZATION: "Basic a2Fma2EtYnJva2VyOjk5ZTljNjMwLTI4NWUtNGNhZi1iNWI2LTdjMTNhMDQ5OTZiYg=="
+      OAUTH_INTROSPECT_SERVER: "keycloak:8080"
+      OAUTH_INTROSPECT_ENDPOINT: "/auth/realms/orderDomain/protocol/openid-connect/token/introspect"
+      OAUTH_INTROSPECT_AUTHORIZATION: "Basic a2Fma2EtYnJva2VyOjk5ZTljNjMwLTI4NWUtNGNhZi1iNWI2LTdjMTNhMDQ5OTZiYg=="
     networks:
       default:
         aliases:
@@ -90,7 +117,12 @@ services:
       - ./configs/kafka-prometheus/rules.yaml:/etc/jmx-prometheus-exporter/rules.yaml
 
   kafka2:
-    image: confluentinc/cp-kafka:${VERSION_CONFLUENT}
+#    image: confluentinc/cp-kafka:${VERSION_CONFLUENT}
+    build:
+      context: ./configs/kafka-oauth
+      args:
+        versionconfluent: ${VERSION_CONFLUENT}
+    image: novatec/technologyconsulting-showcase-orderdomain-kafka-broker:latestlocal
     restart: unless-stopped
     hostname: kafka2
     depends_on:
@@ -100,10 +132,20 @@ services:
     ports:
       - "9292:9292"
     environment:
+      # Configure custom oauthbearer listener
+      ZOOKEEPER_SASL_ENABLED: "false"
+      KAFKA_LISTENER_NAME_SASLPLAINTEXT_OAUTHBEARER_SASL_LOGIN_CALLBACK_HANDLER_CLASS: "de.novatec.showcase.kafka.oauth.OauthAuthenticateLoginCallbackHandler"
+      KAFKA_LISTENER_NAME_SASLPLAINTEXT_OAUTHBEARER_SASL_SERVER_CALLBACK_HANDLER_CLASS: "de.novatec.showcase.kafka.oauth.OauthAuthenticateValidatorCallbackHandler"
+
       KAFKA_BROKER_ID: 2
       KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9092,PLAINTEXT_HOST://localhost:9292
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9092,PLAINTEXT_HOST://localhost:9292
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: SASLPLAINTEXT:SASL_PLAINTEXT, PLAINTEXT_HOST:PLAINTEXT
+        #      KAFKA_LISTENERS: SASLPLAINTEXT://:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: SASLPLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: SASLPLAINTEXT://kafka2:9092, PLAINTEXT_HOST://localhost:9292
       KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: "false"
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
@@ -112,6 +154,19 @@ services:
       KAFKA_MIN_INSYNC_REPLICAS: 2
       KAFKA_JMX_PORT: 9999
       KAFKA_JMX_HOSTNAME: kafka2
+      # Kafka security
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/opt/kafka/config/kafka_server_jaas.conf"
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: OAUTHBEARER
+      KAFKA_SASL_ENABLED_MECHANISMS: OAUTHBEARER
+      # Oauth configuration
+      OAUTH_WITH_SSL: "false"
+      OAUTH_LOGIN_SERVER: "keycloak:8080"
+      OAUTH_LOGIN_ENDPOINT: "/auth/realms/orderDomain/protocol/openid-connect/token"
+      OAUTH_LOGIN_GRANT_TYPE: "client_credentials"
+      OAUTH_AUTHORIZATION: "Basic a2Fma2EtYnJva2VyOjk5ZTljNjMwLTI4NWUtNGNhZi1iNWI2LTdjMTNhMDQ5OTZiYg=="
+      OAUTH_INTROSPECT_SERVER: "keycloak:8080"
+      OAUTH_INTROSPECT_ENDPOINT: "/auth/realms/orderDomain/protocol/openid-connect/token/introspect"
+      OAUTH_INTROSPECT_AUTHORIZATION: "Basic a2Fma2EtYnJva2VyOjk5ZTljNjMwLTI4NWUtNGNhZi1iNWI2LTdjMTNhMDQ5OTZiYg=="
     networks:
       default:
         aliases:
@@ -135,7 +190,12 @@ services:
         - ./configs/kafka-prometheus/rules.yaml:/etc/jmx-prometheus-exporter/rules.yaml
 
   kafka3:
-    image: confluentinc/cp-kafka:${VERSION_CONFLUENT}
+#    image: confluentinc/cp-kafka:${VERSION_CONFLUENT}
+    build:
+      context: ./configs/kafka-oauth
+      args:
+        versionconfluent: ${VERSION_CONFLUENT}
+    image: novatec/technologyconsulting-showcase-orderdomain-kafka-broker:latestlocal
     restart: unless-stopped
     hostname: kafka3
     depends_on:
@@ -145,10 +205,20 @@ services:
     ports:
       - "9392:9392"
     environment:
+      # Configure custom oauthbearer listener
+      ZOOKEEPER_SASL_ENABLED: "false"
+      KAFKA_LISTENER_NAME_SASLPLAINTEXT_OAUTHBEARER_SASL_LOGIN_CALLBACK_HANDLER_CLASS: "de.novatec.showcase.kafka.oauth.OauthAuthenticateLoginCallbackHandler"
+      KAFKA_LISTENER_NAME_SASLPLAINTEXT_OAUTHBEARER_SASL_SERVER_CALLBACK_HANDLER_CLASS: "de.novatec.showcase.kafka.oauth.OauthAuthenticateValidatorCallbackHandler"
+
       KAFKA_BROKER_ID: 3
       KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9092,PLAINTEXT_HOST://localhost:9392
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9092,PLAINTEXT_HOST://localhost:9392
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: SASLPLAINTEXT:SASL_PLAINTEXT, PLAINTEXT_HOST:PLAINTEXT
+        #      KAFKA_LISTENERS: SASLPLAINTEXT://:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: SASLPLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: SASLPLAINTEXT://kafka3:9092, PLAINTEXT_HOST://localhost:9392
       KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: "false"
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
@@ -157,6 +227,19 @@ services:
       KAFKA_MIN_INSYNC_REPLICAS: 2
       KAFKA_JMX_PORT: 9999
       KAFKA_JMX_HOSTNAME: kafka3
+      # Kafka security
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/opt/kafka/config/kafka_server_jaas.conf"
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: OAUTHBEARER
+      KAFKA_SASL_ENABLED_MECHANISMS: OAUTHBEARER
+      # Oauth configuration
+      OAUTH_WITH_SSL: "false"
+      OAUTH_LOGIN_SERVER: "keycloak:8080"
+      OAUTH_LOGIN_ENDPOINT: "/auth/realms/orderDomain/protocol/openid-connect/token"
+      OAUTH_LOGIN_GRANT_TYPE: "client_credentials"
+      OAUTH_AUTHORIZATION: "Basic a2Fma2EtYnJva2VyOjk5ZTljNjMwLTI4NWUtNGNhZi1iNWI2LTdjMTNhMDQ5OTZiYg=="
+      OAUTH_INTROSPECT_SERVER: "keycloak:8080"
+      OAUTH_INTROSPECT_ENDPOINT: "/auth/realms/orderDomain/protocol/openid-connect/token/introspect"
+      OAUTH_INTROSPECT_AUTHORIZATION: "Basic a2Fma2EtYnJva2VyOjk5ZTljNjMwLTI4NWUtNGNhZi1iNWI2LTdjMTNhMDQ5OTZiYg=="
     networks:
       default:
         aliases:

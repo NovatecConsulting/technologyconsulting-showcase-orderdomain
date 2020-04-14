@@ -35,14 +35,18 @@ function start_service () {
     docker_compose_in_environment up -d $1
 }
 
+function start_service_kafka () {
+    docker_compose_in_environment up --build -d $1
+}
+
 function start_kafka () {
     local monitoring=${1:?false}
     start_service "zookeeper1"
     start_service "zookeeper2"
     start_service "zookeeper3"
-    start_service "kafka1"
-    start_service "kafka2"
-    start_service "kafka3"
+    start_service_kafka "kafka1"
+    start_service_kafka "kafka2"
+    start_service_kafka "kafka3"
     if [ "$monitoring" == true ]; then
         start_service "kafka1-prometheus"
         start_service "kafka2-prometheus"
