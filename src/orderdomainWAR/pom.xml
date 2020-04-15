@@ -41,6 +41,11 @@
 	</profiles>
 
 	<dependencies>
+		<dependency>
+			<groupId>de.novatec.showcase</groupId>
+			<artifactId>kafkaOauth</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>de.novatec.showcase</groupId>

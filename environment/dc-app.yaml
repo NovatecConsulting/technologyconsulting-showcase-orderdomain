@@ -23,3 +23,9 @@ services:
       MANUFACTURE_PASSWORD: adminpwd
       KAFKA_BROKER: kafka:9092
       SCHEMA_REGISTRY: http://schemaregistry:8081
+      OAUTH_WITH_SSL: "false"
+      OAUTH_LOGIN_SERVER: "keycloak:8080"
+      OAUTH_ACCEPT_UNSECURE_SERVER: "true"
+      OAUTH_LOGIN_ENDPOINT: "/auth/realms/orderDomain/protocol/openid-connect/token"
+      OAUTH_LOGIN_GRANT_TYPE: "client_credentials"
+      OAUTH_AUTHORIZATION: "Basic a2Fma2EtY2xpZW50OmU5NmFkOThmLTM1YmUtNDY3OS1iYjQ4LTE3NjQzMWRlNjYxYg=="

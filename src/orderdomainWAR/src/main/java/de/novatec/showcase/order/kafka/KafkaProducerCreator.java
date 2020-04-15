@@ -27,6 +27,13 @@ public class KafkaProducerCreator {
         props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG,schemaRegistry!=null?schemaRegistry:KafkaConfiguration.SCHEMA_REGISTRY);
         props.put(ProducerConfig.CLIENT_ID_CONFIG, KafkaConfiguration.PRODUCER_CLIENT_ID);
         props.put(ProducerConfig.ACKS_CONFIG,KafkaConfiguration.ACKS_CONFIG);
+
+        //kafka oauth configuration
+        props.put("sasl.jaas.config", "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required ;");
+        props.put("security.protocol", "SASL_PLAINTEXT");
+        props.put("sasl.mechanism", "OAUTHBEARER");
+        props.put("sasl.login.callback.handler.class", "de.novatec.showcase.kafka.oauth.OauthAuthenticateLoginCallbackHandler");
+
         //Timeout configuration of Kafka producer. Default configuration: send() method timeout after 2 minutes
 //        props.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG,10000);
 //        props.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG,5000);

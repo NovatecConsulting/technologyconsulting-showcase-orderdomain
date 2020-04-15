@@ -46,6 +46,13 @@ public class KafkaStreamInventoryService {
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.Integer().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, GenericAvroSerde.class);
         props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistry);
+
+        //kafka oauth configuration
+        props.put("sasl.jaas.config", "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required ;");
+        props.put("security.protocol", "SASL_PLAINTEXT");
+        props.put("sasl.mechanism", "OAUTHBEARER");
+        props.put("sasl.login.callback.handler.class", "de.novatec.showcase.kafka.oauth.OauthAuthenticateLoginCallbackHandler");
+
         final KafkaStreams kafkaStreams = new KafkaStreams(kafkaStreamTopology(), props);
         kafkaStreams.start();
 

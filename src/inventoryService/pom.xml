@@ -13,6 +13,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>de.novatec.showcase</groupId>
+            <artifactId>kafkaOauth</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
             <version>${springboot.version}</version>
