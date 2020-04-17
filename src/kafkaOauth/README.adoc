@@ -1,0 +1,11 @@
+Plugin for Kafka authentication with external OpenIDConnect server
+-----------------------------------------------------------------
+The source code of this plugin module is obtained from:
+https://medium.com/@jairsjunior/how-to-setup-oauth2-mechanism-to-a-kafka-broker-e42e72839fe
+
+It contains two callback handler classes which implements the AuthenticateCallbackHandler interface from Kafka:
+
+* Login callback handler: used by Kafka brokers (for inter-broker communication) and Kafka clients to authenticate themselves with OpenIDConnect server to obtain ID token.
+* Validator callback handler: used by Kafka brokers to validate ID token of incoming requests.
+
+The OpenIDConnect server is configured via environment variables.
