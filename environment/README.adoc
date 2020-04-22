@@ -189,4 +189,10 @@ image::KafkaOauth.png[Oauth]
 | Grafana Url | http://localhost:13000
 | Prometheus Url | http://localhost:19090
 |===
+.Access to REST endpoints of the application
+|===
+| Username | Password | Roles
+| admin    | adminpwd | ORDERDOMAIN.ADMIN
+| testuser | pwd      | ORDERDOMAIN.CUSTOMER, ORDERDOMAIN.ITEM, ORDERDOMAIN.ORDER
+|===
 

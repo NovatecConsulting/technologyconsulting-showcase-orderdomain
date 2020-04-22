@@ -2,6 +2,8 @@
 	<featureManager>
 		<feature>javaee-8.0</feature>
 		<feature>openapi-3.1</feature>
+		<feature>openidConnectClient-1.0</feature>
+		<feature>transportSecurity-1.0</feature> <!-- Required for openidConnectClient-1.0 -->
 	</featureManager>
 
 	<logging
@@ -32,39 +34,26 @@
 	<jndiEntry jndiName="manufacturedomain.username" value="${env.MANUFACTURE_USER}"/>
 	<jndiEntry jndiName="manufacturedomain.password" value="${env.MANUFACTURE_PASSWORD}"/>
 
-	<basicRegistry id="basic" realm="defaultRealm">
-		<user name="admin" password="adminpwd" />
-		<user name="testuser" password="pwd" />
-
-		<group name="ORDERDOMAIN.ITEM">
-			<member name="testuser" />
-		</group>
-		<group name="ORDERDOMAIN.CUSTOMER">
-			<member name="testuser" />
-		</group>
-		<group name="ORDERDOMAIN.ORDER">
-			<member name="testuser" />
-		</group>
-		<group name="ORDERDOMAIN.ADMIN">
-			<member name="admin" />
-		</group>
-	</basicRegistry>
+	<openidConnectClient id="orderDomain"
+		httpsRequired="false"
+		issuerIdentifier="http://keycloak:8080/auth/realms/orderDomain"
+		signatureAlgorithm="RS256"
+		responseType="code"
+		clientId="order-domain"
+		clientSecret="3b07e614-4940-44fd-8349-a67634f01733"
+		groupIdentifier="order-domain-roles"
+		userIdentityToCreateSubject="preferred_username"
+		inboundPropagation="supported"
+		audiences="order-domain"
+		validationMethod="introspect"
+		tokenReuse="true"
+		jwkEndpointUrl="http://keycloak:8080/auth/realms/orderDomain/protocol/openid-connect/certs"
+		authorizationEndpointUrl="http://keycloak:8080/auth/realms/orderDomain/protocol/openid-connect/auth"
+		tokenEndpointUrl="http://keycloak:8080/auth/realms/orderDomain/protocol/openid-connect/token"
+		validationEndpointUrl="http://keycloak:8080/auth/realms/orderDomain/protocol/openid-connect/token/introspect">
+	</openidConnectClient>
 
 	<enterpriseApplication id="orderdomain"
 		location="orderdomainEAR.ear" name="orderdomainEAR.ear">
-		<application-bnd>
-			<security-role name="ORDERDOMAIN.ITEM">
-				<group name="ORDERDOMAIN.ITEM" />
-			</security-role>
-			<security-role name="ORDERDOMAIN.CUSTOMER">
-				<group name="ORDERDOMAIN.CUSTOMER" />
-			</security-role>
-			<security-role name="ORDERDOMAIN.ORDER">
-				<group name="ORDERDOMAIN.ORDER" />
-			</security-role>
-			<security-role name="ORDERDOMAIN.ADMIN">
-				<group name="ORDERDOMAIN.ADMIN" />
-			</security-role>
-		</application-bnd>
 	</enterpriseApplication>
 </server>

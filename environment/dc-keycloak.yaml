@@ -3,7 +3,9 @@ version: '2.2'
 services:
   keycloak:
     command: ["-Dkeycloak.profile.feature.upload_scripts=enabled","-Dkeycloak.profile.feature.docker=enabled"]
-    build: ./configs/keycloak-server
+    build:
+      context: ./configs/keycloak-server
+    image: novatec/technologyconsulting-showcase-orderdomain-keycloak:latestlocal
     ports:
       - "8080:8080"
     environment:

@@ -224,6 +224,35 @@
         "containerId" : "6babb517-1041-43b6-a6f4-98e58b966208",
         "attributes" : { }
       } ],
+      "order-domain" : [ {
+        "id" : "167e7d11-35f0-4df6-b3c4-dc8ab825b39a",
+        "name" : "ORDERDOMAIN.CUSTOMER",
+        "composite" : false,
+        "clientRole" : true,
+        "containerId" : "5cb6d56c-5d57-4f57-9635-bd57d34b6e04",
+        "attributes" : { }
+      }, {
+        "id" : "1cf2d8b8-fc2a-4e7d-b12a-9cdf71b4f0d4",
+        "name" : "ORDERDOMAIN.ADMIN",
+        "composite" : false,
+        "clientRole" : true,
+        "containerId" : "5cb6d56c-5d57-4f57-9635-bd57d34b6e04",
+        "attributes" : { }
+      }, {
+        "id" : "b46e3148-34f2-430a-a11f-7003571ac55f",
+        "name" : "ORDERDOMAIN.ORDER",
+        "composite" : false,
+        "clientRole" : true,
+        "containerId" : "5cb6d56c-5d57-4f57-9635-bd57d34b6e04",
+        "attributes" : { }
+      }, {
+        "id" : "3f875675-7c08-4db2-83c0-ffa2355c3ebc",
+        "name" : "ORDERDOMAIN.ITEM",
+        "composite" : false,
+        "clientRole" : true,
+        "containerId" : "5cb6d56c-5d57-4f57-9635-bd57d34b6e04",
+        "attributes" : { }
+      } ],
       "kafka-broker" : [ ],
       "security-admin-console" : [ ],
       "admin-cli" : [ ],
@@ -298,7 +327,47 @@
       } ]
     }
   },
-  "groups" : [ ],
+  "groups" : [ {
+    "id" : "e05c8ee0-94fb-41af-8334-e8325e31730d",
+    "name" : "ORDERDOMAIN.ADMIN",
+    "path" : "/ORDERDOMAIN.ADMIN",
+    "attributes" : { },
+    "realmRoles" : [ ],
+    "clientRoles" : {
+      "order-domain" : [ "ORDERDOMAIN.ADMIN" ]
+    },
+    "subGroups" : [ ]
+  }, {
+    "id" : "4a87c66f-154e-42ff-a21a-d8759a5c7de2",
+    "name" : "ORDERDOMAIN.CUSTOMER",
+    "path" : "/ORDERDOMAIN.CUSTOMER",
+    "attributes" : { },
+    "realmRoles" : [ ],
+    "clientRoles" : {
+      "order-domain" : [ "ORDERDOMAIN.CUSTOMER" ]
+    },
+    "subGroups" : [ ]
+  }, {
+    "id" : "75b21631-9e36-4be4-ad3d-0f354841fa41",
+    "name" : "ORDERDOMAIN.ITEM",
+    "path" : "/ORDERDOMAIN.ITEM",
+    "attributes" : { },
+    "realmRoles" : [ ],
+    "clientRoles" : {
+      "order-domain" : [ "ORDERDOMAIN.ITEM" ]
+    },
+    "subGroups" : [ ]
+  }, {
+    "id" : "f0d623bf-fcfe-4885-8959-b0ce475e2111",
+    "name" : "ORDERDOMAIN.ORDER",
+    "path" : "/ORDERDOMAIN.ORDER",
+    "attributes" : { },
+    "realmRoles" : [ ],
+    "clientRoles" : {
+      "order-domain" : [ "ORDERDOMAIN.ORDER" ]
+    },
+    "subGroups" : [ ]
+  } ],
   "defaultRoles" : [ "uma_authorization", "offline_access" ],
   "requiredCredentials" : [ "password" ],
   "otpPolicyType" : "totp",
@@ -329,6 +398,28 @@
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister" : false,
   "webAuthnPolicyPasswordlessAcceptableAaguids" : [ ],
   "users" : [ {
+    "id" : "04e96dd2-b15b-4728-a079-43ef0925ee2a",
+    "createdTimestamp" : 1588234434313,
+    "username" : "admin",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "credentials" : [ {
+      "id" : "a1dda96a-93dd-4a56-b760-7a0779d25010",
+      "type" : "password",
+      "createdDate" : 1588234450900,
+      "secretData" : "{\"value\":\"4+3yGjev1dSdnlq3KJxypvy08HuohEzutYH19z02ucPIpcvVGayHoZFjwLVEbK09OLBwIbtCHP8kER0ByiLX4g==\",\"salt\":\"SWybhbVaQtT0VJ63Ndunag==\"}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\"}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "uma_authorization", "offline_access" ],
+    "clientRoles" : {
+      "account" : [ "manage-account", "view-profile" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ "/ORDERDOMAIN.ADMIN" ]
+  }, {
     "id" : "17b98642-9783-4596-baf3-3f5986db7f1a",
     "createdTimestamp" : 1586419755483,
     "username" : "service-account-kafka-broker",
@@ -362,6 +453,28 @@
     },
     "notBefore" : 0,
     "groups" : [ ]
+  }, {
+    "id" : "24f55201-7bc4-4ceb-aee2-adc364cc48e8",
+    "createdTimestamp" : 1588234461765,
+    "username" : "testuser",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "credentials" : [ {
+      "id" : "3e07089c-cb8a-40f5-bbc9-25f4732edb66",
+      "type" : "password",
+      "createdDate" : 1588234471949,
+      "secretData" : "{\"value\":\"xH9xq90QkrRTzS8qZfZm+2H2SK66KhaBf76IbOBHSaEpIp1FSoASH5iSSxP68QFsR6b9JL2ls5aDHlQSukfPRQ==\",\"salt\":\"fnOL2j5MA5YSM2wQrb+rog==\"}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\"}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "uma_authorization", "offline_access" ],
+    "clientRoles" : {
+      "account" : [ "manage-account", "view-profile" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ "/ORDERDOMAIN.CUSTOMER", "/ORDERDOMAIN.ITEM", "/ORDERDOMAIN.ORDER" ]
   } ],
   "scopeMappings" : [ {
     "clientScope" : "offline_access",
@@ -657,6 +770,64 @@
     "defaultClientScopes" : [ "web-origins", "role_list", "profile", "roles", "email" ],
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
   }, {
+    "id" : "5cb6d56c-5d57-4f57-9635-bd57d34b6e04",
+    "clientId" : "order-domain",
+    "rootUrl" : "http://localhost:9080/orderdomain",
+    "surrogateAuthRequired" : false,
+    "enabled" : true,
+    "alwaysDisplayInConsole" : false,
+    "clientAuthenticatorType" : "client-secret",
+    "secret" : "3b07e614-4940-44fd-8349-a67634f01733",
+    "redirectUris" : [ "http://localhost:9080/orderdomain/*", "https://localhost:9443/oidcclient/redirect/orderDomain/*" ],
+    "webOrigins" : [ ],
+    "notBefore" : 0,
+    "bearerOnly" : false,
+    "consentRequired" : false,
+    "standardFlowEnabled" : true,
+    "implicitFlowEnabled" : false,
+    "directAccessGrantsEnabled" : true,
+    "serviceAccountsEnabled" : false,
+    "publicClient" : false,
+    "frontchannelLogout" : false,
+    "protocol" : "openid-connect",
+    "attributes" : {
+      "saml.assertion.signature" : "false",
+      "saml.force.post.binding" : "false",
+      "saml.multivalued.roles" : "false",
+      "saml.encrypt" : "false",
+      "access.token.signed.response.alg" : "RS256",
+      "saml.server.signature" : "false",
+      "saml.server.signature.keyinfo.ext" : "false",
+      "exclude.session.state.from.auth.response" : "false",
+      "saml_force_name_id_format" : "false",
+      "saml.client.signature" : "false",
+      "tls.client.certificate.bound.access.tokens" : "false",
+      "saml.authnstatement" : "false",
+      "display.on.consent.screen" : "false",
+      "saml.onetimeuse.condition" : "false"
+    },
+    "authenticationFlowBindingOverrides" : { },
+    "fullScopeAllowed" : true,
+    "nodeReRegistrationTimeout" : -1,
+    "protocolMappers" : [ {
+      "id" : "52daf801-afe7-4b36-8292-9961f535cc6b",
+      "name" : "orderdomain-role-mapper",
+      "protocol" : "openid-connect",
+      "protocolMapper" : "oidc-usermodel-client-role-mapper",
+      "consentRequired" : false,
+      "config" : {
+        "multivalued" : "true",
+        "userinfo.token.claim" : "true",
+        "id.token.claim" : "true",
+        "access.token.claim" : "true",
+        "claim.name" : "order-domain-roles",
+        "jsonType.label" : "String",
+        "usermodel.clientRoleMapping.clientId" : "order-domain"
+      }
+    } ],
+    "defaultClientScopes" : [ "web-origins", "order-domain", "role_list", "profile", "roles", "email" ],
+    "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
+  }, {
     "id" : "6babb517-1041-43b6-a6f4-98e58b966208",
     "clientId" : "realm-management",
     "name" : "${client_realm-management}",
@@ -844,6 +1015,26 @@
       "consent.screen.text" : "${offlineAccessScopeConsentText}",
       "display.on.consent.screen" : "true"
     }
+  }, {
+    "id" : "080d8592-ac4f-4b77-8ea6-ae7b41a3b16e",
+    "name" : "order-domain",
+    "protocol" : "openid-connect",
+    "attributes" : {
+      "include.in.token.scope" : "true",
+      "display.on.consent.screen" : "true"
+    },
+    "protocolMappers" : [ {
+      "id" : "8d0e0d74-d4ce-4f26-aa88-c01d1f6c8dfb",
+      "name" : "orderdomain-audience-mapper",
+      "protocol" : "openid-connect",
+      "protocolMapper" : "oidc-audience-mapper",
+      "consentRequired" : false,
+      "config" : {
+        "included.client.audience" : "order-domain",
+        "id.token.claim" : "false",
+        "access.token.claim" : "true"
+      }
+    } ]
   }, {
     "id" : "bf571e80-eab6-450a-b8b2-839f73a49996",
     "name" : "phone",
