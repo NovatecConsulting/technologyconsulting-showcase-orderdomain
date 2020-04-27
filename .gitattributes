@@ -1,0 +1,3 @@
+# enforce correct line endings for shell
+*.sh text eol=lf
+environment/* text eol=lf
