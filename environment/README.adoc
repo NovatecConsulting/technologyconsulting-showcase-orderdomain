@@ -188,4 +188,4 @@ In order to use the Confluent Schema Registry in your application use the serial
 
 == Kafka and Oauth
 
-image::KafkaOauth.png[Oauth,300,300]
+image::KafkaOauth.png[Oauth,1107,713]
