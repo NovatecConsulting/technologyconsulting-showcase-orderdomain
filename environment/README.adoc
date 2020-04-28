@@ -156,6 +156,10 @@ schemaid=2
 
 In order to use the Confluent Schema Registry in your application use the serializer and deserializer from the artifacts _io.confluent:kafka-avro-serializer_ and _io.confluent:kafka-streams-avro-serde_.
 
+=== Kafka and Oauth
+
+image::KafkaOauth.png[Oauth]
+
 == Network and Credentials
 
 [options="header"]
@@ -186,6 +190,3 @@ In order to use the Confluent Schema Registry in your application use the serial
 | Prometheus Url | http://localhost:19090
 |===
 
-== Kafka and Oauth
-
-image::KafkaOauth.png[Oauth]
