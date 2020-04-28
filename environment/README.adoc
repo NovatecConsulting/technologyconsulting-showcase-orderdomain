@@ -4,6 +4,7 @@
 
 :sectanchors:
 :sectlinks:
+:imagesdir: adocgraphics
 
 = Order Domain Docker Environment
 
@@ -184,3 +185,7 @@ In order to use the Confluent Schema Registry in your application use the serial
 | Grafana Url | http://localhost:13000
 | Prometheus Url | http://localhost:19090
 |===
+
+==Kafka and Oauth
+
+image::KafkaOauth.png
