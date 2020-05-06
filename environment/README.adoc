@@ -26,6 +26,7 @@ To start this environment, the following is required:
 - Bash (for Windows use https://docs.microsoft.com/de-de/windows/wsl/install-win10[WSL] or https://cygwin.com/install.html[Cygwin])
 - https://docs.docker.com/install/#server[Docker] (https://docs.microsoft.com/de-de/archive/blogs/stevelasker/configuring-docker-for-windows-volumes[in Windows volume mounts must be enabled])
 - https://docs.docker.com/compose/install/[Docker-Compose]
+- Add 'keycloak' as an alias of 'localhost' in /etc/hosts file (or c:\Windows\System32\Drivers\etc\hosts on Windows) so that browser can be directed to Keycloak login page for user authentication. This is due to different internal and external hostnames of Keycloak container.
 
 == Quick Start
 
