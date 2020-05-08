@@ -1,0 +1,23 @@
+Kafka Authentication Flow
+------------------------
+
+When Kafka broker and client are configured to authenticate using SASL, the authentication flow is as following:
+
+* Kafka client initiates connection and send a SaslHandshakeRequest to Kafka broker.
+* Kafka broker receives the request and checks if it accepts the requested SASL authentication mechanism.
+* If the authentication mechanism is enabled on the broker, the authentication process begins.
+* With SASL Oauthbearer, Kafka client authenticates itself with OpenIDConnect Provider (Keycloak in this showcase) using configured LoginCallbackHandler class to obtain a token and sends it to Kafka broker. The broker validates the received token against Keycloak with configured ServerCallBackHandler.
+* If the token is validated successfully, the connection is accepted and subsequent packets from client are handled as normal Kafka API requests. Otherwise the connection is terminated.
+
+The general Sasl authentication flow is described here: https://kafka.apache.org/protocol#sasl_handshake
+
+The authentication is done only once when establishing the connection. The connection session then continues until being terminated, no further handshake or authentication is required.
+
+The token obtained during authentication is used and will not be replaced throughout the entire connection session. If the information in the token is used for authorization, it is possible that authorization decision can be made based on expired token. More detail can be found here: https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=75968876
+
+Kafka client also frequently refreshes its token before it expired in the background. However, these new tokens will only be used when new connection is established and will not replace the token in ongoing connection session. Token refreshing can be tuned by the following parameters provided by Kafka:
+
+* `sasl.login.refresh.window.factor`
+* `sasl.login.refresh.window.jitter`
+* `sasl.login.refresh.min.period.seconds`
+* `sasl.login.refresh.buffer.seconds`
