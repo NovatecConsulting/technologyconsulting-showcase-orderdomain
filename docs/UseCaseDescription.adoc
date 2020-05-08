@@ -1,0 +1,11 @@
+# Use OpenId for authentication and authorization with Apache-Kafka
+
+OpenId is a defacto standard for authentification and authorization. You can expect that a modern legacy environment does
+use any kind of service providing OpenId within their application landscape with some OpenId-Service-Provider.
+
+Using Kafka as a streaming backbone it would be nice to have Kafka using a already existing authentication and
+authorization service provider.
+
+The goal of this invastigation is to find out if you could martirialize Kafka in a way that you don't have to configure
+any authorization within Kafka but let it use a OpenId Token for authorization.
+

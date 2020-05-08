@@ -52,7 +52,14 @@ The smoketest.sh script consist of two sub scripts - the setup-db.sh and busines
 ## openAPI
 check [openAPI](http://localhost:9080/api/explorer/) if the server is running for the  API of the domain
 
-## TODOs:
+## TODOs
 
 - check functionality of ItemSession.getSubList -> refactor this "PARTS"-thing...
 - OrderStatus model is not clean, i.e. DELETED order are also counted with order/count_by_customer/{id}
+
+## UseCase
+On top of the showcase we like to provide and investigate on several usecases for different purposes.
+
+The usecase of this branch is:
+
+* [Kafka with OpenId](docs/UseCaseDescription.adoc)
