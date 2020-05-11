@@ -21,3 +21,7 @@ Kafka client also frequently refreshes its token before it expired in the backgr
 * `sasl.login.refresh.window.jitter`
 * `sasl.login.refresh.min.period.seconds`
 * `sasl.login.refresh.buffer.seconds`
+
+=== Visualized Authentication Flow
+
+image::KafkaOauth.png[Oauth]
