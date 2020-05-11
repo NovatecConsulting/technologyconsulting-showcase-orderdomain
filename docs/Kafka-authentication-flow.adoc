@@ -1,3 +1,5 @@
+:imagesdir: ./adocgraphics
+
 Kafka Authentication Flow
 ------------------------
 
@@ -21,3 +23,7 @@ Kafka client also frequently refreshes its token before it expired in the backgr
 * `sasl.login.refresh.window.jitter`
 * `sasl.login.refresh.min.period.seconds`
 * `sasl.login.refresh.buffer.seconds`
+
+=== Authentication Flow
+
+image::KafkaOauth.png[Oauth]

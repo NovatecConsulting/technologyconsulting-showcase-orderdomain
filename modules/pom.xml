@@ -32,11 +32,11 @@
 	<name>orderdomainParent</name>
 
     <modules>
-        <module>orderdomainDTO</module>
-        <module>orderdomainWAR</module>
-        <module>orderdomainEAR</module>
-		<module>inventoryService</module>
-        <module>kafkaOauth</module>
+        <module>services/order/orderEvents</module>
+        <module>services/order/orderService</module>
+        <module>services/order/orderServiceEar</module>
+		<module>services/inventory/inventoryService</module>
+        <module>libraries/kafkaOauth</module>
     </modules>
 
 </project>

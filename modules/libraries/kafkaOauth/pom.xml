@@ -44,9 +44,9 @@
                         <configuration>
                             <target>
                                 <copy file="${project.build.directory}/${project.build.finalName}.jar"
-                                      todir="${project.basedir}/../../environment/configs/kafka-oauth/build/" />
+                                      todir="${project.basedir}/../../../environment/configs/kafka-oauth/build/" />
                                 <copy file="${project.build.directory}/${project.build.finalName}.jar"
-                                      todir="${project.basedir}/../../environment/configs/schema-registry-oauth/build/" />
+                                      todir="${project.basedir}/../../../environment/configs/schema-registry-oauth/build/" />
                             </target>
                         </configuration>
                         <goals>

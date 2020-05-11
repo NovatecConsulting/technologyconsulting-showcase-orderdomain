@@ -7,7 +7,7 @@
 		<groupId>de.novatec.showcase</groupId>
 		<artifactId>orderdomainParent</artifactId>
 		<version>1.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
+		<relativePath>../../../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>orderdomainWAR</artifactId>
@@ -24,7 +24,7 @@
 				</os>
 			</activation>
 			<properties>
-				<avro.template.dir>/orderdomainWAR/src/main/resources/avro/templates/</avro.template.dir>
+				<avro.template.dir>/services/order/orderService/src/main/resources/avro/templates/</avro.template.dir>
 			</properties>
 		</profile>
 		<profile>

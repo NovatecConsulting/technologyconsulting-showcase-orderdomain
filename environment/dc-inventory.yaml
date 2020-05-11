@@ -3,7 +3,7 @@ version: '2.2'
 services:
   inventory:
     build:
-      context: ../src/inventoryService/docker/
+      context: ../modules/services/inventory/inventoryService/docker/
     image: novatec/technologyconsulting-showcase-orderdomain-inventoryservice:latestlocal
     restart: unless-stopped
     depends_on:

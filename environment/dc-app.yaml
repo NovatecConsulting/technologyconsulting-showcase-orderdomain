@@ -3,7 +3,7 @@ version: '2.2'
 services:
   order:
     build:
-      context: ../
+      context: ../modules/services/order/orderServiceEar/
     image: novatec/technologyconsulting-showcase-orderdomain:latestlocal
     restart: unless-stopped
     depends_on:
