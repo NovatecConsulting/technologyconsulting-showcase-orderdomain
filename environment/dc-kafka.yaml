@@ -85,6 +85,9 @@ services:
       KAFKA_OPTS: "-Djava.security.auth.login.config=/opt/kafka/config/kafka_server_jaas.conf"
       KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: OAUTHBEARER
       KAFKA_SASL_ENABLED_MECHANISMS: OAUTHBEARER
+      KAFKA_AUTHORIZER_CLASS_NAME: "kafka.security.authorizer.AclAuthorizer"
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+      KAFKA_SUPER_USERS: "User:kafka-broker"
       # Oauth configuration
       OAUTH_WITH_SSL: "false"
       OAUTH_LOGIN_SERVER: "keycloak:8080"
@@ -158,6 +161,9 @@ services:
       KAFKA_OPTS: "-Djava.security.auth.login.config=/opt/kafka/config/kafka_server_jaas.conf"
       KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: OAUTHBEARER
       KAFKA_SASL_ENABLED_MECHANISMS: OAUTHBEARER
+      KAFKA_AUTHORIZER_CLASS_NAME: "kafka.security.authorizer.AclAuthorizer"
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+      KAFKA_SUPER_USERS: "User:kafka-broker"
       # Oauth configuration
       OAUTH_WITH_SSL: "false"
       OAUTH_LOGIN_SERVER: "keycloak:8080"
@@ -231,6 +237,9 @@ services:
       KAFKA_OPTS: "-Djava.security.auth.login.config=/opt/kafka/config/kafka_server_jaas.conf"
       KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: OAUTHBEARER
       KAFKA_SASL_ENABLED_MECHANISMS: OAUTHBEARER
+      KAFKA_AUTHORIZER_CLASS_NAME: "kafka.security.authorizer.AclAuthorizer"
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+      KAFKA_SUPER_USERS: "User:kafka-broker"
       # Oauth configuration
       OAUTH_WITH_SSL: "false"
       OAUTH_LOGIN_SERVER: "keycloak:8080"

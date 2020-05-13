@@ -32,7 +32,7 @@ public class OauthBearerTokenJwt implements OAuthBearerToken {
     public OauthBearerTokenJwt(Map<String, Object> jwtToken, String accessToken){
         super();
         this.value = accessToken;
-        this.principalName = (String) jwtToken.get("sub");
+        this.principalName = (String) jwtToken.get("clientId");
 
         if(this.scope == null){
             this.scope = new TreeSet<>();
@@ -52,7 +52,6 @@ public class OauthBearerTokenJwt implements OAuthBearerToken {
             this.expirationTime = (Long) jwtToken.get("exp");
         }
 
-        Object iat = jwtToken.get("iat");
         if(exp instanceof Integer){
             this.startTimeMs = Integer.toUnsignedLong((Integer) jwtToken.get("iat")) ;
         }else{
