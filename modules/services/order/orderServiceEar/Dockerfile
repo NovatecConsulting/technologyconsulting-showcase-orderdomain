@@ -14,7 +14,6 @@ FROM open-liberty:kernel
 COPY /target/*.ear /liberty/usr/servers/defaultServer/apps/orderdomainEAR.ear
 COPY --chown=1001:0 /Docker/liberty/config/server.xml /liberty/usr/servers/defaultServer/server.xml
 RUN (mkdir -p /liberty/usr/shared/resources/h2 && cd /liberty/usr/shared/resources/h2 && curl -O https://repo1.maven.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200.jar)
-#ADD resources/liberty/h2-1.4.200.jar /liberty/usr/shared/resources/h2/h2-1.4.200.jar
 RUN configure.sh
 
 EXPOSE 9080 9443

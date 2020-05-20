@@ -140,7 +140,7 @@
 					</assemblyArtifact>
 					<serverName>${project.artifactId}Server</serverName>
 					<stripVersion>true</stripVersion>
-					<configDirectory>../../resources/liberty/config</configDirectory>
+					<configDirectory>Docker/liberty/config</configDirectory>
 				</configuration>
 				<executions>
 					<execution>
