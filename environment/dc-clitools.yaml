@@ -19,6 +19,13 @@ services:
       OAUTH_AUTHORIZATION: "Basic a2Fma2EtYnJva2VyOjk5ZTljNjMwLTI4NWUtNGNhZi1iNWI2LTdjMTNhMDQ5OTZiYg=="
 
   schemaregistry-cli:
-    image: confluentinc/cp-schema-registry:${VERSION_CONFLUENT}
+    image: novatec/technologyconsulting-showcase-orderdomain-schema-registry:latestlocal
     command: /bin/bash
     tty: true
+    environment:
+      OAUTH_WITH_SSL: "false"
+      OAUTH_LOGIN_SERVER: "keycloak:8080"
+      OAUTH_ACCEPT_UNSECURE_SERVER: "true"
+      OAUTH_LOGIN_ENDPOINT: "/auth/realms/orderDomain/protocol/openid-connect/token"
+      OAUTH_LOGIN_GRANT_TYPE: "client_credentials"
+      OAUTH_AUTHORIZATION: "Basic a2Fma2EtYnJva2VyOjk5ZTljNjMwLTI4NWUtNGNhZi1iNWI2LTdjMTNhMDQ5OTZiYg=="
