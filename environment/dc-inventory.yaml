@@ -23,4 +23,4 @@ services:
       OAUTH_ACCEPT_UNSECURE_SERVER: "true"
       OAUTH_LOGIN_ENDPOINT: "/auth/realms/orderDomain/protocol/openid-connect/token"
       OAUTH_LOGIN_GRANT_TYPE: "client_credentials"
-      OAUTH_AUTHORIZATION: "Basic a2Fma2EtY2xpZW50OmU5NmFkOThmLTM1YmUtNDY3OS1iYjQ4LTE3NjQzMWRlNjYxYg=="
+      OAUTH_AUTHORIZATION: "Basic a2Fma2EtaW52ZW50b3J5LXNlcnZpY2U6YjQyNzc4Y2UtNTY0ZS00MDRlLTk1MWItMzFlYjMwNDVkNDNm"

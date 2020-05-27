@@ -25,7 +25,6 @@ To start this environment, the following is required:
 - Bash (for Windows use https://docs.microsoft.com/de-de/windows/wsl/install-win10[WSL] or https://cygwin.com/install.html[Cygwin])
 - https://docs.docker.com/install/#server[Docker] (https://docs.microsoft.com/de-de/archive/blogs/stevelasker/configuring-docker-for-windows-volumes[in Windows volume mounts must be enabled])
 - https://docs.docker.com/compose/install/[Docker-Compose]
-- Add 'keycloak' as an alias of 'localhost' in /etc/hosts file (or c:\Windows\System32\Drivers\etc\hosts on Windows) so that browser can be directed to Keycloak login page for user authentication. This is due to different internal and external hostnames of Keycloak container.
 
 == Quick Start
 
@@ -33,6 +32,12 @@ To start this environment, the following is required:
 [source,bash]
 ----
 ./up.sh --with-monitoring all
+----
+
+.Start complete environment, create necessary topic and ACL
+[source,bash]
+----
+./up-and-config.sh
 ----
 
 .Start environment with specific services
@@ -57,20 +62,22 @@ To start this environment, the following is required:
 
 Hint: _link:run-clitools.sh[]_ is just a convenient script, which runs a command in the Docker-Compose network. You may also execute _docker run --rm -it --net host confluentinc/cp-kafka:5.4.0 --bootstrap-server localhost:9192 ..._
 
+Topics must be created manually using run-clitools.sh before records can be produced or consumed since auto topic creation is disabled on the cluster.
+
 === Kafka commands
 
 .Create and delete topics
 [source,bash,subs="attributes"]
 ----
-./run-clitools.sh kafka kafka-topics --bootstrap-server kafka:9092 --create --topic test --partitions 6 --replication-factor 3
-./run-clitools.sh kafka kafka-topics --bootstrap-server kafka:9092 --describe
-./run-clitools.sh kafka kafka-topics --bootstrap-server kafka:9092 --delete --topic test
+./run-clitools.sh kafka kafka-topics --bootstrap-server kafka:9092 --create --topic test --partitions 6 --replication-factor 3 --command-config ./admin/config/adminClient.properties
+./run-clitools.sh kafka kafka-topics --bootstrap-server kafka:9092 --describe --command-config ./admin/config/adminClient.properties
+./run-clitools.sh kafka kafka-topics --bootstrap-server kafka:9092 --delete --topic test --command-config ./admin/config/adminClient.properties
 ----
 
 .Produce records
 [source,bash,subs="attributes"]
 ----
-./run-clitools.sh kafka kafka-console-producer --broker-list kafka:9092 --property "parse.key=true" --property "key.separator=:" --topic test
+./run-clitools.sh kafka kafka-console-producer --broker-list kafka:9092 --property "parse.key=true" --property "key.separator=:" --topic test --producer.config ./admin/config/adminClient.properties
 ----
 
 .Once started, you can insert records
@@ -82,7 +89,7 @@ anotherkey:somevalue
 .Consume records
 [source,bash,subs="attributes"]
 ----
-./run-clitools.sh kafka kafka-console-consumer --bootstrap-server kafka:9092 --property "print.key=true" --property "print.timestamp=true" --from-beginning --topic test
+./run-clitools.sh kafka kafka-console-consumer --bootstrap-server kafka:9092 --property "print.key=true" --property "print.timestamp=true" --from-beginning --topic test --consumer.config ./admin/config/adminClient.properties
 ----
 
 === Schema Registry commands
@@ -93,7 +100,7 @@ To find out how it works visit https://docs.confluent.io/{cp-version}/schema-reg
 .Produce records
 [source,bash,subs="attributes"]
 ----
-./run-clitools.sh schemaregistry kafka-avro-console-producer --broker-list kafka:9092 --property schema.registry.url=http://schemaregistry:8081 --topic testavro --property value.schema='{"type":"record","name":"myrecord","fields":[{"name":"f1","type":"string"}]}'
+./run-clitools.sh schemaregistry kafka-avro-console-producer --broker-list kafka:9092 --property schema.registry.url=http://schemaregistry:8081 --topic testavro --property value.schema='{"type":"record","name":"myrecord","fields":[{"name":"f1","type":"string"}]}' --producer.config ./admin/config/adminClient.properties
 ----
 
 .Once started, you can insert records
@@ -106,7 +113,7 @@ To find out how it works visit https://docs.confluent.io/{cp-version}/schema-reg
 .Consume records
 [source,bash,subs="attributes"]
 ----
-./run-clitools.sh schemaregistry kafka-avro-console-consumer --bootstrap-server kafka:9092 --property schema.registry.url=http://schemaregistry:8081 --from-beginning --topic testavro
+./run-clitools.sh schemaregistry kafka-avro-console-consumer --bootstrap-server kafka:9092 --property schema.registry.url=http://schemaregistry:8081 --from-beginning --topic testavro --consumer.config ./admin/config/adminClient.properties
 ----
 
 It is also possible to directly interact with the Confluent Schema Registry via the Rest API.
