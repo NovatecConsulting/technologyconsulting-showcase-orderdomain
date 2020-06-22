@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-config
+data:
+  HTTP_PORT: {{ .Values.app.appconfig.httpport | quote }}
+  HTTPS_PORT: {{ .Values.app.appconfig.httpsport | quote }}
+  MANUFACTURE_WORKORDER_URL: {{ .Values.app.appconfig.MANUFACTURE_WORKORDER_URL }}
