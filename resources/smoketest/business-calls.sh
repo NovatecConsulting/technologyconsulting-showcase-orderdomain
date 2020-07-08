@@ -7,7 +7,7 @@ declare PORT=9080
 
 function main_business_calls
 {
-	script_options
+	script_options $@
 	business_calls
 }
 

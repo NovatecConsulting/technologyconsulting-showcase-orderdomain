@@ -8,7 +8,7 @@ declare PORT=9080
 
 function main_setup
 {
-	script_options
+	script_options $@
 	setup
 }
 
