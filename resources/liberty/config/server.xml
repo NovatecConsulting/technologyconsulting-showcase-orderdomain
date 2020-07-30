@@ -4,8 +4,8 @@
 		<feature>openapi-3.1</feature>
 	</featureManager>
 
-	<logging
-		traceSpecification="com.ibm.ws.microprofile.health.*=all" />
+	<logging traceSpecification="com.ibm.ws.microprofile.health.*=all" consoleSource="message,trace,accessLog" consoleFormat="json" consoleLogLevel="info"/>
+
 
         <httpAccessLogging id="accessLogging"/>
 <!--    <httpEndpoint host="localhost" httpPort="-1" -->
