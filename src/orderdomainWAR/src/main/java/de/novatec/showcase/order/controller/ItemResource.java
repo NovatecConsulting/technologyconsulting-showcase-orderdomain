@@ -10,6 +10,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -25,6 +26,7 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
@@ -34,7 +36,10 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tags;
 import de.novatec.showcase.order.GlobalConstants;
 import de.novatec.showcase.order.dto.Item;
 import de.novatec.showcase.order.ejb.session.ItemSessionLocal;
+import de.novatec.showcase.order.ejb.session.exception.ItemNotFoundException;
 import de.novatec.showcase.order.mapper.DtoMapper;
+
+
 
 @ManagedBean
 @Path(value = "/item")
@@ -45,6 +50,7 @@ public class ItemResource {
 
 	@EJB
 	private ItemSessionLocal itemBean;
+
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -72,7 +78,47 @@ public class ItemResource {
 		de.novatec.showcase.order.ejb.entity.Item createdItem = itemBean.createItem(DtoMapper.mapToItemEntity(item));
 		return Response.created(uriInfo.getAbsolutePathBuilder().build()).entity(DtoMapper.mapToItemDto(createdItem)).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
-
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path(value = "{id}")
+	@RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME})
+	@APIResponses(
+	        value = {
+ 		       @APIResponse(
+ 			    		responseCode = "400",
+ 			            description = "Item id is less than 1",
+ 			            content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+	            @APIResponse(
+		                responseCode = "404",
+		                description = "Item with the given id not found",
+		                content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+	            @APIResponse(
+	                responseCode = "200",
+	                description = "The item with the given id was deleted if found.",
+	                content = @Content(mediaType = MediaType.APPLICATION_JSON,
+	                schema = @Schema(implementation = Item.class))) })
+	    @Operation(
+	        summary = "Delete item by id",
+	        description = "Delete the item with the given id if it is found.")
+	public Response deleteItem(
+			@Parameter(
+		            description = "The ids of the items which should be deleted.",
+		            required = true,
+		            example = "1",
+		            schema = @Schema(type = SchemaType.INTEGER)) 
+			@PathParam("id") Integer itemId) {
+		if (itemId.intValue() <= 0) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Item id cannot be less than 1!").type(MediaType.TEXT_PLAIN_TYPE).build();
+		}
+		try {
+			return Response.ok().entity(DtoMapper.mapToItemDto(itemBean.cancelItem(itemId))).type(MediaType.APPLICATION_JSON_TYPE).build();
+		} catch (ItemNotFoundException e) {
+			return Response.status(Response.Status.NOT_FOUND)
+					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
+		}
+	}
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "count")

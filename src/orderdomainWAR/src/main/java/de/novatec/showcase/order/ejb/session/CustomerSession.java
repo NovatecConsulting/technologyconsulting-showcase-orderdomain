@@ -206,4 +206,12 @@ public class CustomerSession implements CustomerSessionLocal {
 		return customer;
 	}
 
+	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public Customer cancelCustomer(Integer customerId) throws CustomerNotFoundException {
+		Customer customer = this.getCustomer(customerId);
+		em.remove(customer);
+		return customer;
+	}
+
 }

@@ -31,5 +31,7 @@ public interface CustomerService {
 	public void addInventory(Integer orderId) throws OrderNotFoundException;
 
 	public Customer createCustomer(Customer customer);
+	
+	public Customer cancelCustomer(Integer customerId) throws CustomerNotFoundException;
 
 }

@@ -14,6 +14,7 @@ import javax.persistence.TypedQuery;
 import org.apache.commons.lang3.StringUtils;
 
 import de.novatec.showcase.order.ejb.entity.Item;
+import de.novatec.showcase.order.ejb.session.exception.ItemNotFoundException;
 
 /**
  * Session Bean implementation class ItemBrowserSession
@@ -120,4 +121,16 @@ public class ItemSession implements ItemSessionLocal {
 		return item;
 	}
 
+	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public Item cancelItem(Integer itemId) throws ItemNotFoundException {
+
+		List<Item> items = this.getItems(Integer.toString(itemId));
+		if (items.size() < 1) {
+			throw new ItemNotFoundException("item with id" + itemId + " not found ");
+		}
+		Item item = items.get(0);
+		em.remove(item);
+		return item;
+	}
 }

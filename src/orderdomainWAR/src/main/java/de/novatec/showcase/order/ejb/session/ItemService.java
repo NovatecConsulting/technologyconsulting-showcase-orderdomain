@@ -3,6 +3,7 @@ package de.novatec.showcase.order.ejb.session;
 import java.util.List;
 
 import de.novatec.showcase.order.ejb.entity.Item;
+import de.novatec.showcase.order.ejb.session.exception.ItemNotFoundException;
 
 public interface ItemService {
 	public void setBatchSize(int Size);
@@ -22,5 +23,8 @@ public interface ItemService {
 	public String getCurrentMin();
 
 	Item createItem(Item item);
+	
+	public Item cancelItem(Integer itemId) throws ItemNotFoundException;
+
 
 }

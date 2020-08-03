@@ -12,6 +12,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -332,4 +333,45 @@ public class CustomerResource {
 				.entity(DtoMapper.mapToCustomerDto(bean.createCustomer(DtoMapper.mapToCustomerEntity(customer))))
 				.build();
 	}
-}
+
+    @DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path(value = "{id}")
+	@RolesAllowed({GlobalConstants.ADMIN_ROLE_NAME})
+	@APIResponses(
+	        value = {
+ 		       @APIResponse(
+ 			    		responseCode = "400",
+ 			            description = "Customer id is less than 1",
+ 			            content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+	            @APIResponse(
+		                responseCode = "404",
+		                description = "Customer with the given id not found",
+		                content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+	            @APIResponse(
+	                responseCode = "200",
+	                description = "The customer with the given id was deleted if found.",
+	                content = @Content(mediaType = MediaType.APPLICATION_JSON,
+	                schema = @Schema(implementation = Customer.class))) })
+	    @Operation(
+	        summary = "Delete customer by id",
+	        description = "Delete the customer with the given id if it is found.")
+	public Response deleteCustomer(
+			@Parameter(
+		            description = "The id of the customer which should be deleted.",
+		            required = true,
+		            example = "1",
+		            schema = @Schema(type = SchemaType.INTEGER)) 
+			@PathParam("id") Integer customerId) {
+		if (customerId.intValue() <= 0) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Customer id cannot be less than 1!").type(MediaType.TEXT_PLAIN_TYPE).build();
+		}
+		try {
+			return Response.ok().entity(DtoMapper.mapToCustomerDto(bean.cancelCustomer(customerId))).type(MediaType.APPLICATION_JSON_TYPE).build();
+		} catch (CustomerNotFoundException e) {
+			return Response.status(Response.Status.NOT_FOUND)
+					.entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build();
+		}
+	}
+
+}	
