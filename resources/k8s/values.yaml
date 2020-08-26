@@ -10,9 +10,11 @@ app:
     MANUFACTURE_PASSWORD: 
   dbconfig:
     host: 
+    port: 5432
     user: 
     password: 
     schema: 
+    name:
   scale:
     minReplica: 1
     maxReplicas: 3

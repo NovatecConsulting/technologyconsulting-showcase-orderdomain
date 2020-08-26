@@ -6,10 +6,8 @@
 
 	<logging traceSpecification="com.ibm.ws.microprofile.health.*=all" consoleSource="message,trace,accessLog" consoleFormat="json" consoleLogLevel="info"/>
 
-
-        <httpAccessLogging id="accessLogging"/>
-<!--    <httpEndpoint host="localhost" httpPort="-1" -->
-        <httpEndpoint accessLoggingRef="accessLogging" host="*" httpPort="${env.HTTP_PORT}" httpsPort="${env.HTTPS_PORT}" id="defaultHttpEndpoint" />
+	<httpAccessLogging id="accessLogging"/>
+	<httpEndpoint accessLoggingRef="accessLogging" host="*" httpPort="${env.HTTP_PORT}" httpsPort="${env.HTTPS_PORT}" id="defaultHttpEndpoint" />
 
 
 	<keyStore id="defaultKeyStore"
@@ -23,11 +21,32 @@
 			includes="h2-1.4.200.jar" />
 	</library>
 
-	<dataSource id="h2-db" jndiName="jdbc/order_db"
+	<dataSource id="h2-db" jndiName="jdbc/order_db_h2"
 		type="javax.sql.DataSource" jdbcDriverRef="H2Driver">
 		<properties	url="jdbc:h2:mem:order_db;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;TRACE_LEVEL_FILE=4" />
 	</dataSource>
-	
+
+	<jdbcDriver id="postgresql" 
+		javax.sql.ConnectionPoolDataSource="org.postgresql.ds.PGConnectionPoolDataSource" 
+		javax.sql.XADataSource="org.postgresql.xa.PGXADataSource" 
+		libraryRef="psql-lib" />
+	<library id="psql-lib">
+		<file name="${shared.resource.dir}/postgresql/postgresql-42.2.14.jar"/>
+	</library>
+
+	<dataSource id="psql-db" 
+				jndiName="jdbc/order_db"
+				type="javax.sql.DataSource" 
+				jdbcDriverRef="postgresql">
+		<properties.postgresql 	databaseName="${env.DB_NAME}" 
+								currentSchema="${env.DB_SCHEMA}"
+								portNumber="${env.DB_PORT}" 
+								serverName="${env.DB_HOST}" 
+								user="${env.DB_USER}"
+								password="${env.DB_PASSWORD}" 
+		/>
+	</dataSource>
+
 	<jndiEntry jndiName="manufacturedomain.workorder.url" value="${env.MANUFACTURE_WORKORDER_URL}"/>
 	<jndiEntry jndiName="manufacturedomain.username" value="${env.MANUFACTURE_USER}"/>
 	<jndiEntry jndiName="manufacturedomain.password" value="${env.MANUFACTURE_PASSWORD}"/>
