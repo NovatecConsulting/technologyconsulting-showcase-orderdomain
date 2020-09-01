@@ -1,0 +1,21 @@
+# FLYWAY (FlywayProperties)
+flyway:
+  enabled: true
+  # schemas: 
+  baselineOnMigrate: true
+ # baselineVersion: 
+spring:
+    # for each specific flyway function the corresponding spring profile must be used. 
+    # "clean" cleans the database -> flyway clean
+    # "migration" only migrates the database -> flyway migrate
+    # "baseline" sets the new baseline (baselineVersion) and migrates from this point -> flyway migrate && flyway baseline
+  profiles:
+    #active: "clean"
+    active: "migration"
+    #active: "baseline"
+  datasource:
+    url: "jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}"
+    name: ${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    
