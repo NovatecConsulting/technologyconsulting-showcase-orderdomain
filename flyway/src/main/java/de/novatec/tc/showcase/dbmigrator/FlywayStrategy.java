@@ -1,4 +1,4 @@
-package main.java.de.novatec.orderDbMigrator.cloud.migrator;
+package de.novatec.tc.showcase.dbmigrator;
 
 import org.flywaydb.core.Flyway;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
