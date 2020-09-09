@@ -130,7 +130,80 @@ CREATE TABLE public.u_sequences (
 
 ALTER TABLE public.u_sequences OWNER TO order_user;
 
+
+
+--
+-- Name: o_customer o_customer_pkey; Type: CONSTRAINT; Schema: public; Owner: order_user
+--
+
+ALTER TABLE ONLY public.o_customer
+    ADD CONSTRAINT o_customer_pkey PRIMARY KEY (c_id);
+
+
+--
+-- Name: o_customerinventory o_customerinventory_pkey; Type: CONSTRAINT; Schema: public; Owner: order_user
+--
+
+ALTER TABLE ONLY public.o_customerinventory
+    ADD CONSTRAINT o_customerinventory_pkey PRIMARY KEY (ci_customerid, ci_id);
+
+
+--
+-- Name: o_item o_item_pkey; Type: CONSTRAINT; Schema: public; Owner: order_user
+--
+
+ALTER TABLE ONLY public.o_item
+    ADD CONSTRAINT o_item_pkey PRIMARY KEY (i_id);
+
+
+--
+-- Name: o_orderline o_orderline_pkey; Type: CONSTRAINT; Schema: public; Owner: order_user
+--
+
+ALTER TABLE ONLY public.o_orderline
+    ADD CONSTRAINT o_orderline_pkey PRIMARY KEY (ol_o_id, ol_id);
+
+
+--
+-- Name: o_orders o_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: order_user
+--
+
+ALTER TABLE ONLY public.o_orders
+    ADD CONSTRAINT o_orders_pkey PRIMARY KEY (o_id);
+
+
+--
+-- Name: u_sequences u_sequences_pkey; Type: CONSTRAINT; Schema: public; Owner: order_user
+--
+
+ALTER TABLE ONLY public.u_sequences
+    ADD CONSTRAINT u_sequences_pkey PRIMARY KEY (s_id);
+
+
+--
+-- Name: o_customerinventory fk_o_customerinventory_ci_customerid; Type: FK CONSTRAINT; Schema: public; Owner: order_user
+--
+
+ALTER TABLE ONLY public.o_customerinventory
+    ADD CONSTRAINT fk_o_customerinventory_ci_customerid FOREIGN KEY (ci_customerid) REFERENCES public.o_customer(c_id);
+
+
+--
+-- Name: o_orderline fk_o_orderline_ol_o_id; Type: FK CONSTRAINT; Schema: public; Owner: order_user
+--
+
+ALTER TABLE ONLY public.o_orderline
+    ADD CONSTRAINT fk_o_orderline_ol_o_id FOREIGN KEY (ol_o_id) REFERENCES public.o_orders(o_id);
+
+
+--
+-- Name: o_orders fk_o_orders_o_c_id; Type: FK CONSTRAINT; Schema: public; Owner: order_user
+--
+
+ALTER TABLE ONLY public.o_orders
+    ADD CONSTRAINT fk_o_orders_o_c_id FOREIGN KEY (o_c_id) REFERENCES public.o_customer(c_id);
+
+
 --
 -- PostgreSQL database dump complete
 --
-
