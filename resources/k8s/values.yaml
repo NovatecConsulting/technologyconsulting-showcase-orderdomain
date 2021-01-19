@@ -2,7 +2,6 @@ app:
   image:
     repository: 
     tag: 
-    pullsecret: 
   appconfig:
     httpport: 9080
     httpsport: 9443
