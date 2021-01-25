@@ -25,6 +25,16 @@ jobs:
         run: |
               ./getKubeconfig.sh
 
+      - name: Get Secrets
+        env:
+          ARM_CLIENT_ID: ${{ secrets.TC_SHOWCASE_ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.TC_SHOWCASE_ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.TC_SHOWCASE_ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.TC_SHOWCASE_ARM_TENANT_ID }}
+        working-directory: ./resources/pipelines/helperscripts
+        run: |
+              ./getKeyVaultSecrets.sh
+
       - name: Deploy via Helm
         env:
           ARM_CLIENT_ID: ${{ secrets.TC_SHOWCASE_ARM_CLIENT_ID }}
@@ -41,11 +51,11 @@ jobs:
                     upgrade orderdomain ./ \
                         --namespace orderdomain \
                         --install \
+                        --debug \
                         --values values.yaml \
-                        --set app.dbconfig.host="test" \
-                        --set app.dbconfig.port="5432" \
-                        --set app.dbconfig.user="test" \
-                        --set app.dbconfig.password="test" \
+                        --set app.dbconfig.host="tc-showcase-test-psql.postgres.database.azure.com" \
+                        --set app.dbconfig.user="${DBUSER}@tc-showcase-test-psql" \
+                        --set app.dbconfig.password="$DBPWD" \
                         --set app.dbconfig.schema="test" \
                         --set app.dbconfig.name="test"
 
@@ -53,3 +63,5 @@ jobs:
         working-directory: ./resources/pipelines/helperscripts
         run: |
               sudo rm -rf kubeconfig
+              echo "DBUSER=asdf" >> $GITHUB_ENV
+              echo "DBPWD=asdf" >> $GITHUB_ENV
