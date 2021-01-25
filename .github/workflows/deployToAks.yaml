@@ -21,18 +21,35 @@ jobs:
           ARM_TENANT_ID: ${{ secrets.TC_SHOWCASE_ARM_TENANT_ID }}
           AKSRESOURCEGROUP: 'tc-showcase-test'
           AKSNAME: 'k8s-tc-showcase-test'
+        working-directory: ./resources/pipelines/helperscripts
         run: |
-              #!/bin/bash
-              set -e
+              ./getKubeconfig.sh
 
-              az login --service-principal \
-                  -u $ARM_CLIENT_ID \
-                  -p $ARM_CLIENT_SECRET \
-                  --tenant $ARM_TENANT_ID \
-                  --allow-no-subscriptions > /dev/null
+      - name: Deploy via Helm
+        env:
+          ARM_CLIENT_ID: ${{ secrets.TC_SHOWCASE_ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.TC_SHOWCASE_ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.TC_SHOWCASE_ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.TC_SHOWCASE_ARM_TENANT_ID }}
+          AKSRESOURCEGROUP: 'tc-showcase-test'
+          AKSNAME: 'k8s-tc-showcase-test'
+        run: |
+              docker run \
+                -v "$(pwd)/resources/k8s":/apps \
+                -v "$(pwd)/resources/pipelines/helperscripts/kubeconfig":/root/.kube \
+                alpine/helm \
+                    upgrade orderdomain ./ \
+                        --namespace orderdomain \
+                        --install \
+                        --values values.yaml \
+                        --set app.dbconfig.host="test" \
+                        --set app.dbconfig.port="5432" \
+                        --set app.dbconfig.user="test" \
+                        --set app.dbconfig.password="test" \
+                        --set app.dbconfig.schema="test" \
+                        --set app.dbconfig.name="test"
 
-              az aks get-credentials --resource-group $AKSRESOURCEGROUP --name $AKSNAME --file kubeconfig/.kubeconfig
-
-              ls -al
-              pwd
-
+      - name: Cleanup
+        working-directory: ./resources/pipelines/helperscripts
+        run: |
+              sudo rm -rf kubeconfig
