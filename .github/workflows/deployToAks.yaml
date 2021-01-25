@@ -51,13 +51,12 @@ jobs:
                     upgrade orderdomain ./ \
                         --namespace orderdomain \
                         --install \
-                        --debug \
                         --values values.yaml \
-                        --set app.dbconfig.host="tc-showcase-test-psql.postgres.database.azure.com" \
+                        --set app.dbconfig.host="${DBFQDN}" \
                         --set app.dbconfig.user="${DBUSER}@tc-showcase-test-psql" \
-                        --set app.dbconfig.password="$DBPWD" \
+                        --set app.dbconfig.password="${DBPWD}" \
                         --set app.dbconfig.schema="test" \
-                        --set app.dbconfig.name="test"
+                        --set app.dbconfig.name="orderdomain"
 
       - name: Cleanup
         working-directory: ./resources/pipelines/helperscripts

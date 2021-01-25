@@ -11,7 +11,10 @@ DBUSER=$(az keyvault secret show --vault-name "vault-tc-showcase-test" --name "d
 
 DBPWD=$(az keyvault secret show --vault-name "vault-tc-showcase-test" --name "database-password" --query value -o tsv)
 
+DBFQDN=$(az keyvault secret show --vault-name "vault-tc-showcase-test" --name "database-fqdn" --query value -o tsv)
+
 # put values to Github's env stage
 # this not a safe solution
 echo "DBUSER=$DBUSER" >> $GITHUB_ENV
 echo "DBPWD=$DBPWD" >> $GITHUB_ENV
+echo "DBFQDN=$DBFQDN" >> $GITHUB_ENV
