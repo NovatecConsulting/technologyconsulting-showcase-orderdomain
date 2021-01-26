@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: {{ .Values.app.networking.ingressip }}
+    - host: {{ .Values.app.networking.ingressfqdn }}
       http:
         paths:
         - path: /order
