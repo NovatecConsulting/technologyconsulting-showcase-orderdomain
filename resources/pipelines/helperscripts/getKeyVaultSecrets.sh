@@ -14,11 +14,11 @@ DBPWD=$(az keyvault secret show --vault-name "vault-tc-showcase-test" --name "da
 
 DBFQDN=$(az keyvault secret show --vault-name "vault-tc-showcase-test" --name "database-fqdn" --query value -o tsv)
 
-INGRESSIP=$(az keyvault secret show --vault-name "vault-tc-showcase-test" --name "ingress-ip" --query value -o tsv)
+INGRESSFQDN=$(az keyvault secret show --vault-name "vault-tc-showcase-test" --name "ingress-fqdn" --query value -o tsv)
 
 # put values to Github's env stage
 # this not a safe solution
 echo "DBUSER=$DBUSER" >> $GITHUB_ENV
 echo "DBPWD=$DBPWD" >> $GITHUB_ENV
 echo "DBFQDN=$DBFQDN" >> $GITHUB_ENV
-echo "INGRESSIP=$INGRESSIP" >> $GITHUB_ENV
+echo "INGRESSFQDN=$INGRESSFQDN" >> $GITHUB_ENV
