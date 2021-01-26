@@ -56,7 +56,8 @@ jobs:
                         --set app.dbconfig.user="${DBUSER}@tc-showcase-test-psql" \
                         --set app.dbconfig.password="${DBPWD}" \
                         --set app.dbconfig.schema="test" \
-                        --set app.dbconfig.name="orderdomain"
+                        --set app.dbconfig.name="orderdomain" \
+                        --set app.networking.ingressip="${INGRESSIP}"
 
       - name: Cleanup
         working-directory: ./resources/pipelines/helperscripts
@@ -64,3 +65,5 @@ jobs:
               sudo rm -rf kubeconfig
               echo "DBUSER=asdf" >> $GITHUB_ENV
               echo "DBPWD=asdf" >> $GITHUB_ENV
+              echo "DBFQDN=asdf" >> $GITHUB_ENV
+              echo "INGRESSIP=asdf" >> $GITHUB_ENV

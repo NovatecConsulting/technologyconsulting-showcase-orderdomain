@@ -18,3 +18,5 @@ app:
   scale:
     minReplica: 1
     maxReplicas: 3
+  networking:
+    ingressip:
