@@ -14,7 +14,7 @@ spring:
     active: "migration"
     #active: "baseline"
   datasource:
-    url: "jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}"
+    url: "jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?ssl=true"
     name: ${DB_NAME}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
