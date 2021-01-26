@@ -1,14 +1,13 @@
 app: 
   image:
-    repository: 
-    tag: 
-    pullsecret: 
+    repository: novatec/technologyconsulting-showcase-orderdomain
+    tag: latest
   appconfig:
     httpport: 9080
     httpsport: 9443
     MANUFACTURE_WORKORDER_URL: http://supplierdomain-service/supplierdomain/supplier/purchase/
-    MANUFACTURE_USER: 
-    MANUFACTURE_PASSWORD: 
+    MANUFACTURE_USER: admin
+    MANUFACTURE_PASSWORD: adminpwd
   dbconfig:
     host: 
     port: 5432
@@ -19,6 +18,3 @@ app:
   scale:
     minReplica: 1
     maxReplicas: 3
-  azureconfig:
-    resourcegroup: 
-    loadbalancerip: 
