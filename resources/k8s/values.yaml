@@ -10,7 +10,7 @@ app:
     MANUFACTURE_PASSWORD: adminpwd
   dbconfig:
     host: 
-    port: 5432
+    port: "5432"
     user: 
     password: 
     schema: 
