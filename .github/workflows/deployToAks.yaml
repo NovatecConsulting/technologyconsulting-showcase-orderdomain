@@ -1,11 +1,11 @@
 name: Deploy to AKS
 
 on:
-  push:
+  workflow_dispatch:
     branches: [ migrateToPsql ]
-
+         
 jobs:
-  build:
+  deploy:
 
     runs-on: ubuntu-latest
 
