@@ -68,8 +68,6 @@
 			<member name="admin" />
 		</group>
 	</basicRegistry>
-	
-        <webApplication contextRoot="order" location="orderdomainEAR.ear"/>
 
 	<enterpriseApplication id="orderdomain"
 		location="orderdomainEAR.ear" name="orderdomainEAR.ear">
