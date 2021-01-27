@@ -15,3 +15,7 @@ spec:
           backend:
             serviceName: {{ .Chart.Name }}-service
             servicePort: 80
+        - path: /
+          backend:
+            serviceName: {{ .Chart.Name }}-service
+            servicePort: 80
