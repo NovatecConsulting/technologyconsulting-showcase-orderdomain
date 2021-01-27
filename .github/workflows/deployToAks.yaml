@@ -2,8 +2,7 @@ name: Deploy to AKS
 
 on:
   workflow_dispatch:
-    branches: [ migrateToPsql ]
-         
+      
 jobs:
   deployToAks:
 
