@@ -8,8 +8,8 @@
 
 	<httpAccessLogging id="accessLogging"/>
 	<httpEndpoint accessLoggingRef="accessLogging" host="*" httpPort="${env.HTTP_PORT}" httpsPort="${env.HTTPS_PORT}" id="defaultHttpEndpoint" />
-
-
+ 
+ 
 	<keyStore id="defaultKeyStore"
 		type="PKCS12"
 		password="Liberty" />
@@ -68,6 +68,8 @@
 			<member name="admin" />
 		</group>
 	</basicRegistry>
+	
+        <webApplication contextRoot="order" location="orderdomainEAR.ear"/>
 
 	<enterpriseApplication id="orderdomain"
 		location="orderdomainEAR.ear" name="orderdomainEAR.ear">
