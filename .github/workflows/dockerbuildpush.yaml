@@ -22,5 +22,5 @@ jobs:
         username: ${{ secrets.TC_SHOWCASE_DOCKERHUB_USER }}
         password: ${{ secrets.TC_SHOWCASE_DOCKERHUB_PASSWORD }}
         repository: novatec/technologyconsulting-showcase-orderdomain
-        tags: latest
+        tags: latest, ${{ SHORT_SHA }} 
         tag_with_sha: true
