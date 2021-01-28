@@ -9,13 +9,13 @@
 -- Data for Name: u_sequences; Type: TABLE DATA; Schema: public; Owner: order_user
 --
 
-COPY public.u_sequences (s_id, s_nextnum) FROM stdin;
+/* COPY public.u_sequences (s_id, s_nextnum) FROM stdin;
 O_SEQ	0
 INV_SEQ	0
 OL_SEQ	0
 C_SEQ	1
 I_SEQ	24
-\.
+\. */
 
 
 --

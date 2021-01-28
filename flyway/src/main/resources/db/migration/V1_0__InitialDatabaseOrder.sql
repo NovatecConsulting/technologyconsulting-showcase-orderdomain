@@ -45,7 +45,7 @@ CREATE TABLE public.o_customer (
 );
 
 
-ALTER TABLE public.o_customer OWNER TO order_user;
+-- ALTER TABLE public.o_customer OWNER TO order_user;
 
 --
 -- Name: o_customerinventory; Type: TABLE; Schema: public; Owner: order_user
@@ -61,7 +61,7 @@ CREATE TABLE public.o_customerinventory (
 );
 
 
-ALTER TABLE public.o_customerinventory OWNER TO order_user;
+-- ALTER TABLE public.o_customerinventory OWNER TO order_user;
 
 --
 -- Name: o_item; Type: TABLE; Schema: public; Owner: order_user
@@ -78,7 +78,7 @@ CREATE TABLE public.o_item (
 );
 
 
-ALTER TABLE public.o_item OWNER TO order_user;
+-- ALTER TABLE public.o_item OWNER TO order_user;
 
 --
 -- Name: o_orderline; Type: TABLE; Schema: public; Owner: order_user
@@ -97,7 +97,7 @@ CREATE TABLE public.o_orderline (
 );
 
 
-ALTER TABLE public.o_orderline OWNER TO order_user;
+-- ALTER TABLE public.o_orderline OWNER TO order_user;
 
 --
 -- Name: o_orders; Type: TABLE; Schema: public; Owner: order_user
@@ -116,7 +116,7 @@ CREATE TABLE public.o_orders (
 );
 
 
-ALTER TABLE public.o_orders OWNER TO order_user;
+-- ALTER TABLE public.o_orders OWNER TO order_user;
 
 --
 -- Name: u_sequences; Type: TABLE; Schema: public; Owner: order_user
@@ -128,7 +128,7 @@ CREATE TABLE public.u_sequences (
 );
 
 
-ALTER TABLE public.u_sequences OWNER TO order_user;
+-- ALTER TABLE public.u_sequences OWNER TO order_user;
 
 
 
