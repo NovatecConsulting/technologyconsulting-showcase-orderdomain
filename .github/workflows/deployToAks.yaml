@@ -52,7 +52,7 @@ jobs:
                         --install \
                         --values values.yaml \
                         --set app.dbconfig.host="${DBFQDN}" \
-                        --set app.dbconfig.user="${DBUSER}@tc-showcase-test-psql" \
+                        --set app.dbconfig.user="${DBUSER}" \
                         --set app.dbconfig.password="${DBPWD}" \
                         --set app.dbconfig.schema="public" \
                         --set app.dbconfig.name="order_db" \
