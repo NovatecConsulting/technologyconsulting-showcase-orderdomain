@@ -38,7 +38,10 @@ jobs:
         working-directory: ./resources/pipelines/helperscripts
         run: |
               ./getKeyVaultSecrets.sh
-
+     
+      - name: Add SHORT_SHA env property with commit short sha
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+      
       - name: Deploy via Helm
         env:
           ARM_CLIENT_ID: ${{ secrets.TC_SHOWCASE_ARM_CLIENT_ID }}
@@ -47,6 +50,7 @@ jobs:
           ARM_TENANT_ID: ${{ secrets.TC_SHOWCASE_ARM_TENANT_ID }}
           AKSRESOURCEGROUP: 'tc-showcase-test'
           AKSNAME: 'k8s-tc-showcase-test'
+          IMAGETAG: ${{ env.SHORT_SHA }}
         run: |
               docker run \
                 -v "$(pwd)/resources/k8s":/apps \
@@ -61,7 +65,8 @@ jobs:
                         --set app.dbconfig.password="${DBPWD}" \
                         --set app.dbconfig.schema="public" \
                         --set app.dbconfig.name="order_db" \
-                        --set app.networking.ingressfqdn="${INGRESSFQDN}"
+                        --set app.networking.ingressfqdn="${INGRESSFQDN}" \
+                        --set app.image.tag="${IMAGETAG}"
 
       - name: Cleanup
         working-directory: ./resources/pipelines/helperscripts
