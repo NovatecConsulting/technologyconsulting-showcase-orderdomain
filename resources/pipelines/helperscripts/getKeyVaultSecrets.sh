@@ -16,9 +16,11 @@ DBFQDN=$(az keyvault secret show --vault-name "vault-tc-showcase-test" --name "d
 
 INGRESSFQDN=$(az keyvault secret show --vault-name "vault-tc-showcase-test" --name "ingress-fqdn" --query value -o tsv)
 
+ORDERDOMAINIP=$(az keyvault secret show --vault-name "vault-tc-showcase-test" --name "orderdomain-publicip" --query value -o tsv)
 # put values to Github's env stage
 # this not a safe solution
 echo "DBUSER=$DBUSER" >> $GITHUB_ENV
 echo "DBPWD=$DBPWD" >> $GITHUB_ENV
 echo "DBFQDN=$DBFQDN" >> $GITHUB_ENV
 echo "INGRESSFQDN=$INGRESSFQDN" >> $GITHUB_ENV
+echo "ORDERDOMAINIP=$ORDERDOMAINIP" >> $GITHUB_ENV

@@ -20,3 +20,6 @@ app:
     maxReplicas: 3
   networking:
     ingressfqdn:
+  azureconfig:
+    resourcegroup: 
+    loadbalancerip: 
