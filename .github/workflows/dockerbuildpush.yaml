@@ -37,10 +37,15 @@ jobs:
         image-ref: 'novatec/technologyconsulting-showcase-orderdomain:${{ env.SHORT_SHA }}'
         format: 'template'
         template: '@/contrib/sarif.tpl'
-        output: 'trivy-result.sarif'
+        output: 'trivy-results.sarif'
         exit-code: 0
         ignore-unfixed: false
         severity: MEDIUM,HIGH
+    
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: 'trivy-results.sarif'
     
     - name: Run Trivy vulnerability scanner CRITICAL
       uses: aquasecurity/trivy-action@master
@@ -56,6 +61,4 @@ jobs:
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v1
       with:
-        sarif_file: |
-                 'trivy-result.sarif'
-                 'trivy-results-critical.sarif'
+        sarif_file: 'trivy-results-critical.sarif'
