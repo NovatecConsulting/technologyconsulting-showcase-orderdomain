@@ -3,5 +3,7 @@ tasks:
   - init: brew install k9s
   - init: brew install stern
   - init: brew install octant
-  - command: sudo docker-up
-  - command: mvn clean install
+  - openMode: split-bottom
+    command: sudo docker-up SplitTerminal
+  - openIn: right
+    command: docker run hello-world
