@@ -1,0 +1,7 @@
+tasks:
+  - init: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+  - init: brew install k9s
+  - init: brew install stern
+  - init: brew install octant
+  - command: sudo docker-up
+  - command: mvn clean install
