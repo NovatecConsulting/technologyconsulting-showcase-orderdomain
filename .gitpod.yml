@@ -1,10 +1,7 @@
 tasks:
   - init: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
   - init: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" | unzip awscliv2.zip | sudo ./aws/install
-  - init: brew install k9s
-  - init: brew install stern
-  - init: brew install octant
-  - init: brew install kubernetes-cli
+  - init: brew install k9s stern octant kubernetes-cli
   - openMode: split-right
     command: sudo docker-up
   - openIn: right
