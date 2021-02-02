@@ -3,7 +3,7 @@ tasks:
   - init: brew install k9s
   - init: brew install stern
   - init: brew install octant
-  - openMode: split-bottom
-    command: sudo docker-up SplitTerminal
+  - openMode: split-right
+    command: sudo docker-up
   - openIn: right
     command: docker run hello-world
