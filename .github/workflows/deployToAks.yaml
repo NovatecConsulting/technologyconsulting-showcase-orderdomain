@@ -35,7 +35,7 @@ jobs:
           ARM_CLIENT_SECRET: ${{ secrets.TC_SHOWCASE_ARM_CLIENT_SECRET }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.TC_SHOWCASE_ARM_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.TC_SHOWCASE_ARM_TENANT_ID }}
-          STAGE: 'stag'
+          STAGE: 'prod'
         working-directory: ./resources/pipelines/helperscripts
         run: |
               ./getKeyVaultSecrets.sh
@@ -51,7 +51,7 @@ jobs:
           ARM_TENANT_ID: ${{ secrets.TC_SHOWCASE_ARM_TENANT_ID }}
           AKSRESOURCEGROUP: 'tc-showcase-test'
           AKSNAME: 'k8s-tc-showcase-test'
-          STAGE: 'stag'
+          STAGE: 'prod'
           IMAGETAG: ${{ env.SHORT_SHA }}
         run: |
               docker run \
