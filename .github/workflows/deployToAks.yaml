@@ -66,7 +66,7 @@ jobs:
                         --set app.dbconfig.user="${DBUSER}" \
                         --set app.dbconfig.password="${DBPWD}" \
                         --set app.dbconfig.schema="public" \
-                        --set app.dbconfig.name="order_db" \
+                        --set app.dbconfig.name="order_db-${STAGE}" \
                         --set app.networking.ingressfqdn="${INGRESSFQDN}" \
                         --set app.image.tag="${IMAGETAG}" \
                         --set app.azureconfig.resourcegroup="${AKSRESOURCEGROUP}" \
