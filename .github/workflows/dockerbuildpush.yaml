@@ -32,7 +32,7 @@ jobs:
         tag_with_sha: true
 
     - name: Run Trivy vulnerability scanner MEDIUM,HIGH
-      uses: aquasecurity/trivy-action@master
+      uses: aquasecurity/trivy-action@0.0.19
       with:
         image-ref: 'novatec/technologyconsulting-showcase-orderdomain:${{ env.SHORT_SHA }}'
         format: 'template'
@@ -57,3 +57,5 @@ jobs:
       uses: github/codeql-action/upload-sarif@v1
       with:
         sarif_file: 'trivy-results.sarif'
+        
+        
