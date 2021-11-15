@@ -31,31 +31,31 @@ jobs:
         tags: latest, ${{ env.SHORT_SHA }} 
         tag_with_sha: true
 
-    - name: Run Trivy vulnerability scanner MEDIUM,HIGH
-      uses: aquasecurity/trivy-action@0.0.19
-      with:
-        image-ref: 'novatec/technologyconsulting-showcase-orderdomain:${{ env.SHORT_SHA }}'
-        format: 'template'
-        template: '@/contrib/sarif.tpl'
-        output: 'trivy-results.sarif'
-        exit-code: 0
-        ignore-unfixed: false
-        severity: MEDIUM,HIGH
+   # - name: Run Trivy vulnerability scanner MEDIUM,HIGH
+   #   uses: aquasecurity/trivy-action@0.0.19
+    #  with:
+    #    image-ref: 'novatec/technologyconsulting-showcase-orderdomain:${{ env.SHORT_SHA }}'
+     #   format: 'template'
+      #  template: '@/contrib/sarif.tpl'
+       # output: 'trivy-results.sarif'
+        #exit-code: 0
+        #ignore-unfixed: false
+        #severity: MEDIUM,HIGH
     
-    - name: Run Trivy vulnerability scanner CRITICAL
-      uses: aquasecurity/trivy-action@master
-      with:
-        image-ref: 'novatec/technologyconsulting-showcase-orderdomain:${{ env.SHORT_SHA }}'
-        format: 'template'
-        template: '@/contrib/sarif.tpl'
-        output: 'trivy-results.sarif'
-        exit-code: 1
-        ignore-unfixed: false
-        severity: CRITICAL  
+    #- name: Run Trivy vulnerability scanner CRITICAL
+     # uses: aquasecurity/trivy-action@master
+      #with:
+       # image-ref: 'novatec/technologyconsulting-showcase-orderdomain:${{ env.SHORT_SHA }}'
+        #format: 'template'
+        #template: '@/contrib/sarif.tpl'
+        #output: 'trivy-results.sarif'
+        #exit-code: 1
+        #ignore-unfixed: false
+        #severity: CRITICAL  
         
-    - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: 'trivy-results.sarif'
+    #- name: Upload Trivy scan results to GitHub Security tab
+     # uses: github/codeql-action/upload-sarif@v1
+      #with:
+       # sarif_file: 'trivy-results.sarif'
         
         
